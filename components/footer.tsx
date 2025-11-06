@@ -59,10 +59,10 @@ export function Footer() {
                 <Phone size={16} className="text-cyan-400" /> (92) 98460-7721
               </li>
               <li className="flex items-center gap-2">
-                <Mail size={16} className="text-cyan-400" /> contato@ondeline.com
+                <Mail size={16} className="text-cyan-400" /> contato@ondeline.com.br
               </li>
               <li className="flex items-center gap-2">
-                <MapPin size={16} className="text-cyan-400" /> Amazonas, Brasil
+                <MapPin size={16} className="text-cyan-400" /> Rua Albino, 74, Ipixuna/AM - Brasil
               </li>
             </ul>
           </div>
