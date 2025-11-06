@@ -30,7 +30,7 @@ export function Header() {
           <a href="/blog" className="text-foreground hover:text-primary transition">
             Blog
           </a>
-          <a href="#cobertura" className="text-foreground hover:text-primary transition">
+          <a href="/coverage" className="text-foreground hover:text-primary transition">
             Cobertura
           </a>
 
@@ -68,7 +68,7 @@ export function Header() {
             <a href="/blog" className="block text-foreground hover:text-primary">
               Blog
             </a>
-            <a href="#cobertura" className="block text-foreground hover:text-primary">
+            <a href="/coverage" className="block text-foreground hover:text-primary">
               Cobertura
             </a>
             <a

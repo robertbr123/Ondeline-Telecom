@@ -310,7 +310,7 @@ export default function BlogPage() {
                     className={`px-4 py-2 rounded-lg font-medium transition ${
                       selectedCategory === category
                         ? "bg-primary text-primary-foreground"
-                        : "bg-secondary text-foreground hover:bg-secondary/80"
+                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
                     }`}
                   >
                     {category}
