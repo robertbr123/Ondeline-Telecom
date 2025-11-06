@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import { ThemeProvider } from "@/lib/theme-context"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -12,6 +13,11 @@ export const metadata: Metadata = {
   description:
     "Internet de alta velocidade em Ipixuna, Eirunepe, Itamarati e Carauari. Suporte rápido 24/7 e planos a partir de R$ 100.",
   generator: "v0.app",
+  openGraph: {
+    title: "Ondeline - Internet Rápida no Amazonas",
+    description: "Conectando o Amazonas com internet de qualidade",
+    type: "website",
+  },
 }
 
 export default function RootLayout({
@@ -20,9 +26,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
         <Analytics />
       </body>
     </html>

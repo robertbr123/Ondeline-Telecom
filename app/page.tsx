@@ -1,6 +1,6 @@
 import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
-import { SpeedAnimation } from "@/components/speed-animation"
+import { ServicesAnimation } from "@/components/services-animation"
 import { Features } from "@/components/features"
 import { Plans } from "@/components/plans"
 import { Support } from "@/components/support"
@@ -16,7 +16,7 @@ export default function Home() {
     <main className="w-full">
       <Header />
       <Hero />
-      <SpeedAnimation />
+      <ServicesAnimation />
       <Features />
       <Plans />
       <Support />
