@@ -10,6 +10,7 @@ export function middleware(request: NextRequest) {
   if (
     pathname === '/admin/login' ||
     pathname.startsWith('/api/auth/login') ||
+    pathname.startsWith('/api/auth/debug') ||
     pathname.startsWith('/api/leads') ||
     pathname.startsWith('/api/faq') ||
     pathname.startsWith('/api/plans') ||

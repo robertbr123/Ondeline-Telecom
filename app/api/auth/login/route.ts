@@ -71,12 +71,18 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    // Configurar cookie - usar secure apenas se não for localhost/traefik
+    const isSecure = process.env.NODE_ENV === 'production'
+    
     response.cookies.set('auth-token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isSecure,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7, // 7 dias
+      path: '/',
     })
+
+    console.log('✅ Login successful, cookie set')
 
     return response
   } catch (error) {

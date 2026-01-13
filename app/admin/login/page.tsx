@@ -22,13 +22,16 @@ export default function AdminLogin() {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(formData),
       })
 
       const data = await res.json()
+      console.log('Login response:', data)
 
       if (data.success) {
-        router.push('/admin')
+        // Usar window.location para garantir reload completo e cookie aplicado
+        window.location.href = '/admin'
       } else {
         setError(data.error || 'Erro ao fazer login')
       }
