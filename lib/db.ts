@@ -5,16 +5,21 @@ import { nanoid } from 'nanoid'
 // Connection string do PostgreSQL
 const connectionString = process.env.DATABASE_URL
 
+// Detectar se estamos em tempo de build (next build)
+const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build' || 
+                    process.argv.includes('build') ||
+                    process.env.npm_lifecycle_event === 'build'
+
 // Verificar se DATABASE_URL está configurado
-if (!connectionString) {
+if (!connectionString && !isBuildTime) {
   console.warn('⚠️  DATABASE_URL não está configurado. O app não funcionará corretamente.')
   console.warn('Configure a variável DATABASE_URL no Dokploy antes do deploy.')
 }
 
-// Criar pool de conexões (apenas se DATABASE_URL existe)
+// Criar pool de conexões (apenas se DATABASE_URL existe e não estamos em build time)
 let pool: Pool | null = null
 
-if (connectionString) {
+if (connectionString && !isBuildTime) {
   // Verificar se deve usar SSL (via variável de ambiente ou em produção)
   const useSSL = process.env.DATABASE_SSL === 'true' || 
                  (process.env.NODE_ENV === 'production' && process.env.DATABASE_SSL !== 'false')
@@ -27,11 +32,19 @@ if (connectionString) {
     connectionString,
     ssl: sslConfig,
   })
+} else if (isBuildTime) {
+  console.log('🔨 Build time detected - skipping database connection')
 }
 
 // Inicializar tabelas
 export async function initializeDatabase() {
   try {
+    // Pular durante build time
+    if (isBuildTime) {
+      console.log('🔨 Build time - skipping database initialization')
+      return
+    }
+
     if (!pool) {
       console.warn('⚠️  Pulando inicialização do banco: pool não disponível (DATABASE_URL não configurada)')
       return
