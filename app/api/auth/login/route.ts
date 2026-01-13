@@ -71,8 +71,12 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Configurar cookie - usar secure apenas se não for localhost/traefik
-    const isSecure = process.env.NODE_ENV === 'production'
+    // Configurar cookie
+    // NOTA: secure deve ser false quando usando proxy reverso (Traefik) 
+    // que termina HTTPS externamente mas usa HTTP internamente
+    const isSecure = false // Temporariamente desativado para funcionar com proxy
+    
+    console.log('🍪 Setting cookie with secure:', isSecure)
     
     response.cookies.set('auth-token', token, {
       httpOnly: true,

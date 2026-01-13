@@ -33,8 +33,14 @@ export function middleware(request: NextRequest) {
   // Proteger rotas de admin
   if (pathname.startsWith('/admin') || pathname.startsWith('/api/')) {
     const token = request.cookies.get('auth-token')?.value
+    const allCookies = request.cookies.getAll()
+    
+    console.log('🔒 Middleware check for:', pathname)
+    console.log('🍪 All cookies:', allCookies.map(c => c.name))
+    console.log('🎫 Auth token present:', !!token)
 
     if (!token) {
+      console.log('❌ No token, redirecting to login')
       if (pathname.startsWith('/api/')) {
         return NextResponse.json(
           { success: false, error: 'Não autorizado' },
@@ -46,8 +52,10 @@ export function middleware(request: NextRequest) {
 
     try {
       jwt.verify(token, JWT_SECRET)
+      console.log('✅ Token valid, allowing access')
       return NextResponse.next()
     } catch (error) {
+      console.log('❌ Token invalid:', error)
       if (pathname.startsWith('/api/')) {
         return NextResponse.json(
           { success: false, error: 'Token inválido' },
