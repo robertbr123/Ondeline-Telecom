@@ -96,12 +96,12 @@ npm start
    - **IMPORTANTE**: Não esqueça do `NEXTAUTH_SECRET`!
 
 4. **Configurar Build**
-   - **Build Type:** Selecione **Nixpacks** (recomendado) ou **Buildpacks**
-     - **Nixpacks** é a melhor opção - detecta automaticamente Next.js
-     - Se não disponível, use **Buildpacks** que também funciona bem
-   - Build Command: `npm install && npm run build`
-   - Start Command: `npm start`
-   - Node Version: 20.x ou 18.x
+   - **Build Type:** Selecione **Dockerfile** ⭐ (recomendado)
+     - Dockerfile personalizado para este projeto
+     - Inclui todas as dependências necessárias (better-sqlite3, etc.)
+     - Otimizado para Next.js standalone
+   - Build Command: (deixe em branco, será usado do Dockerfile)
+   - Start Command: (deixe em branco, será usado do Dockerfile)
 
 5. **Configurar Domínio**
    - Em "Domains", adicione seu domínio
