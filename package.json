@@ -6,7 +6,8 @@
     "build": "next build",
     "dev": "next dev -p 3008",
     "lint": "eslint .",
-    "start": "next start -p 3008"
+    "start": "next start -p 3008",
+    "postinstall": "cd node_modules/better-sqlite3 && npm run build-release"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
