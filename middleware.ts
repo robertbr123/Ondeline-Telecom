@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
+import { jwtVerify } from 'jose'
 
-const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'your-secret-key-change-in-production'
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.NEXTAUTH_SECRET || 'your-secret-key-change-in-production'
+)
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Permitir rotas públicas
@@ -51,7 +53,7 @@ export function middleware(request: NextRequest) {
     }
 
     try {
-      jwt.verify(token, JWT_SECRET)
+      await jwtVerify(token, JWT_SECRET)
       console.log('✅ Token valid, allowing access')
       return NextResponse.next()
     } catch (error) {

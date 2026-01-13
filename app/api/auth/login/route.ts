@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
+import { SignJWT } from 'jose'
 import { query } from '@/lib/db'
 
-const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'your-secret-key-change-in-production'
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.NEXTAUTH_SECRET || 'your-secret-key-change-in-production'
+)
 
 export async function POST(request: NextRequest) {
   try {
@@ -52,12 +54,11 @@ export async function POST(request: NextRequest) {
       username
     ])
 
-    // Criar token JWT
-    const token = jwt.sign(
-      { username: user.username, role: user.role },
-      JWT_SECRET,
-      { expiresIn: '7d' }
-    )
+    // Criar token JWT usando jose (compatível com Edge Runtime)
+    const token = await new SignJWT({ username: user.username, role: user.role })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setExpirationTime('7d')
+      .sign(JWT_SECRET)
 
     // Definir cookie
     const response = NextResponse.json({
