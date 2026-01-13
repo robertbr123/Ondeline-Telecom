@@ -3,17 +3,40 @@ import bcrypt from 'bcryptjs'
 import { nanoid } from 'nanoid'
 
 // Connection string do PostgreSQL
-const connectionString = process.env.DATABASE_URL || 'postgresql://ondel:Ipx102030@ondeline-ondeline-f0zpnd:5432/site'
+const connectionString = process.env.DATABASE_URL
 
-// Criar pool de conexões
-const pool = new Pool({
-  connectionString,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-})
+// Verificar se DATABASE_URL está configurado
+if (!connectionString) {
+  console.warn('⚠️  DATABASE_URL não está configurado. O app não funcionará corretamente.')
+  console.warn('Configure a variável DATABASE_URL no Dokploy antes do deploy.')
+}
+
+// Criar pool de conexões (apenas se DATABASE_URL existe)
+let pool: Pool | null = null
+
+if (connectionString) {
+  // Verificar se deve usar SSL (via variável de ambiente ou em produção)
+  const useSSL = process.env.DATABASE_SSL === 'true' || 
+                 (process.env.NODE_ENV === 'production' && process.env.DATABASE_SSL !== 'false')
+  
+  const sslConfig = useSSL ? { rejectUnauthorized: false } : false
+  
+  console.log(`🔗 Database connection: SSL=${useSSL}`)
+  
+  pool = new Pool({
+    connectionString,
+    ssl: sslConfig,
+  })
+}
 
 // Inicializar tabelas
 export async function initializeDatabase() {
   try {
+    if (!pool) {
+      console.warn('⚠️  Pulando inicialização do banco: pool não disponível (DATABASE_URL não configurada)')
+      return
+    }
+
     // Tabela de configurações do site
     await pool.query(`
       CREATE TABLE IF NOT EXISTS site_config (
