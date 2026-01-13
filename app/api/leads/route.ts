@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { nanoid } from 'nanoid'
 import { z } from 'zod'
 import nodemailer from 'nodemailer'
-import db from '@/lib/db'
+import { query } from '@/lib/db'
 
 // Schema de validação com Zod
 const leadSchema = z.object({
@@ -15,9 +15,8 @@ const leadSchema = z.object({
 // GET - Listar leads (admin)
 export async function GET(request: NextRequest) {
   try {
-    const leads = db
-      .prepare('SELECT * FROM leads ORDER BY created_at DESC')
-      .all() as any[]
+    const result = await query('SELECT * FROM leads ORDER BY created_at DESC')
+    const leads = result.rows as any[]
 
     return NextResponse.json({
       success: true,
@@ -44,10 +43,10 @@ export async function POST(request: NextRequest) {
     const now = new Date().toISOString()
 
     // Inserir no banco
-    db.prepare(`
+    await query(`
       INSERT INTO leads (id, name, email, phone, city, status, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, 'new', ?, ?)
-    `).run(id, validatedData.name, validatedData.email, validatedData.phone, validatedData.city, now, now)
+      VALUES ($1, $2, $3, $4, $5, 'new', $6, $7)
+    `, [id, validatedData.name, validatedData.email, validatedData.phone, validatedData.city, now, now])
 
     // Enviar email de notificação
     try {

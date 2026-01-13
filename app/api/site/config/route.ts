@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import db from '@/lib/db'
+import { query } from '@/lib/db'
 
 // GET - Obter configurações
 export async function GET() {
   try {
-    const config = db.prepare('SELECT * FROM site_config').all() as any[]
+    const result = await query('SELECT * FROM site_config')
+    const config = result.rows as any[]
     
     const configObj: any = {}
     config.forEach(item => {
@@ -29,11 +30,9 @@ export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
     
-    const update = db.prepare('INSERT OR REPLACE INTO site_config (key, value) VALUES (?, ?)')
-    
     for (const [key, value] of Object.entries(body)) {
       const valueToStore = key === 'keywords' ? JSON.stringify(value) : String(value)
-      update.run(key, valueToStore)
+      await query('INSERT INTO site_config (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = $2', [key, valueToStore])
     }
 
     return NextResponse.json({

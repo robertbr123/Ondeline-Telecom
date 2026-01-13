@@ -6,8 +6,7 @@
     "build": "next build",
     "dev": "next dev -p 3008",
     "lint": "eslint .",
-    "start": "next start -p 3008",
-    "postinstall": "cd node_modules/better-sqlite3 && npm run build-release"
+    "start": "next start -p 3008"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -69,7 +68,7 @@
     "next-auth": "^4.24.10",
     "cookie": "^0.7.1",
     "nanoid": "^5.0.9",
-    "better-sqlite3": "^11.8.1"
+    "pg": "^8.11.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.9",
@@ -81,7 +80,7 @@
     "@types/leaflet": "^1.9.14",
     "@types/nodemailer": "^6.4.17",
     "@types/cookie": "^0.6.0",
-    "@types/better-sqlite3": "^7.6.12",
+    "@types/pg": "^8.11.0",
     "postcss": "^8.5",
     "tailwindcss": "^4.1.9",
     "tw-animate-css": "1.3.3",

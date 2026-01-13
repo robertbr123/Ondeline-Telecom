@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { nanoid } from 'nanoid'
-import db from '@/lib/db'
+import { query } from '@/lib/db'
 
 // GET - Listar FAQ
 export async function GET() {
   try {
-    const faq = db
-      .prepare('SELECT * FROM faq ORDER BY "order" ASC')
-      .all() as any[]
+    const result = await query('SELECT * FROM faq ORDER BY "order" ASC')
+    const faq = result.rows as any[]
 
     return NextResponse.json({
       success: true,
@@ -37,10 +36,10 @@ export async function POST(request: NextRequest) {
 
     const id = nanoid()
 
-    db.prepare(`
+    await query(`
       INSERT INTO faq (id, question, answer, category, "order", active)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).run(id, question, answer, category, order, active ? 1 : 0)
+      VALUES ($1, $2, $3, $4, $5, $6)
+    `, [id, question, answer, category, order, active ? 1 : 0])
 
     return NextResponse.json({
       success: true,

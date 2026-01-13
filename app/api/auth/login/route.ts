@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import db from '@/lib/db'
+import { query } from '@/lib/db'
 
 const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'your-secret-key-change-in-production'
 
@@ -18,7 +18,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Buscar usuário no banco
-    const user = db.prepare('SELECT * FROM admin_users WHERE username = ?').get(username) as any
+    const result = await query('SELECT * FROM admin_users WHERE username = $1', [username])
+    const user = result.rows[0] as any
 
     if (!user) {
       return NextResponse.json(
@@ -38,10 +39,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Atualizar último login
-    db.prepare('UPDATE admin_users SET last_login = ? WHERE username = ?').run(
+    await query('UPDATE admin_users SET last_login = $1 WHERE username = $2', [
       new Date().toISOString(),
       username
-    )
+    ])
 
     // Criar token JWT
     const token = jwt.sign(

@@ -1,9 +1,6 @@
 # Imagem base Node.js
 FROM node:20-alpine AS base
 
-# Instalar dependências do sistema necessárias para better-sqlite3
-RUN apk add --no-cache python3 make g++ libc6-compat
-
 # Diretório de trabalho
 WORKDIR /app
 
@@ -13,10 +10,8 @@ COPY package.json pnpm-lock.yaml* ./
 # Instalar pnpm
 RUN corepack enable pnpm
 
-# Instalar dependências e compilar better-sqlite3
-RUN pnpm install --no-frozen-lockfile && \
-    cd node_modules/better-sqlite3 && \
-    npm run build-release
+# Instalar dependências
+RUN pnpm install --no-frozen-lockfile
 
 # Copiar resto do código
 COPY . .
@@ -28,9 +23,6 @@ RUN pnpm run build
 FROM node:20-alpine AS runner
 
 WORKDIR /app
-
-# Instalar dependências do sistema necessárias para better-sqlite3
-RUN apk add --no-cache python3 make g++
 
 # Instalar pnpm
 RUN corepack enable pnpm

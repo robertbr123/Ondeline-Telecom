@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import db from '@/lib/db'
+import { query } from '@/lib/db'
 
 // PATCH - Atualizar status do lead
 export async function PATCH(
@@ -19,11 +19,11 @@ export async function PATCH(
 
     const now = new Date().toISOString()
 
-    db.prepare(`
+    await query(`
       UPDATE leads 
-      SET status = ?, notes = ?, updated_at = ?
-      WHERE id = ?
-    `).run(status, notes || null, now, params.id)
+      SET status = $1, notes = $2, updated_at = $3
+      WHERE id = $4
+    `, [status, notes || null, now, params.id])
 
     return NextResponse.json({
       success: true,

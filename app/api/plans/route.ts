@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { nanoid } from 'nanoid'
-import db from '@/lib/db'
+import { query } from '@/lib/db'
 
 // GET - Listar planos
 export async function GET() {
   try {
-    const plans = db
-      .prepare('SELECT * FROM plans ORDER BY active DESC, highlighted DESC, name ASC')
-      .all() as any[]
+    const result = await query('SELECT * FROM plans ORDER BY active DESC, highlighted DESC, name ASC')
+    const plans = result.rows as any[]
 
     const plansWithFeatures = plans.map((plan) => ({
       ...plan,
@@ -46,10 +45,10 @@ export async function POST(request: NextRequest) {
     const id = nanoid()
     const now = new Date().toISOString()
 
-    db.prepare(`
+    await query(`
       INSERT INTO plans (id, name, speed, price, description, features, highlighted, active, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(id, name, speed, price, description, JSON.stringify(features), highlighted ? 1 : 0, active ? 1 : 0, now, now)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    `, [id, name, speed, price, description, JSON.stringify(features), highlighted ? 1 : 0, active ? 1 : 0, now, now])
 
     return NextResponse.json({
       success: true,

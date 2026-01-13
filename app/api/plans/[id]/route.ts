@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import db from '@/lib/db'
+import { query } from '@/lib/db'
 
 // PUT - Atualizar plano
 export async function PUT(
@@ -10,8 +10,8 @@ export async function PUT(
     const body = await request.json()
     const { name, speed, price, description, features, highlighted, active } = body
 
-    const existingPlan = db.prepare('SELECT id FROM plans WHERE id = ?').get(params.id)
-    if (!existingPlan) {
+    const existingPlan = await query('SELECT id FROM plans WHERE id = $1', [params.id])
+    if (!existingPlan.rows[0]) {
       return NextResponse.json(
         { success: false, error: 'Plano não encontrado' },
         { status: 404 }
@@ -20,12 +20,12 @@ export async function PUT(
 
     const now = new Date().toISOString()
 
-    db.prepare(`
+    await query(`
       UPDATE plans 
-      SET name = ?, speed = ?, price = ?, description = ?, features = ?, 
-          highlighted = ?, active = ?, updated_at = ?
-      WHERE id = ?
-    `).run(
+      SET name = $1, speed = $2, price = $3, description = $4, features = $5, 
+          highlighted = $6, active = $7, updated_at = $8
+      WHERE id = $9
+    `, [
       name,
       speed,
       price,
@@ -35,7 +35,7 @@ export async function PUT(
       active ? 1 : 0,
       now,
       params.id
-    )
+    ])
 
     return NextResponse.json({
       success: true,
@@ -57,9 +57,9 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const result = db.prepare('DELETE FROM plans WHERE id = ?').run(params.id)
+    const result = await query('DELETE FROM plans WHERE id = $1', [params.id])
 
-    if (result.changes === 0) {
+    if (result.rowCount === 0) {
       return NextResponse.json(
         { success: false, error: 'Plano não encontrado' },
         { status: 404 }
