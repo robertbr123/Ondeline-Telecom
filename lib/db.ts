@@ -250,13 +250,17 @@ export async function initializeDatabase() {
     // Criar usuário admin padrão se não existir
     const adminCount = await pool.query('SELECT COUNT(*) as count FROM admin_users')
     if (parseInt(adminCount.rows[0].count) === 0) {
-      const defaultHash = bcrypt.hashSync('admin123', 10)
+      // Usar variáveis de ambiente se disponíveis, senão usar padrão
+      const adminUsername = process.env.ADMIN_USERNAME || 'admin'
+      const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH || bcrypt.hashSync('admin123', 10)
       const now = new Date().toISOString()
+      
+      console.log(`🔐 Creating admin user: ${adminUsername}`)
       
       await pool.query(`
         INSERT INTO admin_users (username, password_hash, role, created_at)
         VALUES ($1, $2, 'admin', $3)
-      `, ['admin', defaultHash, now])
+      `, [adminUsername, adminPasswordHash, now])
     }
 
     console.log('✅ Database initialized successfully')
