@@ -8,8 +8,12 @@ export function middleware(request: NextRequest) {
 
   // Permitir rotas públicas
   if (
+    pathname === '/admin/login' ||
     pathname.startsWith('/api/auth/login') ||
     pathname.startsWith('/api/leads') ||
+    pathname.startsWith('/api/faq') ||
+    pathname.startsWith('/api/plans') ||
+    pathname.startsWith('/api/site/config') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/static') ||
     pathname.startsWith('/favicon') ||
