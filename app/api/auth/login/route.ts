@@ -10,6 +10,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { username, password } = body
 
+    console.log('🔐 Login attempt for user:', username)
+
     if (!username || !password) {
       return NextResponse.json(
         { success: false, error: 'Usuário e senha são obrigatórios' },
@@ -21,7 +23,10 @@ export async function POST(request: NextRequest) {
     const result = await query('SELECT * FROM admin_users WHERE username = $1', [username])
     const user = result.rows[0] as any
 
+    console.log('🔍 User found:', user ? 'Yes' : 'No')
+
     if (!user) {
+      console.log('❌ User not found in database')
       return NextResponse.json(
         { success: false, error: 'Credenciais inválidas' },
         { status: 401 }
@@ -29,9 +34,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Verificar senha
+    console.log('🔑 Comparing password...')
     const isValidPassword = await bcrypt.compare(password, user.password_hash)
+    console.log('🔑 Password valid:', isValidPassword)
 
     if (!isValidPassword) {
+      console.log('❌ Invalid password')
       return NextResponse.json(
         { success: false, error: 'Credenciais inválidas' },
         { status: 401 }
