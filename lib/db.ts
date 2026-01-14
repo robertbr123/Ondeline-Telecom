@@ -113,6 +113,41 @@ export async function initializeDatabase() {
       )
     `)
 
+    // Tabela de posts do blog
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS blog_posts (
+        id TEXT PRIMARY KEY,
+        title TEXT NOT NULL,
+        slug TEXT NOT NULL UNIQUE,
+        excerpt TEXT,
+        content TEXT NOT NULL,
+        cover_image TEXT,
+        author TEXT NOT NULL,
+        category TEXT DEFAULT 'geral',
+        tags TEXT,
+        published INTEGER DEFAULT 0,
+        views INTEGER DEFAULT 0,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    `)
+
+    // Tabela de materiais (downloads)
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS materials (
+        id TEXT PRIMARY KEY,
+        title TEXT NOT NULL,
+        description TEXT,
+        file_url TEXT NOT NULL,
+        file_type TEXT NOT NULL,
+        category TEXT DEFAULT 'documentos',
+        downloads INTEGER DEFAULT 0,
+        active INTEGER DEFAULT 1,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    `)
+
     // Inserir configurações padrão se não existirem
     const defaultConfig = await pool.query('SELECT COUNT(*) as count FROM site_config')
     if (parseInt(defaultConfig.rows[0].count) === 0) {

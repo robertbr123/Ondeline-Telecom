@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { LogOut, Users, LayoutDashboard, Package, MessageSquare, Settings } from 'lucide-react'
+import { LogOut, Users, LayoutDashboard, Package, MessageSquare, Settings, BarChart3, FileText, BookOpen } from 'lucide-react'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -110,23 +110,50 @@ export default function AdminDashboard() {
         </div>
 
         {/* Quick Links */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <a
-            href="/admin/leads"
+            href="/admin/analytics"
             className="p-6 rounded-xl border border-border bg-card/50 hover:border-primary/50 transition group"
           >
-            <Users className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition" />
+            <BarChart3 className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition" />
+            <h3 className="text-xl font-semibold mb-2">Analytics</h3>
+            <p className="text-sm text-muted-foreground">Ver estatísticas e métricas</p>
+          </a>
+
+          <a
+            href="/admin/leads"
+            className="p-6 rounded-xl border border-border bg-card/50 hover:border-secondary/50 transition group"
+          >
+            <Users className="w-8 h-8 text-secondary mb-3 group-hover:scale-110 transition" />
             <h3 className="text-xl font-semibold mb-2">Leads</h3>
             <p className="text-sm text-muted-foreground">Gerenciar pré-cadastros</p>
           </a>
 
           <a
             href="/admin/plans"
-            className="p-6 rounded-xl border border-border bg-card/50 hover:border-secondary/50 transition group"
+            className="p-6 rounded-xl border border-border bg-card/50 hover:border-accent/50 transition group"
           >
-            <Package className="w-8 h-8 text-secondary mb-3 group-hover:scale-110 transition" />
+            <Package className="w-8 h-8 text-accent mb-3 group-hover:scale-110 transition" />
             <h3 className="text-xl font-semibold mb-2">Planos</h3>
             <p className="text-sm text-muted-foreground">Editar planos de internet</p>
+          </a>
+
+          <a
+            href="/admin/blog"
+            className="p-6 rounded-xl border border-border bg-card/50 hover:border-primary/50 transition group"
+          >
+            <BookOpen className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition" />
+            <h3 className="text-xl font-semibold mb-2">Blog</h3>
+            <p className="text-sm text-muted-foreground">Criar e gerenciar posts</p>
+          </a>
+
+          <a
+            href="/admin/materials"
+            className="p-6 rounded-xl border border-border bg-card/50 hover:border-secondary/50 transition group"
+          >
+            <FileText className="w-8 h-8 text-secondary mb-3 group-hover:scale-110 transition" />
+            <h3 className="text-xl font-semibold mb-2">Materiais</h3>
+            <p className="text-sm text-muted-foreground">Gerenciar downloads</p>
           </a>
 
           <a
