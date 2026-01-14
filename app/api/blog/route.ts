@@ -5,14 +5,20 @@ import { nanoid } from 'nanoid'
 // GET - Buscar todos os posts (apenas publicados)
 export async function GET(request: NextRequest) {
   try {
+    console.log('=== API BLOG - GET ===')
+    
     const { searchParams } = new URL(request.url)
     const includeUnpublished = searchParams.get('unpublished') === 'true'
+
+    console.log('includeUnpublished:', includeUnpublished)
 
     const result = await query(`
       SELECT * FROM blog_posts 
       ${!includeUnpublished ? 'WHERE published = 1' : ''}
       ORDER BY created_at DESC
     `)
+
+    console.log(`Encontrados ${result.rows.length} posts`)
 
     const posts = result.rows.map(p => ({
       id: p.id,
@@ -46,10 +52,17 @@ export async function GET(request: NextRequest) {
 // POST - Criar novo post
 export async function POST(request: NextRequest) {
   try {
+    console.log('=== API BLOG - POST ===')
+    
     const body = await request.json()
+    console.log('Body recebido:', body)
+    
     const { title, slug, excerpt, content, cover_image, author, category, tags } = body
 
+    console.log('Campos:', { title, slug, excerpt, content: cover_image, author, category, tags })
+
     if (!title || !content || !author) {
+      console.error('Campos obrigatórios faltando:', { title: !!title, content: !!content, author: !!author })
       return NextResponse.json(
         { success: false, error: 'Campos obrigatórios: title, content, author' },
         { status: 400 }
@@ -65,8 +78,31 @@ export async function POST(request: NextRequest) {
       .replace(/-+/g, '-')
       .substring(0, 50)
 
+    console.log('Slug gerado:', postSlug)
+
     const id = `blog-${nanoid(8)}`
     const now = new Date().toISOString()
+
+    console.log('Inserindo no banco:', {
+      id,
+      title,
+      slug: postSlug,
+      excerpt: excerpt || '',
+      content,
+      cover_image: cover_image || '',
+      author,
+      category: category || 'geral',
+      tags: tags || [],
+    })
+
+    // Verificar se a tabela existe
+    const checkTable = await query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'blog_posts'
+      )
+    `)
+    console.log('Tabela blog_posts existe:', checkTable.rows[0])
 
     await query(`
       INSERT INTO blog_posts (id, title, slug, excerpt, content, cover_image, author, category, tags, published, created_at, updated_at)
@@ -86,6 +122,8 @@ export async function POST(request: NextRequest) {
       now
     ])
 
+    console.log('Post inserido com sucesso')
+
     return NextResponse.json({
       success: true,
       data: { id, title, slug: postSlug, excerpt, content, cover_image, author, category, tags },
@@ -93,8 +131,9 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error('Erro ao criar post:', error)
+    console.error('Stack trace:', error.stack)
     return NextResponse.json(
-      { success: false, error: 'Erro ao criar post' },
+      { success: false, error: 'Erro ao criar post: ' + error.message },
       { status: 500 }
     )
   }

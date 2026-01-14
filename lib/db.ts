@@ -308,16 +308,32 @@ export async function initializeDatabase() {
 // Inicializar o banco de dados
 initializeDatabase().catch(console.error)
 
-// Helper para queries
+// Helper para queries com logs detalhados
 export async function query(text: string, params?: any[]) {
   const start = Date.now()
   try {
+    console.log('=== DATABASE QUERY START ===')
+    console.log('Query SQL:', text)
+    console.log('Parâmetros:', params ? JSON.stringify(params) : 'Nenhum')
+    console.log('Pool está disponível:', !!pool)
+    
+    if (!pool) {
+      console.error('❌ Pool não disponível! DATABASE_URL não configurado?')
+      throw new Error('Conexão com banco não disponível. Verifique DATABASE_URL.')
+    }
+    
     const res = await pool.query(text, params)
     const duration = Date.now() - start
-    console.log('Executed query', { text, duration, rows: res.rowCount })
+    console.log('✅ Query executada com sucesso')
+    console.log('Linhas afetadas:', res.rowCount)
+    console.log('⏱️  Tempo:', duration + 'ms')
     return res
   } catch (error) {
-    console.error('Query error:', error)
+    console.error('❌ DATABASE QUERY ERROR ===')
+    console.error('Erro:', error.message)
+    console.error('Stack:', error.stack)
+    console.error('SQL que falhou:', text)
+    console.error('====================================')
     throw error
   }
 }
