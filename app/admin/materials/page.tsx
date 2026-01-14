@@ -42,21 +42,42 @@ export default function AdminMaterials() {
 
   const saveMaterial = async (material: Material) => {
     try {
-      const method = material.id ? 'PUT' : 'POST'
-      const url = material.id ? `/api/materials/${material.id}` : '/api/materials'
+      const isEditing = material.id && material.id.length > 0
+      const method = isEditing ? 'PUT' : 'POST'
+      const url = isEditing ? `/api/materials/${material.id}` : '/api/materials'
+      
+      // Preparar dados para enviar
+      const materialData = {
+        title: material.title,
+        description: material.description,
+        file_url: material.file_url,
+        file_type: material.file_type,
+        category: material.category,
+        active: true,
+      }
+      
+      console.log('Salvando material:', { method, url, materialData })
       
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(material),
+        body: JSON.stringify(materialData),
       })
 
-      if (res.ok) {
-        fetchMaterials()
-        setEditingMaterial(null)
+      const data = await res.json()
+      
+      if (!res.ok) {
+        console.error('Erro na resposta:', data)
+        alert(`Erro: ${data.error || 'Erro ao salvar material'}`)
+        return
       }
+      
+      fetchMaterials()
+      setEditingMaterial(null)
+      alert('Material salvo com sucesso!')
     } catch (error) {
       console.error('Erro ao salvar material:', error)
+      alert('Erro ao salvar material. Verifique o console.')
     }
   }
 
@@ -105,8 +126,9 @@ export default function AdminMaterials() {
                 file_type: 'pdf',
                 category: 'documentos',
                 downloads: 0,
-                created_at: '',
-                updated_at: '',
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+                active: true,
               })}
               className="flex items-center gap-2"
             >

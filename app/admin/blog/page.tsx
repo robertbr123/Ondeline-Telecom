@@ -46,21 +46,45 @@ export default function AdminBlog() {
 
   const savePost = async (post: BlogPost) => {
     try {
-      const method = post.id ? 'PUT' : 'POST'
-      const url = post.id ? `/api/blog/${post.slug}` : '/api/blog'
+      const isEditing = post.id && post.id.length > 0
+      const method = isEditing ? 'PUT' : 'POST'
+      const url = isEditing ? `/api/blog/${post.slug}` : '/api/blog'
+      
+      // Preparar dados para enviar
+      const postData = {
+        title: post.title,
+        slug: post.slug,
+        excerpt: post.excerpt,
+        content: post.content,
+        cover_image: post.cover_image,
+        author: post.author,
+        category: post.category,
+        tags: post.tags,
+        published: post.published,
+      }
+      
+      console.log('Salvando post:', { method, url, postData })
       
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(post),
+        body: JSON.stringify(postData),
       })
 
-      if (res.ok) {
-        fetchPosts()
-        setEditingPost(null)
+      const data = await res.json()
+      
+      if (!res.ok) {
+        console.error('Erro na resposta:', data)
+        alert(`Erro: ${data.error || 'Erro ao salvar post'}`)
+        return
       }
+      
+      fetchPosts()
+      setEditingPost(null)
+      alert('Post salvo com sucesso!')
     } catch (error) {
       console.error('Erro ao salvar post:', error)
+      alert('Erro ao salvar post. Verifique o console.')
     }
   }
 
@@ -91,22 +115,22 @@ export default function AdminBlog() {
           </Link>
           <div className="flex items-center justify-between mt-4">
             <h1 className="text-2xl font-bold">Gerenciar Blog</h1>
-            <Button
-              onClick={() => setEditingPost({
-                id: '',
-                title: '',
-                slug: '',
-                excerpt: '',
-                content: '',
-                cover_image: '',
-                author: '',
-                category: 'geral',
-                tags: [],
-                published: false,
-                views: 0,
-                created_at: '',
-                updated_at: '',
-              })}
+              <Button
+                onClick={() => setEditingPost({
+                  id: '',
+                  title: '',
+                  slug: '',
+                  excerpt: '',
+                  content: '',
+                  cover_image: '',
+                  author: '',
+                  category: 'geral',
+                  tags: [],
+                  published: false,
+                  views: 0,
+                  created_at: new Date().toISOString(),
+                  updated_at: new Date().toISOString(),
+                })}
               className="flex items-center gap-2"
             >
               <Plus size={16} /> Novo Post

@@ -91,6 +91,8 @@ export default function AdminPlans() {
                 features: [],
                 highlighted: false,
                 active: true,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
               })}
               className="flex items-center gap-2"
             >
@@ -257,17 +259,43 @@ export default function AdminPlans() {
                   <Button
                     onClick={async () => {
                       try {
-                        const res = await fetch(editingPlan.id ? `/api/plans/${editingPlan.id}` : '/api/plans', {
-                          method: editingPlan.id ? 'PUT' : 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify(editingPlan),
-                        })
-                        if (res.ok) {
-                          fetchPlans()
-                          setEditingPlan(null)
+                        const isEditing = editingPlan.id && editingPlan.id.length > 0
+                        const method = isEditing ? 'PUT' : 'POST'
+                        const url = isEditing ? `/api/plans/${editingPlan.id}` : '/api/plans'
+                        
+                        // Preparar dados para enviar
+                        const planData = {
+                          name: editingPlan.name,
+                          speed: editingPlan.speed,
+                          price: editingPlan.price,
+                          description: editingPlan.description,
+                          features: editingPlan.features,
+                          highlighted: editingPlan.highlighted,
+                          active: editingPlan.active,
                         }
+                        
+                        console.log('Salvando plano:', { method, url, planData })
+                        
+                        const res = await fetch(url, {
+                          method,
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify(planData),
+                        })
+
+                        const data = await res.json()
+                        
+                        if (!res.ok) {
+                          console.error('Erro na resposta:', data)
+                          alert(`Erro: ${data.error || 'Erro ao salvar plano'}`)
+                          return
+                        }
+                        
+                        fetchPlans()
+                        setEditingPlan(null)
+                        alert('Plano salvo com sucesso!')
                       } catch (error) {
                         console.error('Erro ao salvar plano:', error)
+                        alert('Erro ao salvar plano. Verifique o console.')
                       }
                     }}
                     className="flex-1 bg-primary hover:bg-primary/90"
