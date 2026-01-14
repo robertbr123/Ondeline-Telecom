@@ -5,18 +5,26 @@ const JWT_SECRET = new TextEncoder().encode(
   process.env.NEXTAUTH_SECRET || 'your-secret-key-change-in-production'
 )
 
+// Rotas públicas que não exigem autenticação
+const publicRoutes = [
+  '/admin/login',
+  '/api/auth/login',
+  '/api/auth/debug',
+  '/api/leads',
+  '/api/faq',
+  '/api/plans',
+  '/api/site/config',
+]
+
+// Extensões de arquivos estáticos
+const staticExtensions = ['.png', '.jpg', '.jpeg', '.svg', '.ico', '.gif', '.webp', '.css', '.js']
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Permitir rotas públicas
   if (
-    pathname === '/admin/login' ||
-    pathname.startsWith('/api/auth/login') ||
-    pathname.startsWith('/api/auth/debug') ||
-    pathname.startsWith('/api/leads') ||
-    pathname.startsWith('/api/faq') ||
-    pathname.startsWith('/api/plans') ||
-    pathname.startsWith('/api/site/config') ||
+    publicRoutes.some(route => pathname.startsWith(route)) ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/static') ||
     pathname.startsWith('/favicon') ||
@@ -24,10 +32,7 @@ export async function middleware(request: NextRequest) {
     pathname === '/' ||
     pathname.startsWith('/blog') ||
     pathname.startsWith('/coverage') ||
-    pathname.includes('.png') ||
-    pathname.includes('.jpg') ||
-    pathname.includes('.svg') ||
-    pathname.includes('.ico')
+    staticExtensions.some(ext => pathname.includes(ext))
   ) {
     return NextResponse.next()
   }
@@ -35,14 +40,8 @@ export async function middleware(request: NextRequest) {
   // Proteger rotas de admin
   if (pathname.startsWith('/admin') || pathname.startsWith('/api/')) {
     const token = request.cookies.get('auth-token')?.value
-    const allCookies = request.cookies.getAll()
-    
-    console.log('🔒 Middleware check for:', pathname)
-    console.log('🍪 All cookies:', allCookies.map(c => c.name))
-    console.log('🎫 Auth token present:', !!token)
 
     if (!token) {
-      console.log('❌ No token, redirecting to login')
       if (pathname.startsWith('/api/')) {
         return NextResponse.json(
           { success: false, error: 'Não autorizado' },
@@ -54,10 +53,8 @@ export async function middleware(request: NextRequest) {
 
     try {
       await jwtVerify(token, JWT_SECRET)
-      console.log('✅ Token valid, allowing access')
       return NextResponse.next()
     } catch (error) {
-      console.log('❌ Token invalid:', error)
       if (pathname.startsWith('/api/')) {
         return NextResponse.json(
           { success: false, error: 'Token inválido' },
