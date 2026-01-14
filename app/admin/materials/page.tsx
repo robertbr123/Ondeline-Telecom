@@ -21,6 +21,7 @@ export default function AdminMaterials() {
   const [materials, setMaterials] = useState<Material[]>([])
   const [loading, setLoading] = useState(true)
   const [editingMaterial, setEditingMaterial] = useState<Material | null>(null)
+  const [isCreating, setIsCreating] = useState(false)
 
   useEffect(() => {
     fetchMaterials()
@@ -40,13 +41,28 @@ export default function AdminMaterials() {
     }
   }
 
+  const handleCreateNew = () => {
+    setIsCreating(true)
+    setEditingMaterial({
+      id: '',
+      title: '',
+      description: '',
+      file_url: '',
+      file_type: 'pdf',
+      category: 'documentos',
+      downloads: 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      active: true,
+    })
+  }
+
   const saveMaterial = async (material: Material) => {
     try {
-      const isEditing = material.id && material.id.length > 0
-      const method = isEditing ? 'PUT' : 'POST'
-      const url = isEditing ? `/api/materials/${material.id}` : '/api/materials'
+      const isNewMaterial = isCreating || !material.id || material.id === ''
+      const method = isNewMaterial ? 'POST' : 'PUT'
+      const url = isNewMaterial ? '/api/materials' : `/api/materials/${material.id}`
       
-      // Preparar dados para enviar
       const materialData = {
         title: material.title,
         description: material.description,
@@ -56,7 +72,10 @@ export default function AdminMaterials() {
         active: true,
       }
       
-      console.log('Salvando material:', { method, url, materialData })
+      console.log('=== SALVANDO MATERIAL ===')
+      console.log('isNewMaterial:', isNewMaterial)
+      console.log('method:', method)
+      console.log('url:', url)
       
       const res = await fetch(url, {
         method,
@@ -65,6 +84,7 @@ export default function AdminMaterials() {
       })
 
       const data = await res.json()
+      console.log('=== RESPOSTA DA API ===', data)
       
       if (!res.ok) {
         console.error('Erro na resposta:', data)
@@ -74,6 +94,7 @@ export default function AdminMaterials() {
       
       fetchMaterials()
       setEditingMaterial(null)
+      setIsCreating(false)
       alert('Material salvo com sucesso!')
     } catch (error) {
       console.error('Erro ao salvar material:', error)
@@ -118,18 +139,7 @@ export default function AdminMaterials() {
           <div className="flex items-center justify-between mt-4">
             <h1 className="text-2xl font-bold">Gerenciar Materiais</h1>
             <Button
-              onClick={() => setEditingMaterial({
-                id: '',
-                title: '',
-                description: '',
-                file_url: '',
-                file_type: 'pdf',
-                category: 'documentos',
-                downloads: 0,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-                active: true,
-              })}
+              onClick={handleCreateNew}
               className="flex items-center gap-2"
             >
               <Plus size={16} /> Novo Material
@@ -177,7 +187,10 @@ export default function AdminMaterials() {
                     size="sm"
                     variant="outline"
                     className="flex-1"
-                    onClick={() => setEditingMaterial(material)}
+                    onClick={() => {
+                      setIsCreating(false)
+                      setEditingMaterial(material)
+                    }}
                   >
                     <Edit size={14} className="mr-1" /> Editar
                   </Button>
@@ -200,7 +213,7 @@ export default function AdminMaterials() {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-background border border-border rounded-xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
             <h2 className="text-2xl font-bold mb-6">
-              {editingMaterial.id ? 'Editar Material' : 'Novo Material'}
+              {isCreating ? 'Novo Material' : 'Editar Material'}
             </h2>
 
             <div className="space-y-4">
@@ -268,7 +281,10 @@ export default function AdminMaterials() {
               <div className="flex gap-3 pt-4">
                 <Button
                   variant="outline"
-                  onClick={() => setEditingMaterial(null)}
+                  onClick={() => {
+                    setEditingMaterial(null)
+                    setIsCreating(false)
+                  }}
                   className="flex-1"
                 >
                   Cancelar

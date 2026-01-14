@@ -25,6 +25,7 @@ export default function AdminBlog() {
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null)
+  const [isCreating, setIsCreating] = useState(false)
 
   useEffect(() => {
     fetchPosts()
@@ -44,11 +45,31 @@ export default function AdminBlog() {
     }
   }
 
+  const handleCreateNew = () => {
+    setIsCreating(true)
+    setEditingPost({
+      id: '',
+      title: '',
+      slug: '',
+      excerpt: '',
+      content: '',
+      cover_image: '',
+      author: '',
+      category: 'geral',
+      tags: [],
+      published: false,
+      views: 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    console.log('Abrindo modal para NOVO post')
+  }
+
   const savePost = async (post: BlogPost) => {
     try {
-      const isEditing = post.id && post.id.length > 0
-      const method = isEditing ? 'PUT' : 'POST'
-      const url = isEditing ? `/api/blog/${post.slug}` : '/api/blog'
+      const isNewPost = isCreating || !post.id || post.id === ''
+      const method = isNewPost ? 'POST' : 'PUT'
+      const url = isNewPost ? '/api/blog' : `/api/blog/${post.slug}`
       
       // Preparar dados para enviar
       const postData = {
@@ -63,7 +84,13 @@ export default function AdminBlog() {
         published: post.published,
       }
       
-      console.log('Salvando post:', { method, url, postData })
+      console.log('=== SALVANDO POST ===')
+      console.log('isNewPost:', isNewPost)
+      console.log('isCreating:', isCreating)
+      console.log('postId:', post.id)
+      console.log('method:', method)
+      console.log('url:', url)
+      console.log('postData:', postData)
       
       const res = await fetch(url, {
         method,
@@ -72,6 +99,7 @@ export default function AdminBlog() {
       })
 
       const data = await res.json()
+      console.log('=== RESPOSTA DA API ===', data)
       
       if (!res.ok) {
         console.error('Erro na resposta:', data)
@@ -81,6 +109,7 @@ export default function AdminBlog() {
       
       fetchPosts()
       setEditingPost(null)
+      setIsCreating(false)
       alert('Post salvo com sucesso!')
     } catch (error) {
       console.error('Erro ao salvar post:', error)
@@ -115,22 +144,8 @@ export default function AdminBlog() {
           </Link>
           <div className="flex items-center justify-between mt-4">
             <h1 className="text-2xl font-bold">Gerenciar Blog</h1>
-              <Button
-                onClick={() => setEditingPost({
-                  id: '',
-                  title: '',
-                  slug: '',
-                  excerpt: '',
-                  content: '',
-                  cover_image: '',
-                  author: '',
-                  category: 'geral',
-                  tags: [],
-                  published: false,
-                  views: 0,
-                  created_at: new Date().toISOString(),
-                  updated_at: new Date().toISOString(),
-                })}
+            <Button
+              onClick={handleCreateNew}
               className="flex items-center gap-2"
             >
               <Plus size={16} /> Novo Post
@@ -202,7 +217,10 @@ export default function AdminBlog() {
                     size="sm"
                     variant="outline"
                     className="flex-1"
-                    onClick={() => setEditingPost(post)}
+                    onClick={() => {
+                      setIsCreating(false)
+                      setEditingPost(post)
+                    }}
                   >
                     <Edit size={14} className="mr-1" /> Editar
                   </Button>
@@ -225,7 +243,7 @@ export default function AdminBlog() {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-background border border-border rounded-xl max-w-3xl w-full p-6 max-h-[90vh] overflow-y-auto">
             <h2 className="text-2xl font-bold mb-6">
-              {editingPost.id ? 'Editar Post' : 'Novo Post'}
+              {isCreating ? 'Novo Post' : 'Editar Post'}
             </h2>
 
             <div className="space-y-4">
@@ -337,7 +355,10 @@ export default function AdminBlog() {
               <div className="flex gap-3 pt-4">
                 <Button
                   variant="outline"
-                  onClick={() => setEditingPost(null)}
+                  onClick={() => {
+                    setEditingPost(null)
+                    setIsCreating(false)
+                  }}
                   className="flex-1"
                 >
                   Cancelar

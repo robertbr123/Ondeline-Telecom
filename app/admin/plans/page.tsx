@@ -20,6 +20,7 @@ export default function AdminPlans() {
   const [plans, setPlans] = useState<Plan[]>([])
   const [loading, setLoading] = useState(true)
   const [editingPlan, setEditingPlan] = useState<Plan | null>(null)
+  const [isCreating, setIsCreating] = useState(false)
 
   useEffect(() => {
     fetchPlans()
@@ -39,18 +40,90 @@ export default function AdminPlans() {
     }
   }
 
+  const handleCreateNew = () => {
+    setIsCreating(true)
+    setEditingPlan({
+      id: '',
+      name: '',
+      speed: '',
+      price: '',
+      description: '',
+      features: [],
+      highlighted: false,
+      active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+  }
+
   const toggleActive = async (planId: string, currentStatus: boolean) => {
     try {
+      const plan = plans.find(p => p.id === planId)
       const res = await fetch(`/api/plans/${planId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...plans.find(p => p.id === planId), active: !currentStatus }),
+        body: JSON.stringify({ 
+          name: plan.name,
+          speed: plan.speed,
+          price: plan.price,
+          description: plan.description,
+          features: plan.features,
+          highlighted: plan.highlighted,
+          active: !currentStatus,
+        }),
       })
       if (res.ok) {
         fetchPlans()
       }
     } catch (error) {
       console.error('Erro ao atualizar plano:', error)
+    }
+  }
+
+  const savePlan = async (plan: Plan) => {
+    try {
+      const isNewPlan = isCreating || !plan.id || plan.id === ''
+      const method = isNewPlan ? 'POST' : 'PUT'
+      const url = isNewPlan ? '/api/plans' : `/api/plans/${plan.id}`
+      
+      const planData = {
+        name: plan.name,
+        speed: plan.speed,
+        price: plan.price,
+        description: plan.description,
+        features: plan.features,
+        highlighted: plan.highlighted,
+        active: plan.active,
+      }
+      
+      console.log('=== SALVANDO PLANO ===')
+      console.log('isNewPlan:', isNewPlan)
+      console.log('method:', method)
+      console.log('url:', url)
+      console.log('planData:', planData)
+      
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(planData),
+      })
+
+      const data = await res.json()
+      console.log('=== RESPOSTA DA API ===', data)
+      
+      if (!res.ok) {
+        console.error('Erro na resposta:', data)
+        alert(`Erro: ${data.error || 'Erro ao salvar plano'}`)
+        return
+      }
+      
+      fetchPlans()
+      setEditingPlan(null)
+      setIsCreating(false)
+      alert('Plano salvo com sucesso!')
+    } catch (error) {
+      console.error('Erro ao salvar plano:', error)
+      alert('Erro ao salvar plano. Verifique o console.')
     }
   }
 
@@ -82,18 +155,7 @@ export default function AdminPlans() {
           <div className="flex items-center justify-between mt-4">
             <h1 className="text-2xl font-bold">Gerenciar Planos</h1>
             <Button
-              onClick={() => setEditingPlan({
-                id: '',
-                name: '',
-                speed: '',
-                price: '',
-                description: '',
-                features: [],
-                highlighted: false,
-                active: true,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-              })}
+              onClick={handleCreateNew}
               className="flex items-center gap-2"
             >
               <Plus size={16} /> Novo Plano
@@ -146,7 +208,10 @@ export default function AdminPlans() {
                     size="sm"
                     variant="outline"
                     className="flex-1"
-                    onClick={() => setEditingPlan(plan)}
+                    onClick={() => {
+                    setIsCreating(false)
+                    setEditingPlan(plan)
+                  }}
                   >
                     <Edit size={14} className="mr-1" /> Editar
                   </Button>
@@ -248,61 +313,24 @@ export default function AdminPlans() {
                   </label>
                 </div>
 
-                <div className="flex gap-3 pt-4">
-                  <Button
-                    variant="outline"
-                    onClick={() => setEditingPlan(null)}
-                    className="flex-1"
+              <div className="flex gap-3 pt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setEditingPlan(null)
+                    setIsCreating(false)
+                  }}
+                  className="flex-1"
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  onClick={() => savePlan(editingPlan)}
+                  className="flex-1 bg-primary hover:bg-primary/90"
                   >
-                    Cancelar
-                  </Button>
-                  <Button
-                    onClick={async () => {
-                      try {
-                        const isEditing = editingPlan.id && editingPlan.id.length > 0
-                        const method = isEditing ? 'PUT' : 'POST'
-                        const url = isEditing ? `/api/plans/${editingPlan.id}` : '/api/plans'
-                        
-                        // Preparar dados para enviar
-                        const planData = {
-                          name: editingPlan.name,
-                          speed: editingPlan.speed,
-                          price: editingPlan.price,
-                          description: editingPlan.description,
-                          features: editingPlan.features,
-                          highlighted: editingPlan.highlighted,
-                          active: editingPlan.active,
-                        }
-                        
-                        console.log('Salvando plano:', { method, url, planData })
-                        
-                        const res = await fetch(url, {
-                          method,
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify(planData),
-                        })
-
-                        const data = await res.json()
-                        
-                        if (!res.ok) {
-                          console.error('Erro na resposta:', data)
-                          alert(`Erro: ${data.error || 'Erro ao salvar plano'}`)
-                          return
-                        }
-                        
-                        fetchPlans()
-                        setEditingPlan(null)
-                        alert('Plano salvo com sucesso!')
-                      } catch (error) {
-                        console.error('Erro ao salvar plano:', error)
-                        alert('Erro ao salvar plano. Verifique o console.')
-                      }
-                    }}
-                    className="flex-1 bg-primary hover:bg-primary/90"
-                  >
-                    Salvar
-                  </Button>
-                </div>
+                  Salvar
+                </Button>
+              </div>
               </div>
             </div>
           </div>
