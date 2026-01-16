@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { LogOut, Users, LayoutDashboard, Package, MessageSquare, Settings, BarChart3, FileText, BookOpen } from 'lucide-react'
+import { LogOut, Users, LayoutDashboard, Package, MessageSquare, Settings, BarChart3, FileText, BookOpen, Building2, HelpCircle, MapPin } from 'lucide-react'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -145,6 +145,33 @@ export default function AdminDashboard() {
             <BookOpen className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition" />
             <h3 className="text-xl font-semibold mb-2">Blog</h3>
             <p className="text-sm text-muted-foreground">Criar e gerenciar posts</p>
+          </a>
+
+          <a
+            href="/admin/faq"
+            className="p-6 rounded-xl border border-border bg-card/50 hover:border-secondary/50 transition group"
+          >
+            <HelpCircle className="w-8 h-8 text-secondary mb-3 group-hover:scale-110 transition" />
+            <h3 className="text-xl font-semibold mb-2">FAQ</h3>
+            <p className="text-sm text-muted-foreground">Perguntas frequentes</p>
+          </a>
+
+          <a
+            href="/admin/clients"
+            className="p-6 rounded-xl border border-border bg-card/50 hover:border-accent/50 transition group"
+          >
+            <Building2 className="w-8 h-8 text-accent mb-3 group-hover:scale-110 transition" />
+            <h3 className="text-xl font-semibold mb-2">Clientes</h3>
+            <p className="text-sm text-muted-foreground">Parceiros e clientes</p>
+          </a>
+
+          <a
+            href="/admin/coverage"
+            className="p-6 rounded-xl border border-border bg-card/50 hover:border-primary/50 transition group"
+          >
+            <MapPin className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition" />
+            <h3 className="text-xl font-semibold mb-2">Cobertura</h3>
+            <p className="text-sm text-muted-foreground">Áreas de cobertura</p>
           </a>
 
           <a
