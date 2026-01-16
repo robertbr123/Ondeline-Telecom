@@ -1,255 +1,218 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-import { CheckCircle, AlertCircle } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
+import { CoverageMap } from "@/components/coverage-map";
+import { CoverageChecker } from "@/components/coverage-checker";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { MapPin, Phone, CheckCircle, Clock, Building2 } from "lucide-react";
+import { useEffect, useState } from "react";
+
+interface CoverageArea {
+  id: number;
+  name: string;
+  state: string;
+  status: string;
+  latitude: number;
+  longitude: number;
+  description: string;
+  population: number;
+  launch_date: string;
+}
 
 export default function CoveragePage() {
-  const [cep, setCep] = useState("")
-  const [coverageStatus, setCoverageStatus] = useState<"idle" | "checking" | "active" | "coming" | "unavailable">(
-    "idle",
-  )
-  const [selectedCity, setSelectedCity] = useState<string | null>(null)
+  const [areas, setAreas] = useState<CoverageArea[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const cities = [
-    { name: "Ipixuna", cep: "69890-000", status: "active" },
-    { name: "Eirunepe", cep: "69880-000", status: "active" },
-    { name: "Carauari", cep: "69500-000", status: "coming" },
-    { name: "Itamarati", cep: "69510-000", status: "coming" },
-  ]
+  useEffect(() => {
+    fetch("/api/coverage")
+      .then((res) => res.json())
+      .then((data) => {
+        setAreas(data.data || []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
-  const formatCEP = (value: string) => {
-    const cleanedValue = value.replace(/\D/g, "").slice(0, 8)
-    if (cleanedValue.length <= 5) {
-      return cleanedValue
-    }
-    return `${cleanedValue.slice(0, 5)}-${cleanedValue.slice(5)}`
-  }
+  const activeAreas = areas.filter((a) => a.status === "active");
+  const comingSoonAreas = areas.filter((a) => a.status === "coming_soon");
 
-  const handleCheckCoverage = () => {
-    const cleanCep = cep.replace(/\D/g, "")
-    if (!cleanCep.trim()) return
-
-    setCoverageStatus("checking")
-
-    setTimeout(() => {
-      const found = cities.find((city) => city.cep.replace(/\D/g, "") === cleanCep)
-
-      if (found) {
-        setSelectedCity(found.name)
-        setCoverageStatus(found.status as "active" | "coming")
-      } else {
-        setCoverageStatus("unavailable")
-        setSelectedCity(null)
-      }
-    }, 500)
-  }
+  const formatPopulation = (pop: number) => {
+    if (!pop) return "";
+    return pop.toLocaleString("pt-BR");
+  };
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="pt-24 pb-16">
-        <div className="max-w-6xl mx-auto px-4">
-          {/* Seção de Verificação de Cobertura */}
-          <div className="mb-16">
-            <div className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-2xl p-8 md:p-12 border border-border">
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 text-balance">
-                Verifique Nossa Cobertura
-              </h1>
-              <p className="text-muted-foreground text-lg mb-8">
-                Digite seu CEP para verificar se a Ondeline atende sua região
-              </p>
+      {/* Hero Section */}
+      <section className="relative py-20 bg-gradient-to-br from-[#00a651] to-[#008c44]">
+        <div className="absolute inset-0 bg-black/10" />
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center text-white max-w-3xl mx-auto">
+            <Badge className="bg-white/20 text-white border-white/30 mb-4">
+              Cobertura Regional
+            </Badge>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              Onde a Ondeline Está Presente
+            </h1>
+            <p className="text-xl text-white/90 mb-8">
+              Levando internet de qualidade para as comunidades do Amazonas.
+              Confira nossa área de cobertura e verifique a disponibilidade no seu endereço.
+            </p>
+          </div>
+        </div>
+      </section>
 
-              <div className="flex flex-col sm:flex-row gap-3 mb-6">
-                <input
-                  type="text"
-                  placeholder="Digite seu CEP (ex: 69890-000)"
-                  value={cep}
-                  onChange={(e) => {
-                    setCep(formatCEP(e.target.value))
-                    setCoverageStatus("idle")
-                  }}
-                  className="flex-1 px-4 py-3 rounded-lg bg-background border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                  maxLength="9"
-                />
-                <Button
-                  onClick={handleCheckCoverage}
-                  disabled={cep.length < 9 || coverageStatus === "checking"}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
-                >
-                  {coverageStatus === "checking" ? "Verificando..." : "Verificar"}
-                </Button>
-              </div>
+      {/* Coverage Map Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
+              Mapa de Cobertura
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Visualize todas as cidades onde a Ondeline oferece seus serviços de internet
+            </p>
+          </div>
+          <CoverageMap />
+        </div>
+      </section>
 
-              {/* Resultado da busca */}
-              {coverageStatus !== "idle" && (
-                <div
-                  className={`p-6 rounded-lg border-l-4 ${
-                    coverageStatus === "active"
-                      ? "bg-emerald-500/10 border-emerald-500"
-                      : coverageStatus === "coming"
-                        ? "bg-orange-500/10 border-orange-500"
-                        : "bg-red-500/10 border-red-500"
-                  }`}
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="mt-1">
-                      {coverageStatus === "active" && <CheckCircle size={24} className="text-emerald-500" />}
-                      {coverageStatus === "coming" && <AlertCircle size={24} className="text-orange-500" />}
-                      {coverageStatus === "unavailable" && <AlertCircle size={24} className="text-red-500" />}
-                    </div>
-                    <div className="flex-1">
-                      {coverageStatus === "active" && (
-                        <div>
-                          <p className="font-semibold text-emerald-700 dark:text-emerald-300 text-lg mb-2">
-                            ✓ Cobertura Confirmada em {selectedCity}!
-                          </p>
-                          <p className="text-emerald-600 dark:text-emerald-400 mb-4">
-                            Perfeito! Você já pode contratar nossos serviços de internet de alta velocidade.
-                          </p>
-                          <a
-                            href={`https://wa.me/5592984607721?text=Olá! Tenho interesse em contratar a Ondeline em ${selectedCity} - CEP ${cep}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                              Agendar Instalação via WhatsApp
-                            </Button>
-                          </a>
-                        </div>
-                      )}
-                      {coverageStatus === "coming" && (
-                        <div>
-                          <p className="font-semibold text-orange-700 dark:text-orange-300 text-lg mb-2">
-                            🔜 {selectedCity} - Em Breve!
-                          </p>
-                          <p className="text-orange-600 dark:text-orange-400 mb-4">
-                            Estamos expandindo para sua região. Reserve já seu lugar na fila para quando chegarmos!
-                          </p>
-                          <a
-                            href={`https://wa.me/5592984607721?text=Olá! Gostaria de reservar a internet da Ondeline em ${selectedCity} - CEP ${cep}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <Button className="bg-orange-600 hover:bg-orange-700 text-white">Reservar Meu Lugar</Button>
-                          </a>
-                        </div>
-                      )}
-                      {coverageStatus === "unavailable" && (
-                        <div>
-                          <p className="font-semibold text-red-700 dark:text-red-300 text-lg mb-2">
-                            CEP não encontrado em nossa cobertura
-                          </p>
-                          <p className="text-red-600 dark:text-red-400">
-                            No momento, não temos cobertura no CEP {cep}. Mas estamos em expansão! Entre em contato para
-                            saber quando chegaremos à sua região.
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+      {/* Coverage Checker Section */}
+      <section className="py-16 bg-muted/50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto">
+            <CoverageChecker />
+          </div>
+        </div>
+      </section>
+
+      {/* Active Areas */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <Badge className="bg-green-100 text-green-800 mb-4">
+              <CheckCircle className="w-4 h-4 mr-1" />
+              Disponível Agora
+            </Badge>
+            <h2 className="text-3xl font-bold text-foreground mb-4">
+              Cidades com Cobertura Ativa
+            </h2>
+            <p className="text-muted-foreground">
+              Nestas cidades você já pode contratar nossos serviços
+            </p>
           </div>
 
-          {/* Mapa interativo com cidades */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold text-foreground mb-8">Nossas Cidades</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {cities.map((city) => (
-                <div
-                  key={city.name}
-                  className={`p-6 rounded-lg border-2 transition-all cursor-pointer ${
-                    city.status === "active"
-                      ? "bg-emerald-500/10 border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/20"
-                      : "bg-orange-500/10 border-orange-500 hover:shadow-lg hover:shadow-orange-500/20"
-                  }`}
-                  onClick={() => setSelectedCity(selectedCity === city.name ? null : city.name)}
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-xl font-bold text-foreground">{city.name}</h3>
-                    <span className={`text-2xl ${city.status === "active" ? "text-emerald-500" : "text-orange-500"}`}>
-                      {city.status === "active" ? "✓" : "🔜"}
-                    </span>
-                  </div>
-                  <p
-                    className={`text-sm font-semibold mb-3 ${
-                      city.status === "active"
-                        ? "text-emerald-600 dark:text-emerald-400"
-                        : "text-orange-600 dark:text-orange-400"
-                    }`}
-                  >
-                    {city.status === "active" ? "Cobertura Ativa" : "Em Breve"}
-                  </p>
-                  <p className="text-xs text-muted-foreground mb-4">CEP: {city.cep}...</p>
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#00a651] mx-auto"></div>
+              <p className="mt-4 text-muted-foreground">Carregando...</p>
+            </div>
+          ) : activeAreas.length === 0 ? (
+            <p className="text-center text-muted-foreground py-8">
+              Nenhuma cidade com cobertura ativa cadastrada ainda.
+            </p>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {activeAreas.map((area) => (
+                <Card key={area.id} className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <CardTitle className="flex items-center gap-2">
+                          <MapPin className="w-5 h-5 text-[#00a651]" />
+                          {area.name}
+                        </CardTitle>
+                        <CardDescription>{area.state}</CardDescription>
+                      </div>
+                      <Badge className="bg-green-100 text-green-800">Ativo</Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {area.description || "Internet de alta qualidade disponível nesta região."}
+                    </p>
+                    {area.population > 0 && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                        <Building2 className="w-4 h-4" />
+                        <span>População: {formatPopulation(area.population)} habitantes</span>
+                      </div>
+                    )}
+                    <Button className="w-full bg-[#00a651] hover:bg-[#008c44]" asChild>
+                      <a href={`https://wa.me/5597991677795?text=Olá! Tenho interesse em contratar internet em ${area.name}`}>
+                        <Phone className="w-4 h-4 mr-2" />
+                        Contratar Agora
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
 
-                  {city.status === "active" && (
-                    <a
-                      href={`https://wa.me/5592984607721?text=Olá! Tenho interesse em contratar a Ondeline em ${city.name}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button className="w-full bg-primary hover:bg-primary/90 text-sm" size="sm">
-                        Contratar em {city.name}
-                      </Button>
-                    </a>
-                  )}
-                  {city.status === "coming" && (
-                    <a
-                      href={`https://wa.me/5592984607721?text=Olá! Gostaria de reservar a internet da Ondeline para ${city.name}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button className="w-full bg-orange-600 hover:bg-orange-700 text-sm" size="sm">
-                        Reservar para {city.name}
-                      </Button>
-                    </a>
-                  )}
-                </div>
+      {/* Coming Soon Areas */}
+      {comingSoonAreas.length > 0 && (
+        <section className="py-16 bg-muted/50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <Badge className="bg-yellow-100 text-yellow-800 mb-4">
+                <Clock className="w-4 h-4 mr-1" />
+                Em Breve
+              </Badge>
+              <h2 className="text-3xl font-bold text-foreground mb-4">
+                Próximas Cidades
+              </h2>
+              <p className="text-muted-foreground">
+                Estamos expandindo! Essas cidades receberão cobertura em breve
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {comingSoonAreas.map((area) => (
+                <Card key={area.id} className="text-center">
+                  <CardContent className="pt-6">
+                    <MapPin className="w-8 h-8 text-yellow-500 mx-auto mb-3" />
+                    <h3 className="font-semibold">{area.name}</h3>
+                    <p className="text-sm text-muted-foreground">{area.state}</p>
+                    {area.launch_date && (
+                      <Badge variant="outline" className="mt-2">
+                        Previsão: {new Date(area.launch_date).toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}
+                      </Badge>
+                    )}
+                  </CardContent>
+                </Card>
               ))}
             </div>
           </div>
+        </section>
+      )}
 
-          {/* Seção de Informações */}
-          <div className="bg-card rounded-lg p-8 border border-border">
-            <h2 className="text-3xl font-bold text-foreground mb-6">Perguntas Frequentes Sobre Cobertura</h2>
-            <div className="space-y-6">
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">Como sei se tenho cobertura?</h3>
-                <p className="text-muted-foreground">
-                  Digite seu CEP no campo acima. Se sua região tiver cobertura, você verá o status imediatamente.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">E se meu CEP estiver "Em Breve"?</h3>
-                <p className="text-muted-foreground">
-                  Ótimo! Estamos expandindo para sua região. Clique em "Reservar" e deixe seus contatos. Entraremos em
-                  contato quando chegarmos lá.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">Qual é a velocidade padrão?</h3>
-                <p className="text-muted-foreground">
-                  Oferecemos planos de 20MB, 50MB, 80MB e planos customizados. Fale com nosso time sobre qual melhor se
-                  adequa às suas necessidades.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">Vocês oferecem suporte técnico?</h3>
-                <p className="text-muted-foreground">
-                  Sim! Temos suporte 24/7 em português. Somos reconhecidos pelo suporte mais rápido da região.
-                </p>
-              </div>
-            </div>
-          </div>
+      {/* CTA Section */}
+      <section className="py-16 bg-gradient-to-br from-[#00a651] to-[#008c44]">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">
+            Sua cidade não está na lista?
+          </h2>
+          <p className="text-white/90 mb-8 max-w-2xl mx-auto">
+            Entre em contato conosco! Estamos sempre buscando expandir nossa cobertura
+            para levar internet de qualidade a mais comunidades do Amazonas.
+          </p>
+          <Button size="lg" variant="secondary" asChild>
+            <a href="https://wa.me/5597991677795?text=Olá! Gostaria de saber quando a Ondeline chegará na minha cidade">
+              <Phone className="w-5 h-5 mr-2" />
+              Falar com a Ondeline
+            </a>
+          </Button>
         </div>
-      </main>
+      </section>
 
       <Footer />
     </div>
-  )
+  );
 }
