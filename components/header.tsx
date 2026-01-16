@@ -13,7 +13,7 @@ export function Header() {
     <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <LogoOndeline />
+          <LogoOndeline size={48} />
           <span className="text-xl font-bold text-primary">Ondeline</span>
         </div>
 

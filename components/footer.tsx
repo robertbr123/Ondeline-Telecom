@@ -1,5 +1,6 @@
 import { Mail, Phone, MapPin } from "lucide-react"
 import { AnatelSeal } from "./anatel-seal"
+import { LogoOndeline } from "./logo-ondeline"
 
 export function Footer() {
   return (
@@ -7,7 +8,10 @@ export function Footer() {
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
           <div>
-            <h3 className="font-bold text-lg mb-4 text-primary">Ondeline</h3>
+            <div className="flex items-center gap-2 mb-4">
+              <LogoOndeline size={36} />
+              <h3 className="font-bold text-lg text-primary">Ondeline</h3>
+            </div>
             <p className="text-sm text-muted-foreground">Conectando o Amazonas com internet rápida e confiável.</p>
           </div>
 
