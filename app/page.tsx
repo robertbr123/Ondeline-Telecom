@@ -11,10 +11,13 @@ import { FAQ } from "@/components/faq"
 import { CTA } from "@/components/cta"
 import { FloatCTA } from "@/components/float-cta"
 import { Footer } from "@/components/footer"
+import { AnalyticsScripts, GTMNoScript } from "@/components/analytics-scripts"
 
 export default function Home() {
   return (
     <main className="w-full">
+      <AnalyticsScripts />
+      <GTMNoScript />
       <Header />
       <Hero />
       <ServicesAnimation />

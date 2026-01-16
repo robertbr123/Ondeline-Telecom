@@ -30,7 +30,9 @@ export function Plans() {
       const res = await fetch('/api/plans')
       const data = await res.json()
       if (data.success) {
-        setPlans(data.data || [])
+        // Filtrar apenas planos ativos
+        const activePlans = (data.data || []).filter((p: Plan) => p.active)
+        setPlans(activePlans)
       }
     } catch (error) {
       console.error('Erro ao buscar planos:', error)

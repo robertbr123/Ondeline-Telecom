@@ -19,6 +19,13 @@ interface SiteConfig {
   linkedin: string
   keywords: string[]
   logoUrl: string
+  // SEO
+  googleAnalyticsId: string
+  googleTagManagerId: string
+  facebookPixelId: string
+  metaRobots: string
+  canonicalUrl: string
+  ogImage: string
 }
 
 export default function AdminSettings() {
@@ -35,6 +42,13 @@ export default function AdminSettings() {
     linkedin: '',
     keywords: [],
     logoUrl: '/logo-ondeline.png',
+    // SEO
+    googleAnalyticsId: '',
+    googleTagManagerId: '',
+    facebookPixelId: '',
+    metaRobots: 'index, follow',
+    canonicalUrl: '',
+    ogImage: '',
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -314,6 +328,87 @@ export default function AdminSettings() {
                     className="w-full px-3 py-2 bg-input border-border rounded-lg"
                   />
                 </div>
+              </div>
+            </div>
+
+            <div className="p-6 rounded-xl border border-border bg-card/50 space-y-4">
+              <h2 className="text-lg font-semibold mb-4">SEO e Analytics</h2>
+              <p className="text-sm text-muted-foreground mb-4">
+                Configure as ferramentas de análise e otimização para mecanismos de busca.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Google Analytics ID</label>
+                  <input
+                    type="text"
+                    value={config.googleAnalyticsId}
+                    onChange={(e) => setConfig({ ...config, googleAnalyticsId: e.target.value })}
+                    className="w-full px-3 py-2 bg-input border border-border rounded-lg"
+                    placeholder="G-XXXXXXXXXX ou UA-XXXXXXXXX-X"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">Ex: G-XXXXXXXXXX (GA4) ou UA-XXXXXXXXX-X (Universal)</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Google Tag Manager ID</label>
+                  <input
+                    type="text"
+                    value={config.googleTagManagerId}
+                    onChange={(e) => setConfig({ ...config, googleTagManagerId: e.target.value })}
+                    className="w-full px-3 py-2 bg-input border border-border rounded-lg"
+                    placeholder="GTM-XXXXXXX"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Facebook Pixel ID</label>
+                  <input
+                    type="text"
+                    value={config.facebookPixelId}
+                    onChange={(e) => setConfig({ ...config, facebookPixelId: e.target.value })}
+                    className="w-full px-3 py-2 bg-input border border-border rounded-lg"
+                    placeholder="XXXXXXXXXXXXXXX"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Meta Robots</label>
+                  <select
+                    value={config.metaRobots}
+                    onChange={(e) => setConfig({ ...config, metaRobots: e.target.value })}
+                    className="w-full px-3 py-2 bg-input border border-border rounded-lg"
+                  >
+                    <option value="index, follow">index, follow (Recomendado)</option>
+                    <option value="index, nofollow">index, nofollow</option>
+                    <option value="noindex, follow">noindex, follow</option>
+                    <option value="noindex, nofollow">noindex, nofollow</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">URL Canônica</label>
+                <input
+                  type="url"
+                  value={config.canonicalUrl}
+                  onChange={(e) => setConfig({ ...config, canonicalUrl: e.target.value })}
+                  className="w-full px-3 py-2 bg-input border border-border rounded-lg"
+                  placeholder="https://www.ondeline.com.br"
+                />
+                <p className="text-xs text-muted-foreground mt-1">URL principal do site para evitar conteúdo duplicado</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Imagem Open Graph (compartilhamento)</label>
+                <input
+                  type="url"
+                  value={config.ogImage}
+                  onChange={(e) => setConfig({ ...config, ogImage: e.target.value })}
+                  className="w-full px-3 py-2 bg-input border border-border rounded-lg"
+                  placeholder="https://www.ondeline.com.br/og-image.jpg"
+                />
+                <p className="text-xs text-muted-foreground mt-1">Imagem exibida ao compartilhar o site em redes sociais (1200x630px recomendado)</p>
               </div>
             </div>
 

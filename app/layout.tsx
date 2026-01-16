@@ -17,11 +17,25 @@ export async function generateMetadata(): Promise<Metadata> {
     title: config.title || "Ondeline - Internet Rápida no Amazonas",
     description: config.description || "Internet de alta velocidade em Ipixuna, Eirunepe, Itamarati e Carauari. Suporte rápido 24/7 e planos a partir de R$ 100.",
     keywords: config.keywords?.join(", "),
+    robots: config.metaRobots || "index, follow",
     generator: "v0.app",
+    ...(config.canonicalUrl && {
+      alternates: {
+        canonical: config.canonicalUrl,
+      },
+    }),
     openGraph: {
       title: config.title || "Ondeline - Internet Rápida no Amazonas",
       description: config.description || "Conectando o Amazonas com internet de qualidade",
       type: "website",
+      ...(config.ogImage && { images: [config.ogImage] }),
+      ...(config.canonicalUrl && { url: config.canonicalUrl }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: config.title || "Ondeline - Internet Rápida no Amazonas",
+      description: config.description || "Conectando o Amazonas com internet de qualidade",
+      ...(config.ogImage && { images: [config.ogImage] }),
     },
   }
 }

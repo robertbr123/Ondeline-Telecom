@@ -15,6 +15,13 @@ export interface SiteConfig {
   linkedin: string
   keywords: string[]
   logoUrl: string
+  // SEO
+  googleAnalyticsId: string
+  googleTagManagerId: string
+  facebookPixelId: string
+  metaRobots: string
+  canonicalUrl: string
+  ogImage: string
 }
 
 const defaultConfig: SiteConfig = {
@@ -30,6 +37,13 @@ const defaultConfig: SiteConfig = {
   linkedin: "",
   keywords: ["internet", "wifi", "amazonas", "ipixuna", "eirunepe", "itamarati", "carauari", "provedor", "fibra óptica"],
   logoUrl: "/logo-ondeline.png",
+  // SEO
+  googleAnalyticsId: "",
+  googleTagManagerId: "",
+  facebookPixelId: "",
+  metaRobots: "index, follow",
+  canonicalUrl: "",
+  ogImage: "",
 }
 
 interface SiteConfigContextType {

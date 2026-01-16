@@ -4,13 +4,14 @@ import { query } from '@/lib/db'
 // PUT - Atualizar plano
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const { name, speed, price, description, features, highlighted, active } = body
 
-    const existingPlan = await query('SELECT id FROM plans WHERE id = $1', [params.id])
+    const existingPlan = await query('SELECT id FROM plans WHERE id = $1', [id])
     if (!existingPlan.rows[0]) {
       return NextResponse.json(
         { success: false, error: 'Plano não encontrado' },
@@ -34,12 +35,12 @@ export async function PUT(
       highlighted ? 1 : 0,
       active ? 1 : 0,
       now,
-      params.id
+      id
     ])
 
     return NextResponse.json({
       success: true,
-      data: { id: params.id, name, speed, price, description, features, highlighted, active },
+      data: { id, name, speed, price, description, features, highlighted, active },
       message: 'Plano atualizado com sucesso',
     })
   } catch (error) {
@@ -54,10 +55,11 @@ export async function PUT(
 // DELETE - Deletar plano
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const result = await query('DELETE FROM plans WHERE id = $1', [params.id])
+    const { id } = await params
+    const result = await query('DELETE FROM plans WHERE id = $1', [id])
 
     if (result.rowCount === 0) {
       return NextResponse.json(

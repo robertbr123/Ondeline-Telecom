@@ -4,9 +4,10 @@ import { query } from '@/lib/db'
 // PATCH - Atualizar status do lead
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const { status, notes } = body
 
@@ -23,11 +24,11 @@ export async function PATCH(
       UPDATE leads 
       SET status = $1, notes = $2, updated_at = $3
       WHERE id = $4
-    `, [status, notes || null, now, params.id])
+    `, [status, notes || null, now, id])
 
     return NextResponse.json({
       success: true,
-      data: { id: params.id, status },
+      data: { id, status },
       message: 'Status atualizado com sucesso',
     })
   } catch (error) {

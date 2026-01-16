@@ -4,13 +4,14 @@ import { query } from '@/lib/db'
 // PUT - Atualizar material
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const { title, description, file_url, file_type, category, active } = body
 
-    const existingMaterial = await query('SELECT id FROM materials WHERE id = $1', [params.id])
+    const existingMaterial = await query('SELECT id FROM materials WHERE id = $1', [id])
     if (!existingMaterial.rows[0]) {
       return NextResponse.json(
         { success: false, error: 'Material não encontrado' },
@@ -33,12 +34,12 @@ export async function PUT(
       category || 'documentos',
       active ? 1 : 0,
       now,
-      params.id
+      id
     ])
 
     return NextResponse.json({
       success: true,
-      data: { id: params.id, title, description, file_url, file_type, category, active },
+      data: { id, title, description, file_url, file_type, category, active },
       message: 'Material atualizado com sucesso',
     })
   } catch (error) {
@@ -53,10 +54,11 @@ export async function PUT(
 // DELETE - Deletar material
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const result = await query('DELETE FROM materials WHERE id = $1', [params.id])
+    const { id } = await params
+    const result = await query('DELETE FROM materials WHERE id = $1', [id])
 
     if (result.rowCount === 0) {
       return NextResponse.json(
