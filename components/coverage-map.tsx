@@ -5,7 +5,7 @@ import { MapPin, CheckCircle2, Clock, Wifi } from "lucide-react"
 
 interface CoverageArea {
   id: number;
-  name: string;
+  city: string;
   state: string;
   status: string;
   latitude: number;
@@ -97,7 +97,7 @@ export function CoverageMap() {
                         key={area.id}
                         className="absolute pointer-events-auto cursor-pointer group z-30"
                         style={{ left: `${pos.left}%`, top: `${pos.top}%` }}
-                        onClick={() => setSelectedCity(selectedCity === area.name ? null : area.name)}
+                        onClick={() => setSelectedCity(selectedCity === area.city ? null : area.city)}
                       >
                         <div className="relative flex flex-col items-center transform -translate-x-1/2 -translate-y-1/2">
                           <div className="absolute w-6 h-6 bg-emerald-500 rounded-full animate-ping opacity-75" />
@@ -105,9 +105,9 @@ export function CoverageMap() {
                             <Wifi size={12} className="text-white" />
                           </div>
                           <div className="mt-1 bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap z-20">
-                            {area.name}
+                            {area.city}
                           </div>
-                          {selectedCity === area.name && (
+                          {selectedCity === area.city && (
                             <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-emerald-500/50 rounded-lg p-3 min-w-[200px] z-50 shadow-xl">
                               <div className="flex items-center gap-2 text-emerald-400 font-bold mb-1">
                                 <CheckCircle2 size={16} />
@@ -129,7 +129,7 @@ export function CoverageMap() {
                         key={area.id}
                         className="absolute pointer-events-auto cursor-pointer group z-30"
                         style={{ left: `${pos.left}%`, top: `${pos.top}%` }}
-                        onClick={() => setSelectedCity(selectedCity === area.name ? null : area.name)}
+                        onClick={() => setSelectedCity(selectedCity === area.city ? null : area.city)}
                       >
                         <div className="relative flex flex-col items-center transform -translate-x-1/2 -translate-y-1/2">
                           <div className="absolute w-6 h-6 bg-amber-500 rounded-full animate-pulse opacity-75" />
@@ -137,9 +137,9 @@ export function CoverageMap() {
                             <Clock size={12} className="text-white" />
                           </div>
                           <div className="mt-1 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap z-20">
-                            {area.name}
+                            {area.city}
                           </div>
-                          {selectedCity === area.name && (
+                          {selectedCity === area.city && (
                             <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-amber-500/50 rounded-lg p-3 min-w-[200px] z-50 shadow-xl">
                               <div className="flex items-center gap-2 text-amber-400 font-bold mb-1">
                                 <Clock size={16} />
@@ -192,12 +192,12 @@ export function CoverageMap() {
                     ? "bg-gradient-to-br from-emerald-900/80 to-emerald-800/80 border border-emerald-600/50 shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20"
                     : "bg-gradient-to-br from-amber-900/80 to-amber-800/80 border border-amber-600/50 shadow-lg shadow-amber-500/10 hover:shadow-amber-500/20"
                 }`}
-                onClick={() => setSelectedCity(selectedCity === area.name ? null : area.name)}
+                onClick={() => setSelectedCity(selectedCity === area.city ? null : area.city)}
               >
                 <div className="text-2xl mb-2">
                   {area.status === "active" ? "✓" : "🔜"}
                 </div>
-                <h3 className="text-lg font-bold text-white mb-1">{area.name}</h3>
+                <h3 className="text-lg font-bold text-white mb-1">{area.city}</h3>
                 <p
                   className={`text-xs font-medium ${area.status === "active" ? "text-emerald-300" : "text-amber-300"}`}
                 >
