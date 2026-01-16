@@ -81,7 +81,7 @@ export function CoverageMap() {
             {/* Marcadores dinâmicos sobre o mapa */}
             <div className="absolute inset-0">
               {loading ? (
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-800/90 px-4 py-3 rounded-lg border border-slate-700">
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-800/90 px-4 py-3 rounded-lg border border-slate-700 z-50">
                   <div className="flex items-center gap-3">
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-cyan-400"></div>
                     <span className="text-slate-300">Carregando cidades...</span>
@@ -95,20 +95,20 @@ export function CoverageMap() {
                     return (
                       <div 
                         key={area.id}
-                        className="absolute pointer-events-auto cursor-pointer group"
+                        className="absolute pointer-events-auto cursor-pointer group z-30"
                         style={{ left: `${pos.left}%`, top: `${pos.top}%` }}
                         onClick={() => setSelectedCity(selectedCity === area.name ? null : area.name)}
                       >
-                        <div className="relative flex flex-col items-center">
+                        <div className="relative flex flex-col items-center transform -translate-x-1/2 -translate-y-1/2">
                           <div className="absolute w-6 h-6 bg-emerald-500 rounded-full animate-ping opacity-75" />
                           <div className="w-6 h-6 bg-emerald-500 rounded-full relative z-10 border-2 border-white shadow-lg flex items-center justify-center">
                             <Wifi size={12} className="text-white" />
                           </div>
-                          <div className="mt-1 bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap">
+                          <div className="mt-1 bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap z-20">
                             {area.name}
                           </div>
                           {selectedCity === area.name && (
-                            <div className="absolute top-14 bg-slate-800 border border-emerald-500/50 rounded-lg p-3 min-w-[200px] z-20 shadow-xl">
+                            <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-emerald-500/50 rounded-lg p-3 min-w-[200px] z-50 shadow-xl">
                               <div className="flex items-center gap-2 text-emerald-400 font-bold mb-1">
                                 <CheckCircle2 size={16} />
                                 Cobertura Ativa
@@ -127,20 +127,20 @@ export function CoverageMap() {
                     return (
                       <div 
                         key={area.id}
-                        className="absolute pointer-events-auto cursor-pointer group"
+                        className="absolute pointer-events-auto cursor-pointer group z-30"
                         style={{ left: `${pos.left}%`, top: `${pos.top}%` }}
                         onClick={() => setSelectedCity(selectedCity === area.name ? null : area.name)}
                       >
-                        <div className="relative flex flex-col items-center">
+                        <div className="relative flex flex-col items-center transform -translate-x-1/2 -translate-y-1/2">
                           <div className="absolute w-6 h-6 bg-amber-500 rounded-full animate-pulse opacity-75" />
                           <div className="w-6 h-6 bg-amber-500 rounded-full relative z-10 border-2 border-white shadow-lg flex items-center justify-center">
                             <Clock size={12} className="text-white" />
                           </div>
-                          <div className="mt-1 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap">
+                          <div className="mt-1 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap z-20">
                             {area.name}
                           </div>
                           {selectedCity === area.name && (
-                            <div className="absolute top-14 bg-slate-800 border border-amber-500/50 rounded-lg p-3 min-w-[200px] z-20 shadow-xl">
+                            <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-amber-500/50 rounded-lg p-3 min-w-[200px] z-50 shadow-xl">
                               <div className="flex items-center gap-2 text-amber-400 font-bold mb-1">
                                 <Clock size={16} />
                                 Em Breve
