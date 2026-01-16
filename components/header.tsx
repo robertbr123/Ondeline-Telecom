@@ -5,9 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 import { LogoOndeline } from "./logo-ondeline"
 import { ThemeToggle } from "./theme-toggle"
+import { useSiteConfig } from "@/lib/site-config-context"
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const { config } = useSiteConfig()
+  const whatsappNumber = config.whatsappNumber || "5592984607721"
 
   return (
     <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border">
@@ -37,7 +40,7 @@ export function Header() {
           <ThemeToggle />
 
           <a
-            href={`https://wa.me/5592984607721?text=Olá! Gostaria de contratar os serviços da Ondeline`}
+            href={`https://wa.me/${whatsappNumber}?text=Olá! Gostaria de contratar os serviços da Ondeline`}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -72,7 +75,7 @@ export function Header() {
               Cobertura
             </a>
             <a
-              href={`https://wa.me/5592984607721?text=Olá! Gostaria de contratar os serviços da Ondeline`}
+              href={`https://wa.me/${whatsappNumber}?text=Olá! Gostaria de contratar os serviços da Ondeline`}
               target="_blank"
               rel="noopener noreferrer"
             >

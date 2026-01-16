@@ -63,10 +63,10 @@ export function CoverageMap() {
             
             {/* Marcadores customizados sobre o mapa */}
             <div className="absolute inset-0">
-              {/* Ipixuna - coordenadas: -7.05, -71.69 (sudoeste do mapa) */}
+              {/* Ipixuna - coordenadas: -7.047002, -71.680786 */}
               <div 
                 className="absolute pointer-events-auto cursor-pointer group"
-                style={{ left: "22%", top: "72%" }}
+                style={{ left: "23%", top: "71%" }}
                 onClick={() => setSelectedCity(selectedCity === "Ipixuna" ? null : "Ipixuna")}
               >
                 <div className="relative flex flex-col items-center">

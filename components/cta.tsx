@@ -1,9 +1,13 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { MessageCircle } from "lucide-react"
+import { useSiteConfig } from "@/lib/site-config-context"
 
 export function CTA() {
-  const whatsappLink =
-    "https://wa.me/5592984607721?text=Olá%20Ondeline,%20gostaria%20de%20contratar%20um%20plano%20de%20internet"
+  const { config } = useSiteConfig()
+  const whatsappNumber = config.whatsappNumber || "5592984607721"
+  const whatsappLink = `https://wa.me/${whatsappNumber}?text=Olá%20Ondeline,%20gostaria%20de%20contratar%20um%20plano%20de%20internet`
 
   return (
     <section className="py-20 px-4 bg-gradient-to-r from-primary to-secondary">

@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Save } from 'lucide-react'
+import { ArrowLeft, Save, Upload, ImageIcon } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface SiteConfig {
   title: string
@@ -17,6 +18,7 @@ interface SiteConfig {
   twitter: string
   linkedin: string
   keywords: string[]
+  logoUrl: string
 }
 
 export default function AdminSettings() {
@@ -32,10 +34,13 @@ export default function AdminSettings() {
     twitter: '',
     linkedin: '',
     keywords: [],
+    logoUrl: '/logo-ondeline.png',
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState('')
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     fetchConfig()
@@ -46,12 +51,46 @@ export default function AdminSettings() {
       const res = await fetch('/api/site/config')
       const data = await res.json()
       if (data.success) {
-        setConfig(data.data)
+        setConfig({
+          ...config,
+          ...data.data,
+          logoUrl: data.data.logoUrl || '/logo-ondeline.png',
+        })
       }
     } catch (error) {
       console.error('Erro ao buscar configurações:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploading(true)
+    setMessage('')
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const res = await fetch('/api/upload/logo', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await res.json()
+      if (data.success) {
+        setConfig({ ...config, logoUrl: data.data.url })
+        setMessage('Logo atualizado! Salve para aplicar as alterações.')
+      } else {
+        setMessage(data.error || 'Erro ao fazer upload do logo')
+      }
+    } catch (error) {
+      setMessage('Erro ao fazer upload do logo')
+    } finally {
+      setUploading(false)
     }
   }
 
@@ -110,6 +149,48 @@ export default function AdminSettings() {
                 {message}
               </div>
             )}
+
+            <div className="p-6 rounded-xl border border-border bg-card/50 space-y-4">
+              <h2 className="text-lg font-semibold mb-4">Logo do Site</h2>
+              
+              <div className="flex items-center gap-6">
+                <div className="relative w-24 h-24 rounded-xl border-2 border-dashed border-border flex items-center justify-center bg-muted/30 overflow-hidden">
+                  {config.logoUrl ? (
+                    <Image
+                      src={config.logoUrl}
+                      alt="Logo atual"
+                      fill
+                      className="object-contain p-2"
+                    />
+                  ) : (
+                    <ImageIcon className="w-8 h-8 text-muted-foreground" />
+                  )}
+                </div>
+                
+                <div className="flex-1 space-y-2">
+                  <p className="text-sm text-muted-foreground">
+                    Faça upload do logo da empresa. Recomendado: PNG ou SVG com fundo transparente.
+                  </p>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/png,image/jpeg,image/jpg,image/svg+xml,image/webp"
+                    onChange={handleLogoUpload}
+                    className="hidden"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                    className="flex items-center gap-2"
+                  >
+                    <Upload size={16} />
+                    {uploading ? 'Enviando...' : 'Alterar Logo'}
+                  </Button>
+                </div>
+              </div>
+            </div>
 
             <div className="p-6 rounded-xl border border-border bg-card/50 space-y-4">
               <h2 className="text-lg font-semibold mb-4">Informações Básicas</h2>

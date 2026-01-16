@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react"
 import { MessageCircle } from "lucide-react"
+import { useSiteConfig } from "@/lib/site-config-context"
 
 export function FloatCTA() {
   const [isVisible, setIsVisible] = useState(false)
+  const { config } = useSiteConfig()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,7 +18,7 @@ export function FloatCTA() {
   }, [])
 
   const handleWhatsApp = () => {
-    const phone = "5592984607721"
+    const phone = config.whatsappNumber || "5592984607721"
     const message = "Olá! Tenho interesse nos planos de internet da Ondeline."
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
     window.open(url, "_blank")
