@@ -14,6 +14,8 @@ const publicRoutes = [
   '/api/faq',
   '/api/plans',
   '/api/site/config',
+  '/api/coverage',
+  '/api/blog',
 ]
 
 // Extensões de arquivos estáticos
