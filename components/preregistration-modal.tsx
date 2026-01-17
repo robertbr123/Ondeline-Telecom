@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { X, Phone } from "lucide-react"
+import { X, Phone, Check } from "lucide-react"
 
 interface PreregistrationModalProps {
   isOpen: boolean
@@ -78,22 +78,31 @@ export function PreregistrationModal({ isOpen, onClose }: PreregistrationModalPr
       <div className="bg-background border border-border rounded-xl max-w-md w-full p-6 shadow-xl animate-in">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold">Pré-cadastro</h2>
-          <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition">
+          <button
+            onClick={onClose}
+            className="text-muted-foreground hover:text-foreground transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md"
+            aria-label="Fechar"
+          >
             <X size={24} />
           </button>
         </div>
 
         {submitted ? (
-          <div className="text-center py-8">
-            <div className="text-4xl mb-4">✓</div>
+          <div className="text-center py-8" aria-live="polite">
+            <div className="flex justify-center mb-4">
+              <Check size={48} className="text-green-500" aria-hidden="true" />
+            </div>
             <p className="text-lg font-semibold text-green-400">Cadastro realizado com sucesso!</p>
             <p className="text-muted-foreground mt-2">Entraremos em contato em breve</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Nome</label>
+              <label htmlFor="name" className="block text-sm font-medium mb-2 cursor-pointer">
+                Nome
+              </label>
               <input
+                id="name"
                 type="text"
                 name="name"
                 value={formData.name}
@@ -105,8 +114,11 @@ export function PreregistrationModal({ isOpen, onClose }: PreregistrationModalPr
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">Email</label>
+              <label htmlFor="email" className="block text-sm font-medium mb-2 cursor-pointer">
+                Email
+              </label>
               <input
+                id="email"
                 type="email"
                 name="email"
                 value={formData.email}
@@ -118,7 +130,7 @@ export function PreregistrationModal({ isOpen, onClose }: PreregistrationModalPr
             </div>
 
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium mb-2 flex items-center gap-2">
+              <label htmlFor="phone" className="block text-sm font-medium mb-2 flex items-center gap-2 cursor-pointer">
                 <Phone size={14} /> Telefone
               </label>
               <input
@@ -136,14 +148,20 @@ export function PreregistrationModal({ isOpen, onClose }: PreregistrationModalPr
             </div>
 
             {error && (
-              <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
+              <div
+                role="alert"
+                className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm"
+              >
                 {error}
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium mb-2">Cidade</label>
+              <label htmlFor="city" className="block text-sm font-medium mb-2 cursor-pointer">
+                Cidade
+              </label>
               <select
+                id="city"
                 name="city"
                 value={formData.city}
                 onChange={handleChange}

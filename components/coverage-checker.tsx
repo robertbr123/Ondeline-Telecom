@@ -119,7 +119,11 @@ export function CoverageChecker() {
           <div className="max-w-2xl mx-auto">
             <div className="bg-card/50 border border-border rounded-2xl p-8 shadow-xl">
               <div className="flex flex-col sm:flex-row gap-4">
+                <label htmlFor="address-input" className="sr-only">
+                  Endereço para verificação de cobertura
+                </label>
                 <input
+                  id="address-input"
                   type="text"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}

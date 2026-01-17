@@ -50,7 +50,12 @@ export function Header() {
 
         <div className="md:hidden flex items-center gap-3">
           <ThemeToggle />
-          <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+          <button
+            className="md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={isOpen}
+          >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
