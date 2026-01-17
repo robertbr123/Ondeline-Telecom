@@ -55,8 +55,21 @@ export function Plans() {
           </div>
 
           {loading ? (
-            <div className="flex justify-center items-center py-12">
-              <div className="text-muted-foreground">Carregando planos...</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="rounded-xl border border-border bg-card/50 p-6 animate-pulse">
+                  <div className="h-4 w-24 bg-muted rounded mb-4"></div>
+                  <div className="h-8 w-32 bg-muted rounded mb-2"></div>
+                  <div className="h-4 w-full bg-muted rounded mb-6"></div>
+                  <div className="h-10 w-full bg-muted rounded mb-6"></div>
+                  <div className="space-y-3">
+                    {[1, 2, 3].map((j) => (
+                      <div key={j} className="h-3 w-full bg-muted rounded"></div>
+                    ))}
+                  </div>
+                  <div className="h-10 w-full bg-muted rounded mt-8"></div>
+                </div>
+              ))}
             </div>
           ) : plans.length === 0 ? (
             <div className="flex justify-center items-center py-12">

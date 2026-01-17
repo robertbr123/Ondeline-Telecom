@@ -41,12 +41,16 @@ export async function initializeDatabase() {
   try {
     // Pular durante build time
     if (isBuildTime) {
-      console.log('🔨 Build time - skipping database initialization')
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('🔨 Build time - skipping database initialization')
+      }
       return
     }
 
     if (!pool) {
-      console.warn('⚠️  Pulando inicialização do banco: pool não disponível (DATABASE_URL não configurada)')
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('⚠️  Pulando inicialização do banco: pool não disponível (DATABASE_URL não configurada)')
+      }
       return
     }
 
@@ -290,7 +294,9 @@ export async function initializeDatabase() {
       const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH || bcrypt.hashSync('admin123', 10)
       const now = new Date().toISOString()
       
-      console.log(`🔐 Creating admin user: ${adminUsername}`)
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`🔐 Creating admin user: ${adminUsername}`)
+      }
       
       await pool.query(`
         INSERT INTO admin_users (username, password_hash, role, created_at)
@@ -298,7 +304,9 @@ export async function initializeDatabase() {
       `, [adminUsername, adminPasswordHash, now])
     }
 
-    console.log('✅ Database initialized successfully')
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('✅ Database initialized successfully')
+    }
   } catch (error) {
     console.error('❌ Error initializing database:', error)
     throw error
@@ -311,11 +319,15 @@ initializeDatabase().catch(console.error)
 // Helper para queries com logs detalhados
 export async function query(text: string, params?: any[]) {
   const start = Date.now()
+  const isProd = process.env.NODE_ENV === 'production'
+
   try {
-    console.log('=== DATABASE QUERY START ===')
-    console.log('Query SQL:', text)
-    console.log('Parâmetros:', params ? JSON.stringify(params) : 'Nenhum')
-    console.log('Pool está disponível:', !!pool)
+    if (!isProd) {
+      console.log('=== DATABASE QUERY START ===')
+      console.log('Query SQL:', text)
+      console.log('Parâmetros:', params ? JSON.stringify(params) : 'Nenhum')
+      console.log('Pool está disponível:', !!pool)
+    }
     
     if (!pool) {
       console.error('❌ Pool não disponível! DATABASE_URL não configurado?')
@@ -324,15 +336,20 @@ export async function query(text: string, params?: any[]) {
     
     const res = await pool.query(text, params)
     const duration = Date.now() - start
-    console.log('✅ Query executada com sucesso')
-    console.log('Linhas afetadas:', res.rowCount)
-    console.log('⏱️  Tempo:', duration + 'ms')
+
+    if (!isProd) {
+      console.log('✅ Query executada com sucesso')
+      console.log('Linhas afetadas:', res.rowCount)
+      console.log('⏱️  Tempo:', duration + 'ms')
+    }
     return res
   } catch (error) {
     console.error('❌ DATABASE QUERY ERROR ===')
     console.error('Erro:', error.message)
-    console.error('Stack:', error.stack)
-    console.error('SQL que falhou:', text)
+    if (!isProd) {
+      console.error('Stack:', error.stack)
+      console.error('SQL que falhou:', text)
+    }
     console.error('====================================')
     throw error
   }

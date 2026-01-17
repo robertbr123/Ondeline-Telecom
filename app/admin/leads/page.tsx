@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Phone, Mail, MapPin, Clock } from 'lucide-react'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 interface Lead {
   id: string
@@ -46,9 +47,13 @@ export default function AdminLeads() {
       })
       if (res.ok) {
         fetchLeads()
+        toast.success(`Status do lead atualizado para ${getStatusLabel(newStatus)}`)
+      } else {
+        toast.error('Erro ao atualizar status do lead')
       }
     } catch (error) {
       console.error('Erro ao atualizar status:', error)
+      toast.error('Erro ao atualizar status do lead')
     }
   }
 

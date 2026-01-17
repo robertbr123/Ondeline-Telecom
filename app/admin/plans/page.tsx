@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Plus, Trash2, Edit, Check } from 'lucide-react'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 interface Plan {
   id: string
@@ -74,9 +75,13 @@ export default function AdminPlans() {
       })
       if (res.ok) {
         fetchPlans()
+        toast.success(`Plano ${!currentStatus ? 'ativado' : 'desativado'} com sucesso!`)
+      } else {
+        toast.error('Erro ao atualizar status do plano')
       }
     } catch (error) {
       console.error('Erro ao atualizar plano:', error)
+      toast.error('Erro ao atualizar status do plano')
     }
   }
 
@@ -113,17 +118,17 @@ export default function AdminPlans() {
       
       if (!res.ok) {
         console.error('Erro na resposta:', data)
-        alert(`Erro: ${data.error || 'Erro ao salvar plano'}`)
+        toast.error(`Erro: ${data.error || 'Erro ao salvar plano'}`)
         return
       }
       
       fetchPlans()
       setEditingPlan(null)
       setIsCreating(false)
-      alert('Plano salvo com sucesso!')
+      toast.success('Plano salvo com sucesso!')
     } catch (error) {
       console.error('Erro ao salvar plano:', error)
-      alert('Erro ao salvar plano. Verifique o console.')
+      toast.error('Erro ao salvar plano. Verifique o console.')
     }
   }
 
@@ -136,9 +141,13 @@ export default function AdminPlans() {
       })
       if (res.ok) {
         fetchPlans()
+        toast.success('Plano deletado com sucesso!')
+      } else {
+        toast.error('Erro ao deletar plano')
       }
     } catch (error) {
       console.error('Erro ao deletar plano:', error)
+      toast.error('Erro ao deletar plano')
     }
   }
 

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft, Save, Upload, ImageIcon } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { toast } from 'sonner'
 
 interface SiteConfig {
   title: string
@@ -97,12 +98,12 @@ export default function AdminSettings() {
       const data = await res.json()
       if (data.success) {
         setConfig({ ...config, logoUrl: data.data.url })
-        setMessage('Logo atualizado! Salve para aplicar as alterações.')
+        toast.success('Logo atualizado! Salve para aplicar as alterações.')
       } else {
-        setMessage(data.error || 'Erro ao fazer upload do logo')
+        toast.error(data.error || 'Erro ao fazer upload do logo')
       }
     } catch (error) {
-      setMessage('Erro ao fazer upload do logo')
+      toast.error('Erro ao fazer upload do logo')
     } finally {
       setUploading(false)
     }
@@ -110,7 +111,6 @@ export default function AdminSettings() {
 
   const handleSave = async () => {
     setSaving(true)
-    setMessage('')
     
     try {
       const res = await fetch('/api/site/config', {
@@ -121,13 +121,12 @@ export default function AdminSettings() {
 
       const data = await res.json()
       if (data.success) {
-        setMessage('Configurações salvas com sucesso!')
-        setTimeout(() => setMessage(''), 3000)
+        toast.success('Configurações salvas com sucesso!')
       } else {
-        setMessage('Erro ao salvar configurações')
+        toast.error('Erro ao salvar configurações')
       }
     } catch (error) {
-      setMessage('Erro ao salvar configurações')
+      toast.error('Erro ao salvar configurações')
     } finally {
       setSaving(false)
     }
@@ -154,16 +153,6 @@ export default function AdminSettings() {
           </div>
         ) : (
           <div className="space-y-6">
-            {message && (
-              <div className={`p-4 rounded-lg ${
-                message.includes('sucesso')
-                  ? 'bg-green-500/10 text-green-500 border border-green-500/20'
-                  : 'bg-red-500/10 text-red-500 border border-red-500/20'
-              }`}>
-                {message}
-              </div>
-            )}
-
             <div className="p-6 rounded-xl border border-border bg-card/50 space-y-4">
               <h2 className="text-lg font-semibold mb-4">Logo do Site</h2>
               

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Plus, Trash2, Edit, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 interface FAQ {
   id: string
@@ -74,9 +75,13 @@ export default function AdminFAQ() {
         fetchFaqs()
         setEditingFaq(null)
         setIsCreating(false)
+        toast.success('FAQ salva com sucesso!')
+      } else {
+        toast.error('Erro ao salvar FAQ')
       }
     } catch (error) {
       console.error('Erro ao salvar FAQ:', error)
+      toast.error('Erro ao salvar FAQ')
     }
   }
 
@@ -90,9 +95,13 @@ export default function AdminFAQ() {
 
       if (res.ok) {
         fetchFaqs()
+        toast.success('FAQ excluída com sucesso!')
+      } else {
+        toast.error('Erro ao excluir FAQ')
       }
     } catch (error) {
       console.error('Erro ao excluir FAQ:', error)
+      toast.error('Erro ao excluir FAQ')
     }
   }
 
@@ -106,9 +115,13 @@ export default function AdminFAQ() {
 
       if (res.ok) {
         fetchFaqs()
+        toast.success(`FAQ ${!faq.active ? 'ativada' : 'desativada'} com sucesso!`)
+      } else {
+        toast.error('Erro ao atualizar status da FAQ')
       }
     } catch (error) {
       console.error('Erro ao atualizar FAQ:', error)
+      toast.error('Erro ao atualizar status da FAQ')
     }
   }
 

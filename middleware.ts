@@ -7,6 +7,7 @@ const JWT_SECRET = new TextEncoder().encode(
 
 // Rotas públicas que não exigem autenticação
 const publicRoutes = [
+  '/',
   '/admin/login',
   '/api/auth/login',
   '/api/auth/debug',
@@ -14,6 +15,16 @@ const publicRoutes = [
   '/api/faq',
   '/api/plans',
   '/api/site/config',
+  '/blog',
+  '/coverage',
+]
+
+// Prefixos de arquivos estáticos e Next.js
+const staticPrefixes = [
+  '/_next',
+  '/static',
+  '/favicon',
+  '/public',
 ]
 
 // Extensões de arquivos estáticos
@@ -22,22 +33,21 @@ const staticExtensions = ['.png', '.jpg', '.jpeg', '.svg', '.ico', '.gif', '.web
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Permitir rotas públicas
-  if (
-    publicRoutes.some(route => pathname.startsWith(route)) ||
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/static') ||
-    pathname.startsWith('/favicon') ||
-    pathname.startsWith('/public') ||
-    pathname === '/' ||
-    pathname.startsWith('/blog') ||
-    pathname.startsWith('/coverage') ||
-    staticExtensions.some(ext => pathname.includes(ext))
-  ) {
+  // 1. Verificar se é uma rota pública
+  const isPublicRoute = publicRoutes.some(route =>
+    route === '/' ? pathname === '/' : pathname.startsWith(route)
+  )
+
+  // 2. Verificar se é um arquivo estático ou recurso do Next.js
+  const isStaticResource =
+    staticPrefixes.some(prefix => pathname.startsWith(prefix)) ||
+    staticExtensions.some(ext => pathname.endsWith(ext))
+
+  if (isPublicRoute || isStaticResource) {
     return NextResponse.next()
   }
 
-  // Proteger rotas de admin
+  // 3. Proteger rotas de admin e API (exceto as públicas já verificadas)
   if (pathname.startsWith('/admin') || pathname.startsWith('/api/')) {
     const token = request.cookies.get('auth-token')?.value
 
