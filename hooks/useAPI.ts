@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { toast } from 'sonner'
 
 interface UseAPIOptions {
@@ -12,6 +12,15 @@ export function useAPI<T>(endpoint: string, options: UseAPIOptions = {}) {
   const [data, setData] = useState<T | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  
+  // Use refs para callbacks para evitar re-renders
+  const onSuccessRef = useRef(onSuccess)
+  const onErrorRef = useRef(onError)
+  
+  useEffect(() => {
+    onSuccessRef.current = onSuccess
+    onErrorRef.current = onError
+  })
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -22,20 +31,20 @@ export function useAPI<T>(endpoint: string, options: UseAPIOptions = {}) {
       
       if (json.success) {
         setData(json.data)
-        onSuccess?.(json.data)
+        onSuccessRef.current?.(json.data)
       } else {
         const errorMsg = json.error || 'Erro ao carregar dados'
         setError(errorMsg)
-        onError?.(errorMsg)
+        onErrorRef.current?.(errorMsg)
       }
     } catch (err) {
       const errorMsg = 'Erro de conexão'
       setError(errorMsg)
-      onError?.(errorMsg)
+      onErrorRef.current?.(errorMsg)
     } finally {
       setLoading(false)
     }
-  }, [endpoint, onSuccess, onError])
+  }, [endpoint])
 
   useEffect(() => {
     if (autoFetch) {
@@ -51,51 +60,35 @@ export function useAPI<T>(endpoint: string, options: UseAPIOptions = {}) {
 }
 
 export function usePlans() {
-  return useAPI('/api/plans', {
-    onError: (error) => toast.error(error),
-  })
+  return useAPI('/api/plans')
 }
 
 export function useFAQs() {
-  return useAPI('/api/faq', {
-    onError: (error) => toast.error(error),
-  })
+  return useAPI('/api/faq')
 }
 
 export function useFeatures() {
-  return useAPI('/api/features', {
-    onError: (error) => toast.error(error),
-  })
+  return useAPI('/api/features')
 }
 
 export function useLeads() {
-  return useAPI('/api/leads', {
-    onError: (error) => toast.error(error),
-  })
+  return useAPI('/api/leads')
 }
 
 export function useBlogPosts(published = true) {
-  return useAPI(`/api/blog${published ? '?published=true' : ''}`, {
-    onError: (error) => toast.error(error),
-  })
+  return useAPI(`/api/blog${published ? '?published=true' : ''}`)
 }
 
 export function useSiteConfig() {
-  return useAPI('/api/site/config', {
-    onError: (error) => toast.error(error),
-  })
+  return useAPI('/api/site/config')
 }
 
 export function useCoverage() {
-  return useAPI('/api/coverage', {
-    onError: (error) => toast.error(error),
-  })
+  return useAPI('/api/coverage')
 }
 
 export function useReferrals() {
-  return useAPI('/api/referrals', {
-    onError: (error) => toast.error(error),
-  })
+  return useAPI('/api/referrals')
 }
 
 export async function submitAPI<T>(

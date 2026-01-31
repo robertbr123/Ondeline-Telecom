@@ -83,14 +83,12 @@ export async function GET() {
       updated_at: plan.updated_at,
     }))
 
-    console.log(`Encontrados ${plans.length} planos`)
     return NextResponse.json({
       success: true,
       data: plans,
     })
   } catch (error) {
-    console.error('=== ERRO AO BUSCAR PLANOS ===')
-    console.error('Erro:', error)
+    console.error('Erro ao buscar planos:', error)
     return NextResponse.json(
       { success: false, error: 'Erro ao buscar planos' },
       { status: 500 }
