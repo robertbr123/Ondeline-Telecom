@@ -148,6 +148,40 @@ export async function initializeDatabase() {
       )
     `)
 
+    // Tabela de features
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS features (
+        id TEXT PRIMARY KEY,
+        title TEXT NOT NULL,
+        description TEXT NOT NULL,
+        icon TEXT NOT NULL,
+        color TEXT NOT NULL,
+        "order" INTEGER DEFAULT 0,
+        active INTEGER DEFAULT 1,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    `)
+
+    // Tabela de sistema de indicação
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS referrals (
+        id TEXT PRIMARY KEY,
+        referrer_name TEXT NOT NULL,
+        referrer_email TEXT NOT NULL,
+        referrer_phone TEXT NOT NULL,
+        referred_name TEXT NOT NULL,
+        referred_email TEXT NOT NULL,
+        referred_phone TEXT NOT NULL,
+        city TEXT NOT NULL,
+        referral_code TEXT NOT NULL UNIQUE,
+        status TEXT DEFAULT 'pending',
+        reward_claimed INTEGER DEFAULT 0,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    `)
+
     // Inserir configurações padrão se não existirem
     const defaultConfig = await pool.query('SELECT COUNT(*) as count FROM site_config')
     if (parseInt(defaultConfig.rows[0].count) === 0) {
@@ -279,6 +313,65 @@ export async function initializeDatabase() {
         'Cobertura',
         5,
         1
+      ])
+    }
+
+    // Inserir features padrão se não existirem
+    const featuresCount = await pool.query('SELECT COUNT(*) as count FROM features')
+    if (parseInt(featuresCount.rows[0].count) === 0) {
+      const insertFeature = `
+        INSERT INTO features (id, title, description, icon, color, "order", active, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      `
+
+      const now = new Date().toISOString()
+      
+      await pool.query(insertFeature, [
+        'feature-1',
+        'Suporte 24/7',
+        'Atendimento rápido e eficiente para resolver seus problemas em tempo real',
+        'Zap',
+        'from-yellow-500 to-yellow-600',
+        1,
+        1,
+        now,
+        now
+      ])
+
+      await pool.query(insertFeature, [
+        'feature-2',
+        'Internet Estável',
+        'Conexão confiável que você pode depender para seu negócio todos os dias',
+        'Shield',
+        'from-blue-500 to-blue-600',
+        2,
+        1,
+        now,
+        now
+      ])
+
+      await pool.query(insertFeature, [
+        'feature-3',
+        'Conexão Rápida',
+        'Velocidade de fibra óptica para downloads e uploads instantâneos',
+        'Rocket',
+        'from-cyan-500 to-cyan-600',
+        3,
+        1,
+        now,
+        now
+      ])
+
+      await pool.query(insertFeature, [
+        'feature-4',
+        'Melhor Custo',
+        'Melhor custo-benefício da região com planos flexíveis',
+        'Award',
+        'from-emerald-500 to-emerald-600',
+        4,
+        1,
+        now,
+        now
       ])
     }
 

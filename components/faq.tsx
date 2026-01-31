@@ -1,7 +1,9 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { ChevronDown } from "lucide-react"
+import { useFAQs } from "@/hooks/useAPI"
+import { LoadingCard } from "./loading"
 
 interface FAQItem {
   id: string
@@ -14,26 +16,7 @@ interface FAQItem {
 
 export function FAQ() {
   const [openIdx, setOpenIdx] = useState(0)
-  const [faqs, setFaqs] = useState<FAQItem[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    fetchFAQs()
-  }, [])
-
-  const fetchFAQs = async () => {
-    try {
-      const res = await fetch('/api/faq')
-      const data = await res.json()
-      if (data.success) {
-        setFaqs(data.data || [])
-      }
-    } catch (error) {
-      console.error('Erro ao buscar FAQs:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const { data: faqs, loading } = useFAQs()
 
   return (
     <section className="w-full py-20 px-4 bg-gradient-to-b from-slate-800 to-slate-900">
@@ -44,16 +27,18 @@ export function FAQ() {
         </div>
 
         {loading ? (
-          <div className="flex justify-center items-center py-12">
-            <div className="text-muted-foreground">Carregando perguntas...</div>
+          <div className="space-y-4">
+            {[1, 2, 3, 4].map((i) => (
+              <LoadingCard key={i} />
+            ))}
           </div>
-        ) : faqs.length === 0 ? (
+        ) : !faqs || faqs.length === 0 ? (
           <div className="flex justify-center items-center py-12">
             <div className="text-muted-foreground">Nenhuma pergunta disponível</div>
           </div>
         ) : (
           <div className="space-y-4">
-            {faqs.map((faq, idx) => (
+            {faqs.map((faq: FAQItem, idx: number) => (
               <div
                 key={faq.id}
                 className="border border-slate-700 rounded-lg overflow-hidden bg-slate-800/50 hover:border-cyan-500/50 transition-all duration-300"

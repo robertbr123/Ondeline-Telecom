@@ -6,7 +6,7 @@ const JWT_SECRET = new TextEncoder().encode(
 )
 
 // Rotas públicas que não exigem autenticação
-const publicRoutes = [
+const PUBLIC_ROUTES = [
   '/admin/login',
   '/api/auth/login',
   '/api/auth/debug',
@@ -16,30 +16,52 @@ const publicRoutes = [
   '/api/site/config',
   '/api/coverage',
   '/api/blog',
-]
+  '/api/features',
+  '/api/referrals',
+] as const
+
+// Rotas públicas do site
+const PUBLIC_PAGES = [
+  '/',
+  '/blog',
+  '/coverage',
+  '/ipixuna',
+  '/eirunepe',
+  '/itamarati',
+  '/carauari',
+] as const
 
 // Extensões de arquivos estáticos
-const staticExtensions = ['.png', '.jpg', '.jpeg', '.svg', '.ico', '.gif', '.webp', '.css', '.js']
+const STATIC_EXTENSIONS = [
+  '.png', '.jpg', '.jpeg', '.svg', '.ico', '.gif', '.webp',
+  '.css', '.js', '.woff', '.woff2', '.ttf', '.eot', '.json'
+] as const
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Permitir rotas públicas
+  // Permitir arquivos estáticos e Next.js internals
   if (
-    publicRoutes.some(route => pathname.startsWith(route)) ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/static') ||
     pathname.startsWith('/favicon') ||
     pathname.startsWith('/public') ||
-    pathname === '/' ||
-    pathname.startsWith('/blog') ||
-    pathname.startsWith('/coverage') ||
-    staticExtensions.some(ext => pathname.includes(ext))
+    STATIC_EXTENSIONS.some(ext => pathname.endsWith(ext))
   ) {
     return NextResponse.next()
   }
 
-  // Proteger rotas de admin
+  // Permitir rotas públicas do site
+  if (PUBLIC_PAGES.some(route => pathname === route || pathname.startsWith(`${route}/`))) {
+    return NextResponse.next()
+  }
+
+  // Permitir rotas públicas de API
+  if (PUBLIC_ROUTES.some(route => pathname.startsWith(route))) {
+    return NextResponse.next()
+  }
+
+  // Proteger rotas de admin e APIs privadas
   if (pathname.startsWith('/admin') || pathname.startsWith('/api/')) {
     const token = request.cookies.get('auth-token')?.value
 
@@ -56,7 +78,7 @@ export async function middleware(request: NextRequest) {
     try {
       await jwtVerify(token, JWT_SECRET)
       return NextResponse.next()
-    } catch (error) {
+    } catch {
       if (pathname.startsWith('/api/')) {
         return NextResponse.json(
           { success: false, error: 'Token inválido' },

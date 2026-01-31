@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { LogOut, Users, LayoutDashboard, Package, MessageSquare, Settings, BarChart3, FileText, BookOpen, Building2, HelpCircle, MapPin } from 'lucide-react'
+import { LogOut, Users, LayoutDashboard, Package, MessageSquare, Settings, BarChart3, FileText, BookOpen, Building2, HelpCircle, MapPin, Sparkles } from 'lucide-react'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -154,6 +154,15 @@ export default function AdminDashboard() {
             <HelpCircle className="w-8 h-8 text-secondary mb-3 group-hover:scale-110 transition" />
             <h3 className="text-xl font-semibold mb-2">FAQ</h3>
             <p className="text-sm text-muted-foreground">Perguntas frequentes</p>
+          </a>
+
+          <a
+            href="/admin/features"
+            className="p-6 rounded-xl border border-border bg-card/50 hover:border-primary/50 transition group"
+          >
+            <Sparkles className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition" />
+            <h3 className="text-xl font-semibold mb-2">Features</h3>
+            <p className="text-sm text-muted-foreground">Gerenciar funcionalidades</p>
           </a>
 
           <a

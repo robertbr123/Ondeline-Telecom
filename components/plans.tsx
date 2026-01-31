@@ -1,9 +1,11 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Check, Zap } from "lucide-react"
 import { PreregistrationModal } from "./preregistration-modal"
+import { usePlans } from "@/hooks/useAPI"
+import { LoadingCard } from "./loading"
 
 interface Plan {
   id: string
@@ -18,28 +20,9 @@ interface Plan {
 
 export function Plans() {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [plans, setPlans] = useState<Plan[]>([])
-  const [loading, setLoading] = useState(true)
+  const { data: plans, loading } = usePlans()
 
-  useEffect(() => {
-    fetchPlans()
-  }, [])
-
-  const fetchPlans = async () => {
-    try {
-      const res = await fetch('/api/plans')
-      const data = await res.json()
-      if (data.success) {
-        // Filtrar apenas planos ativos
-        const activePlans = (data.data || []).filter((p: Plan) => p.active)
-        setPlans(activePlans)
-      }
-    } catch (error) {
-      console.error('Erro ao buscar planos:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const activePlans = (plans || []).filter((p: Plan) => p.active)
 
   return (
     <>
@@ -55,16 +38,18 @@ export function Plans() {
           </div>
 
           {loading ? (
-            <div className="flex justify-center items-center py-12">
-              <div className="text-muted-foreground">Carregando planos...</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[1, 2, 3, 4].map((i) => (
+                <LoadingCard key={i} />
+              ))}
             </div>
-          ) : plans.length === 0 ? (
+          ) : activePlans.length === 0 ? (
             <div className="flex justify-center items-center py-12">
               <div className="text-muted-foreground">Nenhum plano disponível</div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {plans.map((plan) => (
+              {activePlans.map((plan: Plan) => (
                 <div
                   key={plan.id}
                   className={`rounded-xl border transition-all duration-300 p-6 ${

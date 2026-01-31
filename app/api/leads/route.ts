@@ -3,14 +3,7 @@ import { nanoid } from 'nanoid'
 import { z } from 'zod'
 import nodemailer from 'nodemailer'
 import { query } from '@/lib/db'
-
-// Schema de validação com Zod
-const leadSchema = z.object({
-  name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
-  email: z.string().email('Email inválido'),
-  phone: z.string().min(14, 'Telefone inválido'),
-  city: z.enum(['Ipixuna', 'Eirunepe', 'Itamarati', 'Carauari'], 'Cidade inválida'),
-})
+import { leadSchema } from '@/lib/validations'
 
 // GET - Listar leads (admin)
 export async function GET(request: NextRequest) {
