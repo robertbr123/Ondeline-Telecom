@@ -71,6 +71,10 @@ export function useFeatures() {
   return useAPI('/api/features')
 }
 
+export function useClients() {
+  return useAPI('/api/clients')
+}
+
 export function useLeads() {
   return useAPI('/api/leads')
 }

@@ -182,6 +182,20 @@ export async function initializeDatabase() {
       )
     `)
 
+    // Tabela de clientes/empresas
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS clients (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        logo TEXT NOT NULL,
+        bg_color TEXT DEFAULT 'bg-white',
+        "order" INTEGER DEFAULT 0,
+        active INTEGER DEFAULT 1,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    `)
+
     // Inserir configurações padrão se não existirem
     const defaultConfig = await pool.query('SELECT COUNT(*) as count FROM site_config')
     if (parseInt(defaultConfig.rows[0].count) === 0) {
@@ -369,6 +383,83 @@ export async function initializeDatabase() {
         'Award',
         'from-emerald-500 to-emerald-600',
         4,
+        1,
+        now,
+        now
+      ])
+    }
+
+    // Inserir clientes padrão se não existirem
+    const clientsCount = await pool.query('SELECT COUNT(*) as count FROM clients')
+    if (parseInt(clientsCount.rows[0].count) === 0) {
+      const insertClient = `
+        INSERT INTO clients (id, name, logo, bg_color, "order", active, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      `
+
+      const now = new Date().toISOString()
+      
+      await pool.query(insertClient, [
+        'client-1',
+        'Bradesco',
+        'https://scontent-lim1-1.xx.fbcdn.net/v/t39.30808-6/412265266_744572124373375_4671948206819075660_n.jpg?_nc_cat=1&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=F6tNzh_K9twQ7kNvwGPJzRT&_nc_oc=Adk4SH-mG7wwdTAAvZOb_Xv9DOHC-xa-hpYPU5jlvHIqh2qwqJx2bLvzr5-JfqPk3vg&_nc_zt=23&_nc_ht=scontent-lim1-1.xx&_nc_gid=63w5xFAPmuLfb6Wmj84BvA&oh=00_Afp_AVicUuH6_aPk4qEy8ihXOdZ0N7ipdtp01Kx4FxFcKQ&oe=69704723',
+        'bg-white',
+        1,
+        1,
+        now,
+        now
+      ])
+
+      await pool.query(insertClient, [
+        'client-2',
+        'Correios',
+        'https://static.ndmais.com.br/2014/05/06-05-2014-21-21-40-nova-marca.jpg',
+        'bg-white',
+        2,
+        1,
+        now,
+        now
+      ])
+
+      await pool.query(insertClient, [
+        'client-3',
+        'CETAM',
+        'https://www.cetam.am.gov.br/wp-content/uploads/2023/03/Logo-CETAM.png',
+        'bg-white',
+        3,
+        1,
+        now,
+        now
+      ])
+
+      await pool.query(insertClient, [
+        'client-4',
+        'Prefeitura de Ipixuna',
+        'https://scontent-lim1-1.xx.fbcdn.net/v/t39.30808-6/472245549_1026396992867064_8301775409847835316_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=K1SxIXuAcYYQ7kNvwFB7xgg&_nc_oc=AdkpPKszVi8UCFo9eC37aucUeBpThQNwNw_F0HXrnWI2tolZyH7HCpVuiCKeIxvEsFA&_nc_zt=23&_nc_ht=scontent-lim1-1.xx&_nc_gid=nrkEz9s4TDgnYnuSPqIw8A&oh=00_AfokYRLkUk7y8QSBS0OjYzIznyJwDwuXL-V2pzn-NetJAw&oe=697066DF',
+        'bg-white',
+        4,
+        1,
+        now,
+        now
+      ])
+
+      await pool.query(insertClient, [
+        'client-5',
+        'Prefeitura de Eirunepé',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Bandeira_de_Eirunep%C3%A9.png/120px-Bandeira_de_Eirunep%C3%A9.png',
+        'bg-white',
+        5,
+        1,
+        now,
+        now
+      ])
+
+      await pool.query(insertClient, [
+        'client-6',
+        'Caixa Econômica',
+        'https://images.seeklogo.com/logo-png/2/1/caixa-economica-federal-logo-png_seeklogo-24768.png',
+        'bg-white',
+        6,
         1,
         now,
         now

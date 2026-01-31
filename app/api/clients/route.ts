@@ -1,40 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { query } from '@/lib/db'
 import { nanoid } from 'nanoid'
 
-// GET - Listar clientes/parceiros
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
-    // Primeiro, verificar se a tabela existe e criar se necessário
-    await query(`
-      CREATE TABLE IF NOT EXISTS clients (
-        id TEXT PRIMARY KEY,
-        name TEXT NOT NULL,
-        logo TEXT NOT NULL,
-        website TEXT,
-        active INTEGER DEFAULT 1,
-        display_order INTEGER DEFAULT 1,
-        created_at TEXT,
-        updated_at TEXT
-      )
-    `)
-
-    const result = await query('SELECT * FROM clients ORDER BY display_order ASC, name ASC')
+    const result = await query('SELECT * FROM clients WHERE active = 1 ORDER BY "order" ASC')
     
-    const clients = result.rows.map((client: any) => ({
-      id: client.id,
-      name: client.name,
-      logo: client.logo,
-      website: client.website,
-      active: client.active === 1,
-      order: client.display_order,
-      created_at: client.created_at,
-      updated_at: client.updated_at,
-    }))
-
     return NextResponse.json({
       success: true,
-      data: clients,
+      data: result.rows,
     })
   } catch (error) {
     console.error('Erro ao buscar clientes:', error)
@@ -45,11 +21,10 @@ export async function GET() {
   }
 }
 
-// POST - Criar novo cliente
-export async function POST(request: NextRequest) {
+export async function POST(req: Request) {
   try {
-    const body = await request.json()
-    const { name, logo, website, active, order } = body
+    const body = await req.json()
+    const { name, logo, bgColor = 'bg-white', order = 0, active = 1 } = body
 
     if (!name || !logo) {
       return NextResponse.json(
@@ -58,27 +33,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const id = `client-${nanoid(8)}`
+    const id = `client-${nanoid()}`
     const now = new Date().toISOString()
 
-    await query(`
-      INSERT INTO clients (id, name, logo, website, active, display_order, created_at, updated_at)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-    `, [
-      id,
-      name,
-      logo,
-      website || '',
-      active ? 1 : 0,
-      order || 1,
-      now,
-      now
-    ])
+    await query(
+      'INSERT INTO clients (id, name, logo, bg_color, "order", active, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+      [id, name, logo, bgColor, order, active, now, now]
+    )
 
     return NextResponse.json({
       success: true,
-      data: { id, name, logo, website, active, order },
-      message: 'Cliente criado com sucesso',
+      data: { id, name, logo, bg_color: bgColor, order, active, created_at: now, updated_at: now },
     })
   } catch (error) {
     console.error('Erro ao criar cliente:', error)
