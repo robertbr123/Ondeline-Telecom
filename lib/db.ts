@@ -20,9 +20,9 @@ if (!connectionString && !isBuildTime) {
 let pool: Pool | null = null
 
 if (connectionString && !isBuildTime) {
-  // Verificar se deve usar SSL (via variável de ambiente ou em produção)
-  const useSSL = process.env.DATABASE_SSL === 'true' || 
-                 (process.env.NODE_ENV === 'production' && process.env.DATABASE_SSL !== 'false')
+  // Verificar se deve usar SSL (apenas se explicitamente configurado)
+  // Dokploy interno não usa SSL, então default é false
+  const useSSL = process.env.DATABASE_SSL === 'true'
   
   const sslConfig = useSSL ? { rejectUnauthorized: false } : false
   
