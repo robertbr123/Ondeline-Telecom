@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import { useClients } from "@/hooks/useAPI"
-import { Skeleton } from "@/components/ui/skeleton"
 
 interface Client {
   id: string
@@ -28,12 +27,12 @@ export function Clients() {
       <section className="py-20 px-4 border-y border-border">
         <div className="max-w-6xl mx-auto space-y-12">
           <div className="text-center space-y-4">
-            <Skeleton className="h-12 w-3/4 mx-auto" />
-            <Skeleton className="h-6 w-1/2 mx-auto" />
+            <div className="h-12 w-3/4 mx-auto bg-muted animate-pulse rounded" />
+            <div className="h-6 w-1/2 mx-auto bg-muted animate-pulse rounded" />
           </div>
           <div className="flex gap-8 justify-center">
             {[...Array(4)].map((_, idx) => (
-              <Skeleton key={idx} className="w-48 h-32" />
+              <div key={idx} className="w-48 h-32 bg-muted animate-pulse rounded" />
             ))}
           </div>
         </div>
