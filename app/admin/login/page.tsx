@@ -27,7 +27,6 @@ export default function AdminLogin() {
       })
 
       const data = await res.json()
-      console.log('Login response:', data)
 
       if (data.success) {
         // Usar window.location para garantir reload completo e cookie aplicado
@@ -103,7 +102,7 @@ export default function AdminLogin() {
         </div>
 
         <p className="text-center text-sm text-muted-foreground">
-          Credenciais padrão: admin / admin123
+          Acesse com suas credenciais de administrador
         </p>
       </div>
     </div>

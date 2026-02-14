@@ -64,19 +64,19 @@ export function Header() {
       {isOpen && (
         <nav className="md:hidden border-t border-border bg-background">
           <div className="px-4 py-4 space-y-4">
-            <a href="/" className="block text-foreground hover:text-primary">
+            <a href="/" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">
               Início
             </a>
-            <a href="#planos" className="block text-foreground hover:text-primary">
+            <a href="#planos" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">
               Planos
             </a>
-            <a href="#suporte" className="block text-foreground hover:text-primary">
+            <a href="#suporte" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">
               Suporte
             </a>
-            <a href="/blog" className="block text-foreground hover:text-primary">
+            <a href="/blog" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">
               Blog
             </a>
-            <a href="/coverage" className="block text-foreground hover:text-primary">
+            <a href="/coverage" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">
               Cobertura
             </a>
             <a

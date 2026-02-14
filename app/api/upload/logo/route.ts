@@ -24,6 +24,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Limitar tamanho (5MB)
+    const MAX_SIZE = 5 * 1024 * 1024
+    if (file.size > MAX_SIZE) {
+      return NextResponse.json(
+        { success: false, error: 'Arquivo muito grande. Tamanho máximo: 5MB.' },
+        { status: 400 }
+      )
+    }
+
     // Criar diretório uploads se não existir
     const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
     if (!existsSync(uploadsDir)) {

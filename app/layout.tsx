@@ -48,6 +48,30 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "InternetServiceProvider",
+              name: "Ondeline Telecom",
+              description: "Internet de alta velocidade em Ipixuna, Eirunepé, Itamarati e Carauari no Amazonas.",
+              url: "https://ondeline.com.br",
+              telephone: "(92) 98460-7721",
+              email: "contato@ondeline.com.br",
+              address: { "@type": "PostalAddress", addressRegion: "Amazonas", addressCountry: "BR" },
+              areaServed: [
+                { "@type": "City", name: "Ipixuna", addressRegion: "Amazonas" },
+                { "@type": "City", name: "Eirunepé", addressRegion: "Amazonas" },
+                { "@type": "City", name: "Itamarati", addressRegion: "Amazonas" },
+                { "@type": "City", name: "Carauari", addressRegion: "Amazonas" },
+              ],
+              priceRange: "R$ 100 - R$ 150",
+            }),
+          }}
+        />
+      </head>
       <body className={`font-sans antialiased`}>
         <Providers>
           <ThemeProvider>

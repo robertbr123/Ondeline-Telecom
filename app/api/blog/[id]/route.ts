@@ -8,25 +8,44 @@ export async function GET(
 ) {
   try {
     const { id: slug } = await params
-    console.log('=== API BLOG [ID] - GET ===')
-    console.log('Slug buscado:', slug)
-    
-    const result = await query('SELECT * FROM blog_posts WHERE slug = $1', [slug])
-    
+
+    // Buscar post e incrementar views numa única query
+    const result = await query(
+      'UPDATE blog_posts SET views = views + 1 WHERE slug = $1 AND published = 1 RETURNING *',
+      [slug]
+    )
+
     if (!result.rows[0]) {
-      console.log('Post não encontrado para slug:', slug)
-      return NextResponse.json(
-        { success: false, error: 'Post não encontrado' },
-        { status: 404 }
-      )
+      // Tentar buscar sem incrementar (pode ser rascunho para admin)
+      const fallback = await query('SELECT * FROM blog_posts WHERE slug = $1', [slug])
+      if (!fallback.rows[0]) {
+        return NextResponse.json(
+          { success: false, error: 'Post não encontrado' },
+          { status: 404 }
+        )
+      }
+      const post = fallback.rows[0]
+      return NextResponse.json({
+        success: true,
+        data: {
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          excerpt: post.excerpt,
+          content: post.content,
+          cover_image: post.cover_image,
+          author: post.author,
+          category: post.category,
+          tags: post.tags ? JSON.parse(post.tags) : [],
+          published: post.published === 1,
+          views: post.views,
+          created_at: post.created_at,
+          updated_at: post.updated_at,
+        },
+      })
     }
 
     const post = result.rows[0]
-    
-    // Incrementar views
-    await query('UPDATE blog_posts SET views = views + 1 WHERE slug = $1', [slug])
-
-    console.log('Post encontrado e views incrementado:', post.title, 'views:', post.views + 1)
 
     return NextResponse.json({
       success: true,
@@ -41,7 +60,7 @@ export async function GET(
         category: post.category,
         tags: post.tags ? JSON.parse(post.tags) : [],
         published: post.published === 1,
-        views: post.views + 1,
+        views: post.views,
         created_at: post.created_at,
         updated_at: post.updated_at,
       },
@@ -62,18 +81,12 @@ export async function PUT(
 ) {
   try {
     const { id: paramSlug } = await params
-    console.log('=== API BLOG [ID] - PUT ===')
-    console.log('Slug do post:', paramSlug)
-    
     const body = await request.json()
-    console.log('Body recebido para PUT:', body)
-    
     const { title, slug, excerpt, content, cover_image, author, category, tags, published } = body
 
     // Verificar se post existe
     const existingPost = await query('SELECT id FROM blog_posts WHERE slug = $1', [paramSlug])
     if (!existingPost.rows[0]) {
-      console.log('Post não encontrado para edição')
       return NextResponse.json(
         { success: false, error: 'Post não encontrado' },
         { status: 404 }
@@ -83,8 +96,8 @@ export async function PUT(
     const now = new Date().toISOString()
 
     await query(`
-      UPDATE blog_posts 
-      SET title = $1, slug = $2, excerpt = $3, content = $4, cover_image = $5, 
+      UPDATE blog_posts
+      SET title = $1, slug = $2, excerpt = $3, content = $4, cover_image = $5,
           author = $6, category = $7, tags = $8, published = $9, updated_at = $10
       WHERE slug = $11
     `, [
@@ -101,16 +114,13 @@ export async function PUT(
       paramSlug
     ])
 
-    console.log('Post atualizado com sucesso')
-
     return NextResponse.json({
       success: true,
-      data: { slug: paramSlug, title, slug, excerpt, content, cover_image, author, category, tags, published },
+      data: { slug: paramSlug, title, excerpt, content, cover_image, author, category, tags, published },
       message: 'Post atualizado com sucesso',
     })
   } catch (error) {
     console.error('Erro ao atualizar post:', error)
-    console.error('Stack trace:', error.stack)
     return NextResponse.json(
       { success: false, error: 'Erro ao atualizar post' },
       { status: 500 }
@@ -125,20 +135,14 @@ export async function DELETE(
 ) {
   try {
     const { id: slug } = await params
-    console.log('=== API BLOG [ID] - DELETE ===')
-    console.log('Slug do post para deletar:', slug)
-    
     const result = await query('DELETE FROM blog_posts WHERE slug = $1', [slug])
 
     if (result.rowCount === 0) {
-      console.log('Post não encontrado para deleção')
       return NextResponse.json(
         { success: false, error: 'Post não encontrado' },
         { status: 404 }
       )
     }
-
-    console.log('Post deletado com sucesso')
 
     return NextResponse.json({
       success: true,

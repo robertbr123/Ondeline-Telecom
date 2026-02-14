@@ -29,13 +29,15 @@ export type FeatureIcon = typeof FEATURE_ICONS[number]
 export const PUBLIC_ROUTES = [
   '/admin/login',
   '/api/auth/login',
-  '/api/auth/debug',
   '/api/leads',
   '/api/plans',
   '/api/faq',
   '/api/site/config',
   '/api/blog',
   '/api/coverage',
+  '/api/features',
+  '/api/referrals',
+  '/api/clients',
 ] as const
 
 export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '5592984607721'

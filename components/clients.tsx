@@ -76,7 +76,7 @@ export function Clients() {
                             width={120}
                             height={60}
                             className="object-contain max-h-14 group-hover:scale-105 transition"
-                            unoptimized
+                            unoptimized={/^https?:\/\//.test(client.logo)}
                           />
                         </div>
                         <div className="font-medium text-gray-700 text-xs">{client.name}</div>

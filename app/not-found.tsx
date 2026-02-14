@@ -1,10 +1,13 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Home, Search, ArrowLeft } from 'lucide-react'
 
 export default function NotFound() {
+  const router = useRouter()
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-4">
       <div className="max-w-md w-full text-center space-y-8">
@@ -42,14 +45,12 @@ export default function NotFound() {
 
         <div className="pt-8">
           <Button
-            asChild
             variant="ghost"
-            className="text-slate-400 hover:text-white"
+            className="text-slate-400 hover:text-white flex items-center gap-2"
+            onClick={() => router.back()}
           >
-            <Link href="javascript:history.back()" className="flex items-center gap-2">
-              <ArrowLeft size={16} />
-              Voltar para a página anterior
-            </Link>
+            <ArrowLeft size={16} />
+            Voltar para a página anterior
           </Button>
         </div>
       </div>

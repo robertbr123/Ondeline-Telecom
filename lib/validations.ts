@@ -5,7 +5,7 @@ import { CITIES, FAQ_CATEGORIES, BLOG_CATEGORIES, MATERIAL_CATEGORIES, FEATURE_I
 export const leadSchema = z.object({
   name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
   email: z.string().email('Email inválido'),
-  phone: z.string().min(14, 'Telefone inválido'),
+  phone: z.string().min(14, 'Telefone inválido').regex(/^\(\d{2}\)\s?\d{4,5}-\d{4}$/, 'Formato: (92) 98460-7721'),
   city: z.enum(CITIES, { errorMap: () => ({ message: 'Cidade inválida' }) }),
   plan_interest: z.string().optional(),
   notes: z.string().optional(),
@@ -92,10 +92,10 @@ export type CoverageInput = z.infer<typeof coverageSchema>
 export const referralSchema = z.object({
   referrer_name: z.string().min(2, 'Nome é obrigatório'),
   referrer_email: z.string().email('Email inválido'),
-  referrer_phone: z.string().min(14, 'Telefone inválido'),
+  referrer_phone: z.string().min(14, 'Telefone inválido').regex(/^\(\d{2}\)\s?\d{4,5}-\d{4}$/, 'Formato: (92) 98460-7721'),
   referred_name: z.string().min(2, 'Nome do indicado é obrigatório'),
   referred_email: z.string().email('Email do indicado inválido'),
-  referred_phone: z.string().min(14, 'Telefone do indicado inválido'),
+  referred_phone: z.string().min(14, 'Telefone do indicado inválido').regex(/^\(\d{2}\)\s?\d{4,5}-\d{4}$/, 'Formato: (92) 98460-7721'),
   city: z.enum(CITIES, { errorMap: () => ({ message: 'Cidade inválida' }) }),
 })
 
