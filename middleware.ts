@@ -9,7 +9,6 @@ const JWT_SECRET = new TextEncoder().encode(
 const PUBLIC_ROUTES = [
   '/admin/login',
   '/api/auth/login',
-  '/api/auth/debug',
   '/api/leads',
   '/api/faq',
   '/api/plans',
@@ -93,13 +92,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!_next/static|_next/image|favicon.ico).*)',
-  ],
+  // Middleware só roda em rotas /admin e /api - ignora páginas públicas, assets, etc.
+  matcher: ['/admin/:path*', '/api/:path*'],
 }

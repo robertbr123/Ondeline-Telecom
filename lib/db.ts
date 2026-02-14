@@ -489,16 +489,32 @@ export async function initializeDatabase() {
   }
 }
 
-// Inicializar o banco de dados
-initializeDatabase().catch(console.error)
+// Controle de inicialização lazy - só roda uma vez na primeira query
+let dbInitialized = false
+let dbInitPromise: Promise<void> | null = null
 
-// Helper para queries
+async function ensureInitialized() {
+  if (dbInitialized || isBuildTime) return
+  if (!dbInitPromise) {
+    dbInitPromise = initializeDatabase()
+      .then(() => { dbInitialized = true })
+      .catch((err) => {
+        dbInitPromise = null // permite tentar novamente em caso de erro
+        console.error('❌ Error initializing database:', err)
+      })
+  }
+  await dbInitPromise
+}
+
+// Helper para queries - inicializa o banco na primeira chamada
 export async function query(text: string, params?: any[]) {
   try {
     if (!pool) {
       throw new Error('Conexão com banco não disponível. Verifique DATABASE_URL.')
     }
-    
+
+    await ensureInitialized()
+
     const res = await pool.query(text, params)
     return res
   } catch (error: any) {
