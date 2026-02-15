@@ -34,6 +34,7 @@ export async function GET(
           excerpt: post.excerpt,
           content: post.content,
           cover_image: post.cover_image,
+          video_url: post.video_url || '',
           author: post.author,
           category: post.category,
           tags: post.tags ? JSON.parse(post.tags) : [],
@@ -56,6 +57,7 @@ export async function GET(
         excerpt: post.excerpt,
         content: post.content,
         cover_image: post.cover_image,
+        video_url: post.video_url || '',
         author: post.author,
         category: post.category,
         tags: post.tags ? JSON.parse(post.tags) : [],
@@ -82,7 +84,7 @@ export async function PUT(
   try {
     const { id: paramSlug } = await params
     const body = await request.json()
-    const { title, slug, excerpt, content, cover_image, author, category, tags, published } = body
+    const { title, slug, excerpt, content, cover_image, video_url, author, category, tags, published } = body
 
     // Verificar se post existe
     const existingPost = await query('SELECT id FROM blog_posts WHERE slug = $1', [paramSlug])
@@ -97,15 +99,16 @@ export async function PUT(
 
     await query(`
       UPDATE blog_posts
-      SET title = $1, slug = $2, excerpt = $3, content = $4, cover_image = $5,
-          author = $6, category = $7, tags = $8, published = $9, updated_at = $10
-      WHERE slug = $11
+      SET title = $1, slug = $2, excerpt = $3, content = $4, cover_image = $5, video_url = $6,
+          author = $7, category = $8, tags = $9, published = $10, updated_at = $11
+      WHERE slug = $12
     `, [
       title,
       slug,
       excerpt || '',
       content,
       cover_image || '',
+      video_url || '',
       author,
       category || 'geral',
       JSON.stringify(tags || []),
@@ -116,7 +119,7 @@ export async function PUT(
 
     return NextResponse.json({
       success: true,
-      data: { slug: paramSlug, title, excerpt, content, cover_image, author, category, tags, published },
+      data: { slug: paramSlug, title, excerpt, content, cover_image, video_url, author, category, tags, published },
       message: 'Post atualizado com sucesso',
     })
   } catch (error) {

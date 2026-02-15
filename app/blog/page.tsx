@@ -14,6 +14,7 @@ interface Article {
   author: string
   content: string
   cover_image: string
+  video_url: string
   published: boolean
   views: number
   created_at: string
@@ -115,7 +116,13 @@ export default function BlogPage() {
                   </div>
                 </div>
 
-                {selectedArticle.cover_image && (
+                {selectedArticle.video_url ? (
+                  <video
+                    src={selectedArticle.video_url}
+                    controls
+                    className="w-full h-96 object-cover rounded-lg mb-8"
+                  />
+                ) : selectedArticle.cover_image && (
                   <img
                     src={selectedArticle.cover_image}
                     alt={selectedArticle.title}

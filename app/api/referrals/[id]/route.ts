@@ -4,11 +4,11 @@ import { query } from '@/lib/db'
 // PUT - Atualizar status de indicação (admin)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await request.json()
-    const { id } = params
+    const { id } = await params
     const { status, reward_claimed } = body
 
     const now = new Date().toISOString()
@@ -35,10 +35,10 @@ export async function PUT(
 // DELETE - Deletar indicação (admin)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
 
     await query('DELETE FROM referrals WHERE id = $1', [id])
 

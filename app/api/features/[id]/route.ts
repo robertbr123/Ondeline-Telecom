@@ -6,11 +6,11 @@ import { z } from 'zod'
 // PUT - Atualizar feature
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await request.json()
-    const { id } = params
+    const { id } = await params
 
     // Validar dados
     const validatedData = featureSchema.parse(body)
@@ -56,10 +56,10 @@ export async function PUT(
 // DELETE - Deletar feature
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
 
     await query('DELETE FROM features WHERE id = $1', [id])
 

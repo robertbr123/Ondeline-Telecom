@@ -5,12 +5,12 @@ export const dynamic = 'force-dynamic'
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await req.json()
     const { name, logo, bgColor, order, active } = body
-    const { id } = params
+    const { id } = await params
 
     const updates: string[] = []
     const values: any[] = []
@@ -85,10 +85,10 @@ export async function PUT(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const { id } = await params
 
     const result = await query('DELETE FROM clients WHERE id = $1 RETURNING *', [id])
 

@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
       excerpt: p.excerpt,
       content: p.content,
       cover_image: p.cover_image,
+      video_url: p.video_url || '',
       author: p.author,
       category: p.category,
       tags: p.tags ? JSON.parse(p.tags) : [],
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     console.log('Body recebido:', body)
     
-    const { title, slug, excerpt, content, cover_image, author, category, tags } = body
+    const { title, slug, excerpt, content, cover_image, video_url, author, category, tags } = body
 
     console.log('Campos:', { title, slug, excerpt, content: cover_image, author, category, tags })
 
@@ -105,8 +106,8 @@ export async function POST(request: NextRequest) {
     console.log('Tabela blog_posts existe:', checkTable.rows[0])
 
     await query(`
-      INSERT INTO blog_posts (id, title, slug, excerpt, content, cover_image, author, category, tags, published, created_at, updated_at)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+      INSERT INTO blog_posts (id, title, slug, excerpt, content, cover_image, video_url, author, category, tags, published, created_at, updated_at)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
     `, [
       id,
       title,
@@ -114,6 +115,7 @@ export async function POST(request: NextRequest) {
       excerpt || '',
       content,
       cover_image || '',
+      video_url || '',
       author,
       category || 'geral',
       JSON.stringify(tags || []),
@@ -126,7 +128,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: { id, title, slug: postSlug, excerpt, content, cover_image, author, category, tags },
+      data: { id, title, slug: postSlug, excerpt, content, cover_image, video_url, author, category, tags },
       message: 'Post criado com sucesso',
     })
   } catch (error) {

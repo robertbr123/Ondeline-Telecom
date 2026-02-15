@@ -12,6 +12,7 @@ interface BlogPost {
   excerpt: string
   content: string
   cover_image: string
+  video_url: string
   author: string
   category: string
   tags: string[]
@@ -132,7 +133,13 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Conteúdo Principal */}
           <div className="lg:col-span-2">
-            {post.cover_image && (
+            {post.video_url ? (
+              <video
+                src={post.video_url}
+                controls
+                className="w-full h-64 lg:h-96 object-cover rounded-xl mb-6"
+              />
+            ) : post.cover_image && (
               <img
                 src={post.cover_image}
                 alt={post.title}

@@ -4,9 +4,18 @@ import { nanoid } from 'nanoid'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const result = await query('SELECT * FROM clients WHERE active = 1 ORDER BY "order" ASC')
+    const { searchParams } = new URL(req.url)
+    const includeInactive = searchParams.get('includeInactive') === 'true'
+    
+    let queryStr = 'SELECT * FROM clients'
+    if (!includeInactive) {
+      queryStr += ' WHERE active = 1'
+    }
+    queryStr += ' ORDER BY "order" ASC'
+    
+    const result = await query(queryStr)
     
     return NextResponse.json({
       success: true,

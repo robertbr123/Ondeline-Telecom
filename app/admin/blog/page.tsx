@@ -12,6 +12,7 @@ interface BlogPost {
   excerpt: string
   content: string
   cover_image: string
+  video_url: string
   author: string
   category: string
   tags: string[]
@@ -54,6 +55,7 @@ export default function AdminBlog() {
       excerpt: '',
       content: '',
       cover_image: '',
+      video_url: '',
       author: '',
       category: 'geral',
       tags: [],
@@ -78,6 +80,7 @@ export default function AdminBlog() {
         excerpt: post.excerpt,
         content: post.content,
         cover_image: post.cover_image,
+        video_url: post.video_url || '',
         author: post.author,
         category: post.category,
         tags: post.tags,
@@ -304,6 +307,18 @@ export default function AdminBlog() {
                   className="w-full px-3 py-2 bg-input border border-border rounded-lg"
                   placeholder="https://exemplo.com/imagem.jpg"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">URL do Vídeo (opcional)</label>
+                <input
+                  type="text"
+                  value={editingPost.video_url}
+                  onChange={(e) => setEditingPost({ ...editingPost, video_url: e.target.value })}
+                  className="w-full px-3 py-2 bg-input border border-border rounded-lg"
+                  placeholder="https://exemplo.com/video.mp4"
+                />
+                <p className="text-xs text-muted-foreground mt-1">Cole a URL do arquivo de vídeo (.mp4, .webm)</p>
               </div>
 
               <div>

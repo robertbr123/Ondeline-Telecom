@@ -33,7 +33,7 @@ export default function AdminClientsPage() {
 
   const fetchClients = async () => {
     try {
-      const res = await fetch('/api/clients')
+      const res = await fetch('/api/clients?includeInactive=true')
       const data = await res.json()
       if (data.success) {
         setClients(data.data || [])
