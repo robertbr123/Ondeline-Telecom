@@ -1,3 +1,5 @@
+"use client"
+
 import { Header } from "@/components/header"
 import { ReferralModal } from "@/components/referral-modal"
 import { Footer } from "@/components/footer"
