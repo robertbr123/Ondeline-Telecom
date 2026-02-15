@@ -27,6 +27,9 @@ export function Header() {
           <a href="#planos" className="text-foreground hover:text-primary transition">
             Planos
           </a>
+          <a href="/empresas" className="text-foreground hover:text-primary transition">
+            Empresas
+          </a>
           <a href="#suporte" className="text-foreground hover:text-primary transition">
             Suporte
           </a>
@@ -79,6 +82,9 @@ export function Header() {
             </a>
             <a href="#planos" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">
               Planos
+            </a>
+            <a href="/empresas" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">
+              Empresas
             </a>
             <a href="#suporte" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">
               Suporte

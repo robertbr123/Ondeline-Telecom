@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
 import { nanoid } from 'nanoid'
-import { getCachedData, DEFAULT_TTL } from '@/lib/cache'
+import { getCachedData, invalidateCache, DEFAULT_TTL } from '@/lib/cache'
 
 // GET - Buscar todos os posts (apenas publicados)
 export async function GET(request: NextRequest) {
@@ -66,9 +66,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     console.log('Body recebido:', body)
     
-    const { title, slug, excerpt, content, cover_image, video_url, author, category, tags } = body
+    const { title, slug, excerpt, content, cover_image, video_url, author, category, tags, published } = body
 
-    console.log('Campos:', { title, slug, excerpt, content: cover_image, author, category, tags })
+    console.log('Campos:', { title, slug, excerpt, content: cover_image, author, category, tags, published })
 
     if (!title || !content || !author) {
       console.error('Campos obrigatórios faltando:', { title: !!title, content: !!content, author: !!author })
@@ -92,6 +92,9 @@ export async function POST(request: NextRequest) {
     const id = `blog-${nanoid(8)}`
     const now = new Date().toISOString()
 
+    // Usar o valor de published do body (se não fornecido, assume 0 para novos posts)
+    const publishedValue = published ? 1 : 0
+
     console.log('Inserindo no banco:', {
       id,
       title,
@@ -102,6 +105,7 @@ export async function POST(request: NextRequest) {
       author,
       category: category || 'geral',
       tags: tags || [],
+      published: publishedValue,
     })
 
     // Verificar se a tabela existe
@@ -127,16 +131,19 @@ export async function POST(request: NextRequest) {
       author,
       category || 'geral',
       JSON.stringify(tags || []),
-      0,
+      publishedValue,
       now,
       now
     ])
 
-    console.log('Post inserido com sucesso')
+    console.log('Post inserido com sucesso, published:', publishedValue)
+
+    // Invalidar cache do blog
+    await invalidateCache('blog:')
 
     return NextResponse.json({
       success: true,
-      data: { id, title, slug: postSlug, excerpt, content, cover_image, video_url, author, category, tags },
+      data: { id, title, slug: postSlug, excerpt, content, cover_image, video_url, author, category, tags, published: publishedValue === 1 },
       message: 'Post criado com sucesso',
     })
   } catch (error) {

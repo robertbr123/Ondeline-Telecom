@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { LogOut, Users, LayoutDashboard, Package, MessageSquare, Settings, BarChart3, FileText, BookOpen, Building2, HelpCircle, MapPin, Sparkles } from 'lucide-react'
+import { LogOut, Users, LayoutDashboard, Package, MessageSquare, Settings, BarChart3, FileText, BookOpen, Building2, HelpCircle, MapPin, Sparkles, Edit } from 'lucide-react'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -190,6 +190,15 @@ export default function AdminDashboard() {
             <FileText className="w-8 h-8 text-secondary mb-3 group-hover:scale-110 transition" />
             <h3 className="text-xl font-semibold mb-2">Materiais</h3>
             <p className="text-sm text-muted-foreground">Gerenciar downloads</p>
+          </a>
+
+          <a
+            href="/admin/pages"
+            className="p-6 rounded-xl border border-border bg-card/50 hover:border-primary/50 transition group"
+          >
+            <Edit className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition" />
+            <h3 className="text-xl font-semibold mb-2">Páginas</h3>
+            <p className="text-sm text-muted-foreground">Editar qualquer página do site</p>
           </a>
 
           <a

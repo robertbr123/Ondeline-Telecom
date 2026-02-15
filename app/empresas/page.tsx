@@ -281,7 +281,7 @@ export default function EmpresasPage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10">
+      <section className="pt-32 pb-20 px-4 bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-2 bg-primary/20 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6 w-fit">
             <Building2 size={16} />

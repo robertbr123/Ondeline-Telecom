@@ -34,8 +34,18 @@ export function Footer() {
                 </a>
               </li>
               <li>
+                <a href="/empresas" className="hover:text-primary transition">
+                  Empresas
+                </a>
+              </li>
+              <li>
                 <a href="/coverage" className="hover:text-primary transition">
                   Cobertura
+                </a>
+              </li>
+              <li>
+                <a href="/indicar" className="hover:text-primary transition">
+                  Indicar um Amigo
                 </a>
               </li>
             </ul>

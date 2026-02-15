@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
+import { invalidateCache } from '@/lib/cache'
 
 // GET - Buscar post por slug
 export async function GET(
@@ -117,6 +118,9 @@ export async function PUT(
       paramSlug
     ])
 
+    // Invalidar cache do blog
+    await invalidateCache('blog:')
+
     return NextResponse.json({
       success: true,
       data: { slug: paramSlug, title, excerpt, content, cover_image, video_url, author, category, tags, published },
@@ -146,6 +150,9 @@ export async function DELETE(
         { status: 404 }
       )
     }
+
+    // Invalidar cache do blog
+    await invalidateCache('blog:')
 
     return NextResponse.json({
       success: true,
