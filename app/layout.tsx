@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/lib/theme-context"
 import { Providers } from "./providers"
 import { getSiteConfig } from "@/lib/site-config"
 import { Toaster } from "sonner"
+import SkipLink from "@/components/skip-link"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -73,9 +74,12 @@ export default function RootLayout({
         />
       </head>
       <body className={`font-sans antialiased`}>
+        <SkipLink />
         <Providers>
           <ThemeProvider>
-            {children}
+            <main id="main-content" tabIndex={-1}>
+              {children}
+            </main>
             <Toaster 
               position="top-right"
               expand={true}

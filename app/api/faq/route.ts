@@ -1,12 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { nanoid } from 'nanoid'
 import { query } from '@/lib/db'
+import { getCachedData, DEFAULT_TTL } from '@/lib/cache'
 
 // GET - Listar FAQ
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const result = await query('SELECT * FROM faq ORDER BY "order" ASC')
-    const faq = result.rows as any[]
+    const { searchParams } = new URL(req.url)
+    const includeInactive = searchParams.get('includeInactive') === 'true'
+    
+    const faq = await getCachedData(
+      'faq',
+      async () => {
+        const result = await query(
+          includeInactive 
+            ? 'SELECT * FROM faq ORDER BY "order" ASC'
+            : 'SELECT * FROM faq WHERE active = 1 ORDER BY "order" ASC'
+        )
+        return result.rows as any[]
+      },
+      includeInactive ? DEFAULT_TTL.SHORT : DEFAULT_TTL.LONG,
+      { includeInactive }
+    )
 
     return NextResponse.json({
       success: true,

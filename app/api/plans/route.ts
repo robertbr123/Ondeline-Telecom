@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
 import { nanoid } from 'nanoid'
+import { getCachedData, DEFAULT_TTL } from '@/lib/cache'
 
 // POST - Criar novo plano
 export async function POST(request: NextRequest) {
@@ -65,23 +66,37 @@ export async function POST(request: NextRequest) {
 }
 
 // GET - Listar planos
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    console.log('=== API PLANS - GET ===')
-    const result = await query('SELECT * FROM plans ORDER BY active DESC, highlighted DESC, name ASC')
+    const { searchParams } = new URL(req.url)
+    const includeInactive = searchParams.get('includeInactive') === 'true'
     
-    const plans = result.rows.map((plan: any) => ({
-      id: plan.id,
-      name: plan.name,
-      speed: plan.speed,
-      price: plan.price,
-      description: plan.description,
-      features: JSON.parse(plan.features),
-      highlighted: plan.highlighted === 1,
-      active: plan.active === 1,
-      created_at: plan.created_at,
-      updated_at: plan.updated_at,
-    }))
+    const plans = await getCachedData(
+      'plans',
+      async () => {
+        console.log('=== API PLANS - GET ===')
+        const result = await query(
+          includeInactive 
+            ? 'SELECT * FROM plans ORDER BY active DESC, highlighted DESC, name ASC'
+            : 'SELECT * FROM plans WHERE active = 1 ORDER BY highlighted DESC, name ASC'
+        )
+        
+        return result.rows.map((plan: any) => ({
+          id: plan.id,
+          name: plan.name,
+          speed: plan.speed,
+          price: plan.price,
+          description: plan.description,
+          features: JSON.parse(plan.features),
+          highlighted: plan.highlighted === 1,
+          active: plan.active === 1,
+          created_at: plan.created_at,
+          updated_at: plan.updated_at,
+        }))
+      },
+      includeInactive ? DEFAULT_TTL.SHORT : DEFAULT_TTL.LONG,
+      { includeInactive }
+    )
 
     return NextResponse.json({
       success: true,

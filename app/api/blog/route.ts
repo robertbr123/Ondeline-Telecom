@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
 import { nanoid } from 'nanoid'
+import { getCachedData, DEFAULT_TTL } from '@/lib/cache'
 
 // GET - Buscar todos os posts (apenas publicados)
 export async function GET(request: NextRequest) {
@@ -12,30 +13,37 @@ export async function GET(request: NextRequest) {
 
     console.log('includeUnpublished:', includeUnpublished)
 
-    const result = await query(`
-      SELECT * FROM blog_posts 
-      ${!includeUnpublished ? 'WHERE published = 1' : ''}
-      ORDER BY created_at DESC
-    `)
+    const posts = await getCachedData(
+      'blog:posts',
+      async () => {
+        const result = await query(`
+          SELECT * FROM blog_posts 
+          ${!includeUnpublished ? 'WHERE published = 1' : ''}
+          ORDER BY created_at DESC
+        `)
 
-    console.log(`Encontrados ${result.rows.length} posts`)
+        console.log(`Encontrados ${result.rows.length} posts`)
 
-    const posts = result.rows.map(p => ({
-      id: p.id,
-      title: p.title,
-      slug: p.slug,
-      excerpt: p.excerpt,
-      content: p.content,
-      cover_image: p.cover_image,
-      video_url: p.video_url || '',
-      author: p.author,
-      category: p.category,
-      tags: p.tags ? JSON.parse(p.tags) : [],
-      published: p.published === 1,
-      views: p.views,
-      created_at: p.created_at,
-      updated_at: p.updated_at,
-    }))
+        return result.rows.map((p: any) => ({
+          id: p.id,
+          title: p.title,
+          slug: p.slug,
+          excerpt: p.excerpt,
+          content: p.content,
+          cover_image: p.cover_image,
+          video_url: p.video_url || '',
+          author: p.author,
+          category: p.category,
+          tags: p.tags ? JSON.parse(p.tags) : [],
+          published: p.published === 1,
+          views: p.views,
+          created_at: p.created_at,
+          updated_at: p.updated_at,
+        }))
+      },
+      includeUnpublished ? DEFAULT_TTL.SHORT : DEFAULT_TTL.LONG,
+      { includeUnpublished }
+    )
 
     return NextResponse.json({
       success: true,

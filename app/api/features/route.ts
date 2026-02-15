@@ -3,12 +3,27 @@ import { nanoid } from 'nanoid'
 import { query } from '@/lib/db'
 import { featureSchema } from '@/lib/validations'
 import { z } from 'zod'
+import { getCachedData, DEFAULT_TTL } from '@/lib/cache'
 
 // GET - Listar features
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const result = await query('SELECT * FROM features WHERE active = 1 ORDER BY "order" ASC')
-    const features = result.rows
+    const { searchParams } = new URL(req.url)
+    const includeInactive = searchParams.get('includeInactive') === 'true'
+    
+    const features = await getCachedData(
+      'features',
+      async () => {
+        const result = await query(
+          includeInactive 
+            ? 'SELECT * FROM features ORDER BY "order" ASC'
+            : 'SELECT * FROM features WHERE active = 1 ORDER BY "order" ASC'
+        )
+        return result.rows
+      },
+      includeInactive ? DEFAULT_TTL.SHORT : DEFAULT_TTL.LONG,
+      { includeInactive }
+    )
 
     return NextResponse.json({
       success: true,

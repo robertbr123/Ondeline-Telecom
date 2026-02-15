@@ -1,40 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
 import { nanoid } from 'nanoid'
+import { getCachedData, DEFAULT_TTL } from '@/lib/cache'
 
 // GET - Listar áreas de cobertura
 export async function GET() {
   try {
-    // Criar tabela se não existir
-    await query(`
-      CREATE TABLE IF NOT EXISTS coverage_areas (
-        id TEXT PRIMARY KEY,
-        city TEXT NOT NULL,
-        state TEXT NOT NULL DEFAULT 'AM',
-        status TEXT DEFAULT 'coming_soon',
-        latitude REAL,
-        longitude REAL,
-        description TEXT,
-        launch_date TEXT,
-        created_at TEXT,
-        updated_at TEXT
-      )
-    `)
+    const areas = await getCachedData(
+      'coverage:areas',
+      async () => {
+        // Criar tabela se não existir
+        await query(`
+          CREATE TABLE IF NOT EXISTS coverage_areas (
+            id TEXT PRIMARY KEY,
+            city TEXT NOT NULL,
+            state TEXT NOT NULL DEFAULT 'AM',
+            status TEXT DEFAULT 'coming_soon',
+            latitude REAL,
+            longitude REAL,
+            description TEXT,
+            launch_date TEXT,
+            created_at TEXT,
+            updated_at TEXT
+          )
+        `)
 
-    const result = await query('SELECT * FROM coverage_areas ORDER BY status ASC, city ASC')
-    
-    const areas = result.rows.map((area: any) => ({
-      id: area.id,
-      city: area.city,
-      state: area.state,
-      status: area.status,
-      latitude: area.latitude,
-      longitude: area.longitude,
-      description: area.description,
-      launchDate: area.launch_date,
-      created_at: area.created_at,
-      updated_at: area.updated_at,
-    }))
+        const result = await query('SELECT * FROM coverage_areas ORDER BY status ASC, city ASC')
+        
+        return result.rows.map((area: any) => ({
+          id: area.id,
+          city: area.city,
+          state: area.state,
+          status: area.status,
+          latitude: area.latitude,
+          longitude: area.longitude,
+          description: area.description,
+          launchDate: area.launch_date,
+          created_at: area.created_at,
+          updated_at: area.updated_at,
+        }))
+      },
+      DEFAULT_TTL.LONG
+    )
 
     return NextResponse.json({
       success: true,
