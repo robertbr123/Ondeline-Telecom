@@ -31,6 +31,9 @@ if (connectionString && !isBuildTime) {
   pool = new Pool({
     connectionString,
     ssl: sslConfig,
+    max: 5,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
   })
 } else if (isBuildTime) {
   console.log('🔨 Build time detected - skipping database connection')
@@ -508,19 +511,15 @@ async function ensureInitialized() {
 
 // Helper para queries - inicializa o banco na primeira chamada
 export async function query(text: string, params?: any[]) {
-  try {
-    if (!pool) {
-      throw new Error('Conexão com banco não disponível. Verifique DATABASE_URL.')
-    }
-
-    await ensureInitialized()
-
-    const res = await pool.query(text, params)
-    return res
-  } catch (error: any) {
-    console.error('❌ DATABASE ERROR:', error.message)
-    throw error
+  // Durante build time, retornar resultado vazio silenciosamente
+  if (isBuildTime || !pool) {
+    return { rows: [], rowCount: 0 }
   }
+
+  await ensureInitialized()
+
+  const res = await pool.query(text, params)
+  return res
 }
 
 export default pool
