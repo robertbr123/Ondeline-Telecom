@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Menu, X } from "lucide-react"
+import { Menu, X, User } from "lucide-react"
 import { LogoOndeline } from "./logo-ondeline"
 import { ThemeToggle } from "./theme-toggle"
 import { useSiteConfig } from "@/lib/site-config-context"
@@ -38,6 +38,16 @@ export function Header() {
           </a>
 
           <ThemeToggle />
+
+          <a
+            href="https://ondeline.sgp.tsmx.com.br/accounts/central/login"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-foreground hover:text-primary transition"
+          >
+            <User size={20} />
+            <span>Área do Cliente</span>
+          </a>
 
           <a
             href={`https://wa.me/${whatsappNumber}?text=Olá! Gostaria de contratar os serviços da Ondeline`}
@@ -78,6 +88,16 @@ export function Header() {
             </a>
             <a href="/coverage" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">
               Cobertura
+            </a>
+            <a
+              href="https://ondeline.sgp.tsmx.com.br/accounts/central/login"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-2 text-foreground hover:text-primary"
+            >
+              <User size={20} />
+              <span>Área do Cliente</span>
             </a>
             <a
               href={`https://wa.me/${whatsappNumber}?text=Olá! Gostaria de contratar os serviços da Ondeline`}
