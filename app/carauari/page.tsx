@@ -7,6 +7,7 @@ export default function CarauariPage() {
     <CityPageRedesigned
       name="Carauari"
       slug="carauari"
+      backgroundImage="/carauri.jpg"
       population="25.000"
       status="coberto"
       benefits={[

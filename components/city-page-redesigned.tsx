@@ -35,6 +35,7 @@ interface CityPageProps {
     text: string
     avatar?: string
   }>
+  backgroundImage?: string
 }
 
 export function CityPageRedesigned({ 
@@ -50,7 +51,8 @@ export function CityPageRedesigned({
     years: "4",
     installationTime: "24h"
   },
-  testimonials = []
+  testimonials = [],
+  backgroundImage
 }: CityPageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const isCovered = status === "coberto"
@@ -85,13 +87,25 @@ export function CityPageRedesigned({
 
       <main className="min-h-screen bg-background">
         {/* Hero Section Aprimorada */}
-        <section className="relative pt-32 pb-20 px-4 overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-          {/* Background Effects */}
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-30 animate-pulse" />
-            <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-secondary/15 rounded-full blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s' }} />
-            <div className="absolute inset-0 bg-grid-pattern opacity-5" />
-          </div>
+        <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+          {/* Background Image or Gradient */}
+          {backgroundImage ? (
+            <>
+              <div 
+                className="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: `url(${backgroundImage})` }}
+              />
+              {/* Dark overlay for better readability */}
+              <div className="absolute inset-0 -z-10 bg-slate-900/60" />
+            </>
+          ) : (
+            <div className="absolute inset-0 -z-10 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+              {/* Background Effects */}
+              <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-30 animate-pulse" />
+              <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-secondary/15 rounded-full blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s' }} />
+              <div className="absolute inset-0 bg-grid-pattern opacity-5" />
+            </div>
+          )}
 
           <div className="max-w-6xl mx-auto text-center">
             {/* Status Badge */}

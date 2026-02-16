@@ -7,6 +7,7 @@ export default function ItamaratiPage() {
     <CityPageRedesigned
       name="Itamarati"
       slug="itamarati"
+      backgroundImage="/itamarati.jpg"
       population="15.000"
       status="coberto"
       benefits={[
