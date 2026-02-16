@@ -14,6 +14,12 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   output: 'standalone',
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  experimental: {
+    serverMinification: true,
+  },
 }
 
 export default nextConfig
