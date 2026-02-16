@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Cloud, Database, Building2, Users } from "lucide-react"
 
 export function ServicesAnimation() {

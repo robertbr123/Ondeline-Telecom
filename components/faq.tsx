@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { ChevronDown } from "lucide-react"
 import { useFAQs } from "@/hooks/useAPI"
 import { LoadingCard } from "./loading"

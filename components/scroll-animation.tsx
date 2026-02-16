@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, type ReactNode } from "react"
+import React, { useEffect, useRef, type ReactNode } from "react"
 
 interface ScrollAnimationProps {
   children: ReactNode

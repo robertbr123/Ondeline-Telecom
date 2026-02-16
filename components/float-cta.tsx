@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { MessageCircle, X, ArrowUp } from "lucide-react"
 import { useSiteConfig } from "@/lib/site-config-context"
 

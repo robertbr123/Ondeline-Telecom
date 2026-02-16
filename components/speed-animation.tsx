@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 
 export function SpeedAnimation() {
   const [activeSpeed, setActiveSpeed] = useState(0)

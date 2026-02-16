@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { X, Users, Gift } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { submitAPI } from "@/hooks/useAPI"

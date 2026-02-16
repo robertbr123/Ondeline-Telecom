@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Check, Zap } from "lucide-react"
 import { PreregistrationModal } from "./preregistration-modal"
