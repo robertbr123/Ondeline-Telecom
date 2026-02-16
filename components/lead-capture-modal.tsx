@@ -15,6 +15,7 @@ export function LeadCaptureModal() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState("")
 
   useEffect(() => {
     // Verificar se o modal já foi mostrado
@@ -31,6 +32,25 @@ export function LeadCaptureModal() {
     }
   }, [])
 
+  const formatPhone = (value: string) => {
+    const cleaned = value.replace(/\D/g, "")
+    
+    if (cleaned.length === 0) return ""
+    if (cleaned.length <= 2) return `(${cleaned}`
+    if (cleaned.length <= 7) return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}`
+    return `(${cleaned.slice(0, 2)}) ${cleaned.slice(2, 7)}-${cleaned.slice(7, 11)}`
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    
+    if (name === "phone") {
+      setFormData((prev) => ({ ...prev, [name]: formatPhone(value) }))
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }))
+    }
+  }
+
   const handleClose = () => {
     setIsOpen(false)
     localStorage.setItem("leadCaptureModalShown", "true")
@@ -38,6 +58,7 @@ export function LeadCaptureModal() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError("")
     setIsSubmitting(true)
 
     try {
@@ -60,13 +81,12 @@ export function LeadCaptureModal() {
         setSubmitted(true)
         localStorage.setItem("hasSubmittedLead", "true")
         
-        // Fechar modal após 2 segundos
-        setTimeout(() => {
-          handleClose()
-        }, 2000)
+        // NÃO fechar o modal após sucesso - fica na mesma tela
+      } else {
+        setError(data.error || "Erro ao enviar dados")
       }
     } catch (error) {
-      console.error("Erro ao enviar lead:", error)
+      setError("Erro ao conectar com o servidor")
     } finally {
       setIsSubmitting(false)
     }
@@ -131,6 +151,12 @@ export function LeadCaptureModal() {
                     <p className="text-muted-foreground">
                       Em breve entraremos em contato com você
                     </p>
+                    <Button
+                      onClick={handleClose}
+                      className="mt-4 bg-gradient-to-r from-primary via-secondary to-primary hover:opacity-90 transition font-semibold"
+                    >
+                      Fechar
+                    </Button>
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4">
@@ -140,12 +166,12 @@ export function LeadCaptureModal() {
                         Nome Completo
                       </label>
                       <Input
+                        id="name"
+                        name="name"
                         type="text"
                         placeholder="Seu nome"
                         value={formData.name}
-                        onChange={(e) =>
-                          setFormData({ ...formData, name: e.target.value })
-                        }
+                        onChange={handleChange}
                         required
                         className="h-11"
                       />
@@ -157,13 +183,15 @@ export function LeadCaptureModal() {
                         Telefone
                       </label>
                       <Input
+                        id="phone"
+                        name="phone"
                         type="tel"
                         placeholder="(92) 99999-9999"
                         value={formData.phone}
-                        onChange={(e) =>
-                          setFormData({ ...formData, phone: e.target.value })
-                        }
+                        onChange={handleChange}
                         required
+                        maxLength={15}
+                        aria-label="Número de telefone"
                         className="h-11"
                       />
                     </div>
@@ -174,21 +202,30 @@ export function LeadCaptureModal() {
                         Cidade
                       </label>
                       <select
+                        id="city"
+                        name="city"
                         value={formData.city}
-                        onChange={(e) =>
-                          setFormData({ ...formData, city: e.target.value })
-                        }
+                        onChange={handleChange}
                         required
                         className="w-full h-11 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                       >
                         <option value="">Selecione sua cidade</option>
-                        <option value="Eirunepé">Eirunepé</option>
                         <option value="Ipixuna">Ipixuna</option>
+                        <option value="Eirunepe">Eirunepe</option>
                         <option value="Itamarati">Itamarati</option>
                         <option value="Carauari">Carauari</option>
                         <option value="Outra">Outra cidade</option>
                       </select>
                     </div>
+
+                    {error && (
+                      <div
+                        role="alert"
+                        className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm"
+                      >
+                        {error}
+                      </div>
+                    )}
 
                     <Button
                       type="submit"
