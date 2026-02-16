@@ -6,7 +6,7 @@ WORKDIR /app
 # Copiar arquivos de dependências
 COPY package.json pnpm-lock.yaml* ./
 
-# Instalar pnpm e dependências
+# Instalar pnpm e dependências (incluindo framer-motion)
 RUN corepack enable pnpm
 RUN pnpm install --no-frozen-lockfile
 

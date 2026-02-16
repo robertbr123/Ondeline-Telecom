@@ -12,20 +12,6 @@ export function About() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16">
-          <div className="space-y-6">
-            <h3 className="text-2xl font-semibold text-foreground">
-              Nossa Missão
-            </h3>
-            <p className="text-muted-foreground leading-relaxed">
-              A Ondeline Telecom nasceu com o propósito de levar internet de qualidade para 
-              as cidades do interior do Amazonas. Acreditamos que todo mundo merece ter acesso 
-              a uma conexão rápida, estável e confiável, independentemente de onde mora.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              Hoje, somos referência em Ipixuna e Eirunepe, e estamos expandindo para Itamarati e Carauari. 
-              Nosso compromisso continua sendo o mesmo: oferecer o melhor serviço com o melhor suporte da região.
-            </p>
-          </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-card p-6 rounded-xl border border-border hover:border-primary/50 transition">
               <Shield className="w-10 h-10 text-primary mb-3" />
