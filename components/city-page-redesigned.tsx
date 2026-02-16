@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, CheckCircle, Wifi, Zap, Shield, Users, Clock, Star, MapPin } from "lucide-react"
 import { PreregistrationModal } from "@/components/preregistration-modal"
