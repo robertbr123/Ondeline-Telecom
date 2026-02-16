@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { MapPin, CheckCircle2, Clock, Wifi } from "lucide-react"
 
 interface CoverageArea {
