@@ -4,7 +4,7 @@ import { Header } from "@/components/header"
 import { ReferralModal } from "@/components/referral-modal"
 import { Footer } from "@/components/footer"
 import { Gift, Users, TrendingUp, Zap, CheckCircle, Share2, Crown } from "lucide-react"
-import { useState } from "react"
+import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 
 export default function IndicarPage() {

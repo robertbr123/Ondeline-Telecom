@@ -6,7 +6,7 @@ import { CoverageMap } from "@/components/coverage-map";
 import { CoverageChecker } from "@/components/coverage-checker";
 import { Button } from "@/components/ui/button";
 import { MapPin, Phone, CheckCircle, Clock, Building2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface CoverageArea {
   id: number;
