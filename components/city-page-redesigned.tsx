@@ -87,7 +87,7 @@ export function CityPageRedesigned({
 
       <main className="min-h-screen bg-background">
         {/* Hero Section Aprimorada */}
-        <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+        <section className="relative isolate pt-32 pb-20 px-4 overflow-hidden">
           {/* Background Image or Gradient */}
           {backgroundImage ? (
             <>
