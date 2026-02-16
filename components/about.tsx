@@ -11,28 +11,26 @@ export function About() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-card p-6 rounded-xl border border-border hover:border-primary/50 transition">
-              <Shield className="w-10 h-10 text-primary mb-3" />
-              <div className="text-3xl font-bold text-primary mb-2">99.5%</div>
-              <div className="text-sm text-muted-foreground">Disponibilidade</div>
-            </div>
-            <div className="bg-card p-6 rounded-xl border border-border hover:border-secondary/50 transition">
-              <Zap className="w-10 h-10 text-secondary mb-3" />
-              <div className="text-3xl font-bold text-secondary mb-2">24/7</div>
-              <div className="text-sm text-muted-foreground">Suporte Ativo</div>
-            </div>
-            <div className="bg-card p-6 rounded-xl border border-border hover:border-accent/50 transition">
-              <Users className="w-10 h-10 text-accent mb-3" />
-              <div className="text-3xl font-bold text-accent mb-2">+500</div>
-              <div className="text-sm text-muted-foreground">Clientes Satisfeitos</div>
-            </div>
-            <div className="bg-card p-6 rounded-xl border border-border hover:border-primary/50 transition">
-              <Award className="w-10 h-10 text-primary mb-3" />
-              <div className="text-3xl font-bold text-primary mb-2">4 anos</div>
-              <div className="text-sm text-muted-foreground">De Experiência</div>
-            </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+          <div className="bg-card p-6 rounded-xl border border-border hover:border-primary/50 transition text-center">
+            <Shield className="w-10 h-10 text-primary mb-3 mx-auto" />
+            <div className="text-3xl font-bold text-primary mb-2">99.5%</div>
+            <div className="text-sm text-muted-foreground">Disponibilidade</div>
+          </div>
+          <div className="bg-card p-6 rounded-xl border border-border hover:border-secondary/50 transition text-center">
+            <Zap className="w-10 h-10 text-secondary mb-3 mx-auto" />
+            <div className="text-3xl font-bold text-secondary mb-2">24/7</div>
+            <div className="text-sm text-muted-foreground">Suporte Ativo</div>
+          </div>
+          <div className="bg-card p-6 rounded-xl border border-border hover:border-accent/50 transition text-center">
+            <Users className="w-10 h-10 text-accent mb-3 mx-auto" />
+            <div className="text-3xl font-bold text-accent mb-2">+500</div>
+            <div className="text-sm text-muted-foreground">Clientes Satisfeitos</div>
+          </div>
+          <div className="bg-card p-6 rounded-xl border border-border hover:border-primary/50 transition text-center">
+            <Award className="w-10 h-10 text-primary mb-3 mx-auto" />
+            <div className="text-3xl font-bold text-primary mb-2">4 anos</div>
+            <div className="text-sm text-muted-foreground">De Experiência</div>
           </div>
         </div>
 

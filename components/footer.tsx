@@ -69,6 +69,11 @@ export function Footer() {
                   Contato
                 </a>
               </li>
+              <li>
+                <a href="/status" className="hover:text-primary transition">
+                  Status do Sistema
+                </a>
+              </li>
             </ul>
           </div>
 

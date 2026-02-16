@@ -4,7 +4,6 @@ import { About } from "@/components/about"
 import { ServicesAnimation } from "@/components/services-animation"
 import { Features } from "@/components/features"
 import { Plans } from "@/components/plans"
-import { CoverageChecker } from "@/components/coverage-checker"
 import { Support } from "@/components/support"
 import { Clients } from "@/components/clients"
 import { CoverageMap } from "@/components/coverage-map"
@@ -25,7 +24,6 @@ export default function Home() {
       <ServicesAnimation />
       <Features />
       <Plans />
-      <CoverageChecker />
       <Support />
       <Clients />
       <CoverageMap />
