@@ -93,7 +93,7 @@ export function CityPageRedesigned({
             <>
               <div 
                 className="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: `url(${backgroundImage})` }}
+                style={{ backgroundImage: `url('${backgroundImage}')` }}
               />
               {/* Dark overlay for better readability */}
               <div className="absolute inset-0 -z-9 bg-slate-900/60" />
