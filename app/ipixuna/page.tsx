@@ -1,10 +1,10 @@
 "use client"
 
-import { CityPage } from "@/components/city-page"
+import { CityPageRedesigned } from "@/components/city-page-redesigned"
 
 export default function IpixunaPage() {
   return (
-    <CityPage
+    <CityPageRedesigned
       name="Ipixuna"
       slug="ipixuna"
       population="30.000"
@@ -26,6 +26,12 @@ export default function IpixunaPage() {
         technology: "Fibra Óptica",
         support: "24/7",
         uptime: "99.5%",
+      }}
+      stats={{
+        clients: "+120",
+        satisfaction: "4.9",
+        years: "4",
+        installationTime: "3 dias"
       }}
     />
   )
