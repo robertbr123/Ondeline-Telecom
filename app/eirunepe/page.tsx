@@ -7,6 +7,7 @@ export default function EirunepePage() {
     <CityPageRedesigned
       name="Eirunepé"
       slug="eirunepe"
+      backgroundImage="/placeholder.jpg"
       population="35.000"
       status="coberto"
       benefits={[

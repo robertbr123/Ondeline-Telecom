@@ -7,6 +7,7 @@ export default function IpixunaPage() {
     <CityPageRedesigned
       name="Ipixuna"
       slug="ipixuna"
+      backgroundImage="/placeholder.jpg"
       population="30.000"
       status="coberto"
       benefits={[
