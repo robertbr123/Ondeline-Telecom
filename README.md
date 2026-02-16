@@ -1,210 +1,125 @@
-# Ondeline Telecom
+# 🚀 Ondeline Telecom - Site do Provedor de Internet
 
-Internet de alta velocidade no Amazonas - Ipixuna, Eirunepe, Itamarati e Carauari.
+> Conectando o Amazonas com internet rápida e confiável.
 
-## 📋 Sobre
+Site institucional e sistema de gestão para a Ondeline Telecom, provedor de internet do interior do Amazonas.
 
-Ondeline Telecom é um provedor de internet que conecta o interior do Amazonas com serviços de alta qualidade, suporte 24/7 e planos acessíveis a partir de R$ 100/mês.
+## 🌐 Páginas do Site
 
-## 🚀 Tecnologias
+### Páginas Públicas
+- **[Home](/)** - Página inicial com todas as seções
+- **[Ipixuna](/ipixuna)** - Página da cidade de Ipixuna
+- **[Eirunepe](/eirunepe)** - Página da cidade de Eirunepe
+- **[Carauari](/carauari)** - Página da cidade de Carauari
+- **[Itamarati](/itamarati)** - Página da cidade de Itamarati
+- **[Empresas](/empresas)** - Planos para empresas
+- **[Cobertura](/coverage)** - Verificador de cobertura
+- **[Blog](/blog)** - Blog com artigos e notícias
+- **[Indicar](/indicar)** - Programa de indicação de amigos
+- **[Status](/status)** - Status dos serviços em tempo real
+- **[Trabalhe Conosco](/trabalhe-conosco)** - Vagas de emprego
+- **[Privacidade](/privacidade)** - Política de privacidade
+- **[Termos](/termos)** - Termos de uso
 
-- **Frontend**: Next.js 16, React 19, TypeScript
-- **Estilização**: Tailwind CSS 4, shadcn/ui
-- **Autenticação**: NextAuth.js
-- **Banco de Dados**: SQLite (configurável para PostgreSQL/MySQL)
-- **Email**: Nodemailer
-- **Mapas**: Leaflet, React-Leaflet
-- **Validação**: Zod, react-hook-form
-- **Análise**: Vercel Analytics
+### Área Administrativa
+- **[Admin](/admin)** - Painel administrativo completo com CMS
 
-## 📦 Instalação
+## 📚 Documentação
+
+Toda a documentação do projeto está organizada na pasta **[docs/](./docs/)**:
+
+- `README.md` - Documentação completa do projeto
+- `ADMIN_SETUP.md` - Guia de configuração do admin
+- `DEPLOY.md` - Instruções de deploy
+- `CMS_PAGES_DOCUMENTATION.md` - Documentação do CMS de páginas
+- `GUIA_USO_CMS.md` - Guia de uso do CMS
+- `GUIA_EDITOR_HTML.md` - Guia do editor HTML
+- `IMPLEMENTACOES_REALIZADAS.md` - Lista de implementações
+- `MELHORIAS_IMPLEMENTADAS.md` - Melhorias implementadas
+- `VIDEO_MARKETING_GUIDE.md` - Guia de vídeos de marketing
+- `BLOG_CONTENT_SUGGESTIONS.md` - Sugestões de conteúdo para blog
+- `GOOGLE_MY_BUSINESS_SETUP.md` - Configuração Google My Business
+
+## 🛠️ Stack Tecnológica
+
+- **Framework**: Next.js 15 (App Router)
+- **Linguagem**: TypeScript
+- **UI**: Tailwind CSS + shadcn/ui
+- **Editor**: TipTap (editor rich text)
+- **Banco de Dados**: PostgreSQL com Prisma ORM
+- **Deploy**: Dokploy (Docker)
+
+## 🚀 Como Executar
+
+### Pré-requisitos
+- Node.js 18+
+- PostgreSQL
+- pnpm ou npm
+
+### Instalação
 
 ```bash
 # Instalar dependências
-npm install
-# ou
 pnpm install
-# ou
-yarn install
-```
 
-## 🔧 Configuração
+# Configurar banco de dados
+cp .env.example .env
+# Editar .env com suas credenciais
 
-1. **Variáveis de Ambiente** - Crie um arquivo `.env.local`:
+# Rodar migrações do banco
+npx prisma migrate dev
 
-```env
-# URL do site
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-
-# Autenticação
-NEXTAUTH_SECRET=your-secret-key-here
-NEXTAUTH_URL=http://localhost:3000
-
-# Admin Credentials (hash do bcrypt)
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD_HASH=$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-# Email (Nodemailer)
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=seu-email@gmail.com
-SMTP_PASSWORD=sua-senha-app
-SMTP_FROM=Ondeline <noreply@ondeline.com.br>
-
-# WhatsApp (opcional)
-NEXT_PUBLIC_WHATSAPP_NUMBER=5592984607721
-```
-
-2. **Gerar hash de senha para admin**:
-
-```bash
-node -e "const bcrypt = require('bcryptjs'); console.log(bcrypt.hashSync('sua-senha-aqui', 10));"
-```
-
-## 🏃 Executar em Desenvolvimento
-
-```bash
-npm run dev
-# ou
+# Iniciar servidor de desenvolvimento
 pnpm dev
 ```
 
-Acesse [http://localhost:3008](http://localhost:3008)
+O site estará disponível em `http://localhost:3000`
 
-## 🏗️ Build para Produção
-
-```bash
-npm run build
-npm start
-```
-
-## 📊 Painel de Admin
-
-Acesse `/admin` para gerenciar:
-- ✅ Configurações do site (título, descrição, contato)
-- ✅ Planos de internet
-- ✅ Clientes e leads
-- ✅ FAQ
-- ✅ Conteúdo das seções
-
-Login padrão (altere em produção):
-- Usuário: `admin`
-- Senha: `admin123` (gere um novo hash em produção)
-
-## 📁 Estrutura do Projeto
+## 📦 Estrutura do Projeto
 
 ```
-ondeline-telecom/
-├── app/
-│   ├── admin/              # Painel de administração
-│   ├── api/                # API routes
-│   ├── blog/               # Blog
-│   ├── coverage/           # Página de cobertura
-│   ├── layout.tsx          # Layout principal
-│   └── page.tsx            # Página inicial
-├── components/             # Componentes React
-├── lib/                    # Utilitários e helpers
-├── public/                 # Arquivos estáticos
-└── types/                  # TypeScript types
+├── app/                  # Páginas Next.js
+│   ├── admin/           # Painel administrativo
+│   ├── api/             # Rotas da API
+│   ├── blog/            # Blog
+│   └── ...             # Outras páginas
+├── components/          # Componentes React
+├── lib/                # Utilidades e configurações
+├── prisma/            # Banco de dados e migrações
+├── public/            # Arquivos estáticos
+├── scripts/           # Scripts utilitários
+├── docs/             # Documentação
+└── styles/           # Estilos globais
 ```
 
-## 🔌 API Endpoints
+## ✨ Funcionalidades
 
-### Autenticação
-- `POST /api/auth/login` - Login admin
-- `POST /api/auth/logout` - Logout admin
+### Site Público
+- ✅ Design moderno e responsivo
+- ✅ Verificador de cobertura
+- ✅ Blog com CMS
+- ✅ Sistema de indicação
+- ✅ Status dos serviços em tempo real
+- ✅ Trabalhe conosco com formulário
+- ✅ Páginas legais (privacidade, termos)
+- ✅ Animações e interações
 
-### Site
-- `GET /api/site/config` - Obter configurações
-- `PUT /api/site/config` - Atualizar configurações
+### Sistema Admin
+- ✅ CMS completo para conteúdo
+- ✅ Gestão de clientes
+- ✅ Gestão de planos
+- ✅ Gestão de FAQ
+- ✅ Gestão de blog posts
+- ✅ Gestão de páginas
+- ✅ Dashboard com analytics
+- ✅ Upload de imagens
 
-### Planos
-- `GET /api/plans` - Listar planos
-- `POST /api/plans` - Criar plano
-- `PUT /api/plans/[id]` - Atualizar plano
-- `DELETE /api/plans/[id]` - Deletar plano
+## 📞 Contato
 
-### Leads/Pré-cadastro
-- `POST /api/leads` - Criar lead
-- `GET /api/leads` - Listar leads (admin)
-
-### FAQ
-- `GET /api/faq` - Listar perguntas
-- `POST /api/faq` - Criar pergunta
-- `PUT /api/faq/[id]` - Atualizar pergunta
-- `DELETE /api/faq/[id]` - Deletar pergunta
-
-## 🎨 Personalização
-
-### Temas
-O projeto suporta temas claro e escuro. As cores são configuradas em `app/globals.css` usando OKLCH.
-
-### Logo
-Substitua `components/logo-ondeline.tsx` com seu próprio componente de logo.
-
-### Imagens
-Todas as imagens estão em `public/`. Para SEO e performance, use o componente `next/image`.
-
-## 🚢 Deploy com Dokploy
-
-O projeto está configurado para deploy com Dokploy. Certifique-se de:
-
-1. Adicionar todas as variáveis de ambiente no Dokploy
-2. Configurar o banco de dados (SQLite para desenvolvimento, PostgreSQL para produção)
-3. Usar Node.js 20+ ou 18+
-
-### Comandos no Dokploy:
-
-```bash
-# Build
-npm run build
-
-# Start
-npm start
-```
-
-## 📱 PWA Features
-
-- ✅ Manifest para instalação como app
-- ✅ Favicon otimizado
-- ✅ Meta tags para SEO
-- ✅ Open Graph e Twitter Cards
-- ✅ Structured Data (JSON-LD) para SEO local
-
-## ♿ Acessibilidade
-
-- Navegação por teclado
-- ARIA labels em elementos interativos
-- Contraste de cores WCAG AA
-- Alt text em imagens
-- Suporte a leitores de tela
-
-## 📈 Performance
-
-- Lazy loading de componentes
-- Otimização automática de imagens
-- Code splitting dinâmico
-- Fontes otimizadas (Google Fonts)
-- Animações com GPU acceleration
-
-## 🤝 Contribuindo
-
-1. Fork o projeto
-2. Crie uma branch (`git checkout -b feature/nova-feature`)
-3. Commit suas mudanças (`git commit -m 'Add: nova feature'`)
-4. Push para a branch (`git push origin feature/nova-feature`)
-5. Abra um Pull Request
+- **Telefone**: (92) 98460-7721
+- **Email**: contato@ondeline.com.br
+- **Website**: https://ondeline.com.br
 
 ## 📄 Licença
 
-Este projeto é propriedade da Ondeline Telecom. Todos os direitos reservados.
-
-## 📞 Suporte
-
-- WhatsApp: (92) 98460-7721
-- Email: suporte@ondeline.com.br
-- Site: www.ondeline.com.br
-
----
-
-Desenvolvido com ❤️ pela Ondeline Telecom
+© 2026 Ondeline Telecom. Todos os direitos reservados.

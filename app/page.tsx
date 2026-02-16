@@ -1,5 +1,6 @@
 import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
+import { About } from "@/components/about"
 import { ServicesAnimation } from "@/components/services-animation"
 import { Features } from "@/components/features"
 import { Plans } from "@/components/plans"
@@ -20,6 +21,7 @@ export default function Home() {
       <GTMNoScript />
       <Header />
       <Hero />
+      <About />
       <ServicesAnimation />
       <Features />
       <Plans />

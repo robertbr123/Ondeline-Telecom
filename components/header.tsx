@@ -15,10 +15,10 @@ export function Header() {
   return (
     <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <LogoOndeline size={48} />
           <span className="text-xl font-bold text-primary">Ondeline</span>
-        </div>
+        </a>
 
         <nav className="hidden md:flex items-center gap-6">
           <a href="/" className="text-foreground hover:text-primary transition">

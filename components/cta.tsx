@@ -30,10 +30,13 @@ export function CTA() {
           </Button>
           <Button
             size="lg"
+            asChild
             variant="outline"
             className="h-12 px-8 text-lg border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10 w-full sm:w-auto bg-transparent"
           >
-            Fale com a Gente
+            <a href="#suporte">
+              Fale com a Gente
+            </a>
           </Button>
         </div>
       </div>

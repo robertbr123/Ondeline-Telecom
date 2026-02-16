@@ -13,10 +13,10 @@ export function Footer() {
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
           <div>
-            <div className="flex items-center gap-2 mb-4">
+            <a href="/" className="flex items-center gap-2 mb-4 hover:opacity-80 transition-opacity">
               <LogoOndeline size={36} />
               <h3 className="font-bold text-lg text-primary">Ondeline</h3>
-            </div>
+            </a>
             <p className="text-sm text-muted-foreground">Conectando o Amazonas com internet rápida e confiável.</p>
           </div>
 
@@ -24,7 +24,7 @@ export function Footer() {
             <h4 className="font-bold mb-4 text-primary">Sobre</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-primary transition">
+                <a href="/#sobre" className="hover:text-primary transition">
                   Quem Somos
                 </a>
               </li>
@@ -44,8 +44,8 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/indicar" className="hover:text-primary transition">
-                  Indicar um Amigo
+                <a href="/trabalhe-conosco" className="hover:text-primary transition">
+                  Trabalhe Conosco
                 </a>
               </li>
             </ul>
@@ -96,13 +96,13 @@ export function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
             <p>&copy; {new Date().getFullYear()} Ondeline. Todos os direitos reservados.</p>
             <div className="flex gap-6 mt-4 md:mt-0">
-              <a href="#" className="hover:text-primary transition">
+              <a href="/privacidade" className="hover:text-primary transition">
                 Privacidade
               </a>
-              <a href="#" className="hover:text-primary transition">
+              <a href="/termos" className="hover:text-primary transition">
                 Termos
               </a>
-              <a href="#" className="hover:text-primary transition">
+              <a href="/privacidade#cookies" className="hover:text-primary transition">
                 Cookies
               </a>
             </div>

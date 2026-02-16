@@ -31,14 +31,22 @@ export function Hero() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-          <Button className="bg-primary hover:bg-primary/90 h-14 px-10 text-lg flex items-center gap-2 w-full sm:w-auto justify-center font-semibold">
-            Contratar Agora <ArrowRight size={20} />
+          <Button 
+            asChild
+            className="bg-primary hover:bg-primary/90 h-14 px-10 text-lg flex items-center gap-2 w-full sm:w-auto justify-center font-semibold"
+          >
+            <a href="#planos">
+              Contratar Agora <ArrowRight size={20} />
+            </a>
           </Button>
           <Button
+            asChild
             variant="outline"
             className="h-14 px-10 text-lg w-full sm:w-auto border-primary/50 hover:bg-primary/5 bg-transparent"
           >
-            Saiba Mais
+            <a href="#suporte">
+              Saiba Mais
+            </a>
           </Button>
         </div>
 
