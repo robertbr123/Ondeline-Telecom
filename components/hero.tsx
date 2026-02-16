@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Zap, Wifi } from "lucide-react"
+import { ArrowRight, Zap, Wifi, Award } from "lucide-react"
 
 export function Hero() {
   return (
@@ -50,10 +50,10 @@ export function Hero() {
           </Button>
         </div>
 
-        <div className="pt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <div className="pt-16 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-5xl mx-auto">
           <div className="p-6 rounded-xl bg-card/50 border border-border hover:border-primary/50 transition">
             <Zap className="w-8 h-8 text-primary mx-auto mb-3" />
-            <div className="text-3xl font-bold text-primary">+500</div>
+            <div className="text-3xl font-bold text-primary">+700</div>
             <div className="text-sm text-muted-foreground mt-2">Clientes Satisfeitos</div>
           </div>
           <div className="p-6 rounded-xl bg-card/50 border border-border hover:border-secondary/50 transition">
@@ -62,8 +62,14 @@ export function Hero() {
             <div className="text-sm text-muted-foreground mt-2">Suporte Ativo</div>
           </div>
           <div className="p-6 rounded-xl bg-card/50 border border-border hover:border-accent/50 transition">
-            <div className="text-3xl font-bold text-accent mx-auto mb-3">99.5%</div>
+            <Award className="w-8 h-8 text-accent mx-auto mb-3" />
+            <div className="text-3xl font-bold text-accent">99.5%</div>
             <div className="text-sm text-muted-foreground mt-2">Disponibilidade</div>
+          </div>
+          <div className="p-6 rounded-xl bg-card/50 border border-border hover:border-primary/50 transition">
+            <Award className="w-8 h-8 text-primary mx-auto mb-3" />
+            <div className="text-3xl font-bold text-primary">4 anos</div>
+            <div className="text-sm text-muted-foreground mt-2">De Experiência</div>
           </div>
         </div>
       </div>
