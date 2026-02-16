@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import { CityPageRedesigned } from "@/components/city-page-redesigned"
 
 export default function CarauariPage() {
