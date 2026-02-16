@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import { motion } from 'framer-motion'
 
 interface MotionCardProps {
   children: React.ReactNode
@@ -8,61 +9,56 @@ interface MotionCardProps {
   delay?: number
 }
 
-function useIsMounted() {
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
-  return mounted
-}
-
 export function MotionCard({ children, className = '', delay = 0 }: MotionCardProps) {
-  const mounted = useIsMounted()
-
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay }}
+      whileHover={{ scale: 1.02, boxShadow: '0 10px 40px rgba(0,0,0,0.1)' }}
+      whileTap={{ scale: 0.98 }}
       className={className}
-      style={mounted ? {
-        animation: `fadeInUp ${0.5}s ease ${delay}s both`,
-      } : { opacity: 0 }}
     >
       {children}
-    </div>
+    </motion.div>
   )
 }
 
 export function MotionButton({ children, className = '', ...props }: any) {
   return (
-    <button className={className} {...props}>
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className={className}
+      {...props}
+    >
       {children}
-    </button>
+    </motion.button>
   )
 }
 
 export function FadeIn({ children, className = '', delay = 0 }: MotionCardProps) {
-  const mounted = useIsMounted()
-
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6, delay }}
       className={className}
-      style={mounted ? {
-        animation: `fadeIn ${0.6}s ease ${delay}s both`,
-      } : { opacity: 0 }}
     >
       {children}
-    </div>
+    </motion.div>
   )
 }
 
 export function SlideUp({ children, className = '', delay = 0 }: MotionCardProps) {
-  const mounted = useIsMounted()
-
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay }}
       className={className}
-      style={mounted ? {
-        animation: `fadeInUp ${0.6}s ease ${delay}s both`,
-      } : { opacity: 0 }}
     >
       {children}
-    </div>
+    </motion.div>
   )
 }
