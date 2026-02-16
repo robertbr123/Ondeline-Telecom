@@ -53,13 +53,15 @@ export function Features() {
             return (
               <div
                 key={feature.id}
-                className="group relative p-6 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 hover:border-cyan-500 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20"
+                className="group relative p-6 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 hover:border-cyan-500 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20 flex items-start gap-4"
               >
-                <div className={`inline-p-3 rounded-lg bg-gradient-to-br ${feature.color} mb-4 p-3`}>
+                <div className={`rounded-lg bg-gradient-to-br ${feature.color} p-3 flex-shrink-0`}>
                   <IconComponent className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">{feature.description}</p>
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">{feature.description}</p>
+                </div>
               </div>
             )
           })}

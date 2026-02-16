@@ -12,13 +12,13 @@ export default function IpixunaPage() {
       benefits={[
         "Internet estável e rápida",
         "Suporte técnico local",
-        "Instalação em até 3 dias",
+        "Instalação em 24h",
         "Roteador Wi-Fi grátis",
       ]}
       benefitDescriptions={[
         "Conexão estável sem interrupções",
         "Técnicos locais conhecem a região",
-        "Equipe própria de instalação rápida",
+        "Equipe própria de instalação em 24h",
         "Equipamento moderno e de alta qualidade",
       ]}
       features={{
@@ -31,7 +31,7 @@ export default function IpixunaPage() {
         clients: "+120",
         satisfaction: "4.9",
         years: "4",
-        installationTime: "3 dias"
+        installationTime: "24h"
       }}
     />
   )

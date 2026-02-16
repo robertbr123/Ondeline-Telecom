@@ -48,7 +48,7 @@ export function CityPageRedesigned({
     clients: "+150",
     satisfaction: "4.9",
     years: "4",
-    installationTime: "3 dias"
+    installationTime: "24h"
   },
   testimonials = []
 }: CityPageProps) {
@@ -81,7 +81,7 @@ export function CityPageRedesigned({
 
   return (
     <>
-      <PreregistrationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <PreregistrationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} defaultCity={name} />
 
       <main className="min-h-screen bg-background">
         {/* Hero Section Aprimorada */}
@@ -122,7 +122,7 @@ export function CityPageRedesigned({
             <SlideUp delay={0.3}>
               <p className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto mb-8 leading-relaxed">
                 Conectando {name} com internet de alta velocidade, fibra óptica e suporte 24/7. 
-                {isCovered && " Instalação grátis em até 3 dias!"}
+                {isCovered && " Instalação grátis em até 24 horas!"}
               </p>
             </SlideUp>
 
@@ -137,7 +137,7 @@ export function CityPageRedesigned({
                 </Button>
                 <Button
                   variant="outline"
-                  className="h-14 px-10 text-lg w-full sm:w-auto border-white/30 hover:bg-white/10 text-white hover:text-white"
+                  className="h-14 px-10 text-lg w-full sm:w-auto border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white font-semibold"
                   onClick={() => document.getElementById('planos')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   Ver Planos
@@ -253,9 +253,9 @@ export function CityPageRedesigned({
                 <div className="inline-flex p-3 rounded-lg bg-yellow-500/20 mb-4 group-hover:scale-110 transition-transform">
                   <Clock className="w-8 h-8 text-yellow-500" />
                 </div>
-                <h3 className="text-xl font-bold mb-2">Instalação em 3 Dias</h3>
+                <h3 className="text-xl font-bold mb-2">Instalação em 24h</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
-                  Instalação rápida e gratuita. Nossa equipe técnica própria garante qualidade no serviço.
+                  Instalação rápida e gratuita. Nossa equipe técnica própria garante qualidade no serviço em até 24 horas.
                 </p>
               </MotionCard>
 
@@ -319,7 +319,7 @@ export function CityPageRedesigned({
               Pronto para Ter Internet Rápida em {name}?
             </h2>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Contrate agora e tenha internet instalada em até 3 dias úteis. 
+              Contrate agora e tenha internet instalada em até 24 horas. 
               {isCovered && " Instalação totalmente gratuita!"}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

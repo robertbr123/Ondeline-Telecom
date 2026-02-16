@@ -8,15 +8,23 @@ import { X, Phone, Check } from "lucide-react"
 interface PreregistrationModalProps {
   isOpen: boolean
   onClose: () => void
+  defaultCity?: string
 }
 
-export function PreregistrationModal({ isOpen, onClose }: PreregistrationModalProps) {
+export function PreregistrationModal({ isOpen, onClose, defaultCity }: PreregistrationModalProps) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    city: "",
+    city: defaultCity || "",
   })
+
+  // Update city when defaultCity changes
+  React.useEffect(() => {
+    if (defaultCity) {
+      setFormData((prev) => ({ ...prev, city: defaultCity }))
+    }
+  }, [defaultCity])
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
