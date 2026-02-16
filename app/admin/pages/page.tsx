@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Plus, Edit, Trash2, FileText, Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
+import { HtmlEditor } from '@/components/html-editor'
 
 interface Page {
   id: string
@@ -272,14 +273,12 @@ export default function AdminPages() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Conteúdo (HTML/Markdown) *</label>
-                <textarea
-                  value={editingPage.content}
-                  onChange={(e) => setEditingPage({ ...editingPage, content: e.target.value })}
-                  className="w-full px-3 py-2 bg-input border border-border rounded-lg h-64 font-mono text-sm"
-                  placeholder="Conteúdo principal da página..."
+                <label className="block text-sm font-medium mb-2">Conteúdo (HTML) *</label>
+                <HtmlEditor
+                  content={editingPage.content}
+                  onChange={(content) => setEditingPage({ ...editingPage, content })}
+                  placeholder="Use os botões acima para inserir elementos ou digite HTML..."
                 />
-                <p className="text-xs text-muted-foreground mt-1">Use HTML para formatação ou Markdown simples</p>
               </div>
 
               <div>
