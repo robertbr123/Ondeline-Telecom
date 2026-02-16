@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState } from "react"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, CheckCircle, Wifi, Zap, Shield, Users, Clock, Star, MapPin } from "lucide-react"
 import { PreregistrationModal } from "@/components/preregistration-modal"
@@ -92,16 +91,10 @@ export function CityPageRedesigned({
           {/* Background Image or Gradient */}
           {backgroundImage ? (
             <>
-              <div className="absolute inset-0 -z-10">
-                <Image
-                  src={backgroundImage}
-                  alt={`Internet em ${name}`}
-                  fill
-                  priority
-                  className="object-cover"
-                  sizes="100vw"
-                />
-              </div>
+              <div 
+                className="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: `url(${backgroundImage})` }}
+              />
               {/* Dark overlay for better readability */}
               <div className="absolute inset-0 -z-9 bg-slate-900/60" />
             </>
