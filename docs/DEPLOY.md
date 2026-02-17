@@ -75,7 +75,7 @@ npm run build
 npm start
 ```
 
-**Nota:** O projeto está configurado para rodar na **porta 3008** automaticamente.
+**Nota:** O projeto está configurado para rodar na **porta 5008** automaticamente.
 
 ## Processo de Deploy
 
@@ -130,11 +130,11 @@ dokploy create ondeline-telecom \
   --branch main \
   --build-command "npm install && npm run build" \
   --start-command "npm start" \
-  --port 3008 \
+  --port 5008 \
   --env-file .env
 ```
 
-**Nota:** A porta padrão é **3008**.
+**Nota:** A porta padrão é **5008**.
 
 ## Pós-Deploy
 

@@ -69,7 +69,7 @@ npm run dev
 pnpm dev
 ```
 
-Acesse [http://localhost:3008](http://localhost:3008)
+Acesse [http://localhost:5008](http://localhost:5008)
 
 ## 🏗️ Build para Produção
 

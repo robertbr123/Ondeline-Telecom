@@ -22,13 +22,13 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PORT=3008
+ENV PORT=5008
 
 # Copiar APENAS o standalone + static + public
 COPY --from=base /app/.next/standalone ./
 COPY --from=base /app/.next/static ./.next/static
 COPY --from=base /app/public ./public
 
-EXPOSE 3008
+EXPOSE 5008
 
 CMD ["node", "server.js"]

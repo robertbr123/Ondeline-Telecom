@@ -2,8 +2,8 @@
  * API para migrar páginas existentes para o CMS
  * 
  * Acesse via navegador ou curl:
- * - Navegador: http://localhost:3008/api/migrate-pages
- * - curl: curl http://localhost:3008/api/migrate-pages
+ * - Navegador: http://localhost:5008/api/migrate-pages
+ * - curl: curl http://localhost:5008/api/migrate-pages
  * 
  * Nota: Esta API requer configuração do banco em lib/db.ts
  */

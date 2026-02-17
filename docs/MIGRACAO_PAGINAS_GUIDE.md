@@ -40,7 +40,7 @@ Você tem **DUAS OPÇÕES** para migrar as páginas:
 
 #### Passo 1: Apenas acesse a URL
 ```
-http://localhost:3008/api/migrate-pages
+http://localhost:5008/api/migrate-pages
 ```
 
 #### Passo 2: Veja o resultado
@@ -77,7 +77,7 @@ A API vai mostrar um JSON com o resultado:
 ```
 
 #### Passo 3: Verificar no Admin
-Vá para `http://localhost:3008/admin/pages` e confirme que as páginas apareceram!
+Vá para `http://localhost:5008/admin/pages` e confirme que as páginas apareceram!
 
 ---
 
@@ -357,11 +357,11 @@ sudo systemctl start postgresql
 ```
 1. Execute o SQL do CMS_PAGES_SETUP_GUIDE.md
    ↓
-2. Acesse: http://localhost:3008/api/migrate-pages
+2. Acesse: http://localhost:5008/api/migrate-pages
    ↓
 3. Veja o resultado JSON
    ↓
-4. Acesse: http://localhost:3008/admin/pages
+4. Acesse: http://localhost:5008/admin/pages
    ↓
 5. Edite as páginas pelo admin usando o editor HTML
    ↓
@@ -376,7 +376,7 @@ sudo systemctl start postgresql
    ↓
 3. Execute: node scripts/migrate-existing-pages-to-cms.js
    ↓
-4. Acesse: http://localhost:3008/admin/pages
+4. Acesse: http://localhost:5008/admin/pages
    ↓
 5. Edite as páginas pelo admin usando o editor HTML
    ↓
@@ -461,5 +461,5 @@ pg_dump -U postgres -d ondeline > backup.sql
 **Status**: ✅ Script de migração pronto para uso  
 **Próximo passo**: 
 1. Execute o SQL do `CMS_PAGES_SETUP_GUIDE.md`
-2. Acesse `http://localhost:3008/api/migrate-pages` para migrar as páginas
-3. Acesse `http://localhost:3008/admin/pages` para ver e editar as páginas
+2. Acesse `http://localhost:5008/api/migrate-pages` para migrar as páginas
+3. Acesse `http://localhost:5008/admin/pages` para ver e editar as páginas
