@@ -23,6 +23,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV PORT=5008
+ENV HOSTNAME=0.0.0.0
 
 # Copiar APENAS o standalone + static + public
 COPY --from=base /app/.next/standalone ./
