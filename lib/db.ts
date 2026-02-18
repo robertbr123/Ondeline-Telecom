@@ -469,20 +469,24 @@ export async function initializeDatabase() {
       ])
     }
 
-    // Criar usuário admin padrão se não existir
-    const adminCount = await pool.query('SELECT COUNT(*) as count FROM admin_users')
-    if (parseInt(adminCount.rows[0].count) === 0) {
-      // Usar variáveis de ambiente se disponíveis, senão usar padrão
-      const adminUsername = process.env.ADMIN_USERNAME || 'admin'
-      const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH || bcrypt.hashSync('admin123', 10)
-      const now = new Date().toISOString()
-      
+    // Criar ou atualizar usuário admin
+    const adminUsername = process.env.ADMIN_USERNAME || 'admin'
+    const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH || bcrypt.hashSync('admin123', 10)
+    const now = new Date().toISOString()
+
+    const adminExists = await pool.query('SELECT username FROM admin_users WHERE username = $1', [adminUsername])
+    if (adminExists.rows.length === 0) {
       console.log(`🔐 Creating admin user: ${adminUsername}`)
-      
       await pool.query(`
         INSERT INTO admin_users (username, password_hash, role, created_at)
         VALUES ($1, $2, 'admin', $3)
       `, [adminUsername, adminPasswordHash, now])
+    } else {
+      // Atualizar hash se a variável de ambiente estiver definida
+      if (process.env.ADMIN_PASSWORD_HASH) {
+        await pool.query('UPDATE admin_users SET password_hash = $1 WHERE username = $2', [adminPasswordHash, adminUsername])
+        console.log(`🔐 Admin password updated from environment variable`)
+      }
     }
 
     console.log('✅ Database initialized successfully')
