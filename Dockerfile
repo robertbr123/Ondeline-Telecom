@@ -6,16 +6,11 @@ WORKDIR /app
 # Dependências nativas necessárias para sharp e tailwindcss/oxide
 RUN apk add --no-cache libc6-compat
 
-# Copiar arquivos de dependências
+# Copiar arquivos de dependências (package.json inclui pnpm.onlyBuiltDependencies)
 COPY package.json pnpm-lock.yaml* ./
 
-# Instalar pnpm e dependências
+# Instalar pnpm e dependências (build scripts de sharp e oxide serão executados automaticamente)
 RUN corepack enable pnpm
-RUN pnpm config set package-manager-strict false
-RUN pnpm install --no-frozen-lockfile
-
-# Aprovar build scripts (sharp, tailwindcss/oxide)
-RUN pnpm approve-builds sharp @tailwindcss/oxide
 RUN pnpm install --no-frozen-lockfile
 
 # Copiar resto do código

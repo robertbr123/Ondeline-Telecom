@@ -471,22 +471,22 @@ export async function initializeDatabase() {
 
     // Criar ou atualizar usuário admin
     const adminUsername = process.env.ADMIN_USERNAME || 'admin'
-    const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH || bcrypt.hashSync('admin123', 10)
+    // Aceita senha em texto puro (ADMIN_PASSWORD) ou hash pronto (ADMIN_PASSWORD_HASH)
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123'
+    const adminPasswordHash = bcrypt.hashSync(adminPassword, 10)
     const now = new Date().toISOString()
 
-    const adminExists = await pool.query('SELECT username FROM admin_users WHERE username = $1', [adminUsername])
+    const adminExists = await pool.query('SELECT username, password_hash FROM admin_users WHERE username = $1', [adminUsername])
     if (adminExists.rows.length === 0) {
       console.log(`🔐 Creating admin user: ${adminUsername}`)
       await pool.query(`
         INSERT INTO admin_users (username, password_hash, role, created_at)
         VALUES ($1, $2, 'admin', $3)
       `, [adminUsername, adminPasswordHash, now])
-    } else {
-      // Atualizar hash se a variável de ambiente estiver definida
-      if (process.env.ADMIN_PASSWORD_HASH) {
-        await pool.query('UPDATE admin_users SET password_hash = $1 WHERE username = $2', [adminPasswordHash, adminUsername])
-        console.log(`🔐 Admin password updated from environment variable`)
-      }
+    } else if (process.env.ADMIN_PASSWORD) {
+      // Sempre atualizar a senha se ADMIN_PASSWORD estiver definida
+      await pool.query('UPDATE admin_users SET password_hash = $1 WHERE username = $2', [adminPasswordHash, adminUsername])
+      console.log(`🔐 Admin password updated for user: ${adminUsername}`)
     }
 
     console.log('✅ Database initialized successfully')
