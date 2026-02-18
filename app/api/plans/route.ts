@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
 import { nanoid } from 'nanoid'
-import { getCachedData, DEFAULT_TTL } from '@/lib/cache'
+import { getCachedData, invalidateCache, DEFAULT_TTL } from '@/lib/cache'
 
 // POST - Criar novo plano
 export async function POST(request: NextRequest) {
@@ -48,6 +48,8 @@ export async function POST(request: NextRequest) {
     ])
 
     console.log('Plano inserido com sucesso!')
+
+    await invalidateCache('plans')
 
     return NextResponse.json({
       success: true,

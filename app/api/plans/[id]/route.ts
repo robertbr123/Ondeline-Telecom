@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
+import { invalidateCache } from '@/lib/cache'
 
 // PUT - Atualizar plano
 export async function PUT(
@@ -38,6 +39,8 @@ export async function PUT(
       id
     ])
 
+    await invalidateCache('plans')
+
     return NextResponse.json({
       success: true,
       data: { id, name, speed, price, description, features, highlighted, active },
@@ -67,6 +70,8 @@ export async function DELETE(
         { status: 404 }
       )
     }
+
+    await invalidateCache('plans')
 
     return NextResponse.json({
       success: true,

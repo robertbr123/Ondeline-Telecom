@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
+import { invalidateCache } from '@/lib/cache'
 
 // PUT - Atualizar FAQ
 export async function PUT(
@@ -20,7 +21,7 @@ export async function PUT(
     }
 
     await query(`
-      UPDATE faq 
+      UPDATE faq
       SET question = $1, answer = $2, category = $3, "order" = $4, active = $5
       WHERE id = $6
     `, [
@@ -31,6 +32,8 @@ export async function PUT(
       active ? 1 : 0,
       id
     ])
+
+    await invalidateCache('faq')
 
     return NextResponse.json({
       success: true,
@@ -61,6 +64,8 @@ export async function DELETE(
         { status: 404 }
       )
     }
+
+    await invalidateCache('faq')
 
     return NextResponse.json({
       success: true,

@@ -10,7 +10,7 @@ interface UseAPIOptions {
 export function useAPI<T>(endpoint: string, options: UseAPIOptions = {}) {
   const { onSuccess, onError, autoFetch = true } = options
   const [data, setData] = useState<T | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(autoFetch)
   const [error, setError] = useState<string | null>(null)
   
   // Use refs para callbacks para evitar re-renders

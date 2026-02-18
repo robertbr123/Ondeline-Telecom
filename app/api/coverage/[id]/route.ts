@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
+import { invalidateCache } from '@/lib/cache'
 
 // PUT - Atualizar área de cobertura
 export async function PUT(
@@ -22,8 +23,8 @@ export async function PUT(
     const now = new Date().toISOString()
 
     await query(`
-      UPDATE coverage_areas 
-      SET city = $1, state = $2, status = $3, latitude = $4, longitude = $5, 
+      UPDATE coverage_areas
+      SET city = $1, state = $2, status = $3, latitude = $4, longitude = $5,
           description = $6, launch_date = $7, updated_at = $8
       WHERE id = $9
     `, [
@@ -37,6 +38,8 @@ export async function PUT(
       now,
       id
     ])
+
+    await invalidateCache('coverage')
 
     return NextResponse.json({
       success: true,
@@ -67,6 +70,8 @@ export async function DELETE(
         { status: 404 }
       )
     }
+
+    await invalidateCache('coverage')
 
     return NextResponse.json({
       success: true,

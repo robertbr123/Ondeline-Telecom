@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
+import { invalidateCache } from '@/lib/cache'
 import { featureSchema } from '@/lib/validations'
 import { z } from 'zod'
 
@@ -19,7 +20,7 @@ export async function PUT(
 
     // Atualizar no banco
     await query(`
-      UPDATE features 
+      UPDATE features
       SET title = $1, description = $2, icon = $3, color = $4, "order" = $5, active = $6, updated_at = $7
       WHERE id = $8
     `, [
@@ -32,6 +33,8 @@ export async function PUT(
       now,
       id
     ])
+
+    await invalidateCache('features')
 
     return NextResponse.json({
       success: true,
@@ -62,6 +65,8 @@ export async function DELETE(
     const { id } = await params
 
     await query('DELETE FROM features WHERE id = $1', [id])
+
+    await invalidateCache('features')
 
     return NextResponse.json({
       success: true,

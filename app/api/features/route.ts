@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid'
 import { query } from '@/lib/db'
 import { featureSchema } from '@/lib/validations'
 import { z } from 'zod'
-import { getCachedData, DEFAULT_TTL } from '@/lib/cache'
+import { getCachedData, invalidateCache, DEFAULT_TTL } from '@/lib/cache'
 
 // GET - Listar features
 export async function GET(req: Request) {
@@ -64,6 +64,8 @@ export async function POST(request: NextRequest) {
       now,
       now
     ])
+
+    await invalidateCache('features')
 
     return NextResponse.json({
       success: true,

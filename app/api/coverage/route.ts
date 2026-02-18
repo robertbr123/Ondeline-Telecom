@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
 import { nanoid } from 'nanoid'
-import { getCachedData, DEFAULT_TTL } from '@/lib/cache'
+import { getCachedData, invalidateCache, DEFAULT_TTL } from '@/lib/cache'
 
 // GET - Listar áreas de cobertura
 export async function GET() {
@@ -87,6 +87,8 @@ export async function POST(request: NextRequest) {
       now,
       now
     ])
+
+    await invalidateCache('coverage')
 
     return NextResponse.json({
       success: true,

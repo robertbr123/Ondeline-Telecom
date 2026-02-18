@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { nanoid } from 'nanoid'
 import { query } from '@/lib/db'
-import { getCachedData, DEFAULT_TTL } from '@/lib/cache'
+import { getCachedData, invalidateCache, DEFAULT_TTL } from '@/lib/cache'
 
 // GET - Listar FAQ
 export async function GET(req: Request) {
@@ -55,6 +55,8 @@ export async function POST(request: NextRequest) {
       INSERT INTO faq (id, question, answer, category, "order", active)
       VALUES ($1, $2, $3, $4, $5, $6)
     `, [id, question, answer, category, order, active ? 1 : 0])
+
+    await invalidateCache('faq')
 
     return NextResponse.json({
       success: true,
