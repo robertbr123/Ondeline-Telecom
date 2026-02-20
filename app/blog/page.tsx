@@ -93,7 +93,7 @@ export default function BlogPage() {
                   className={`px-4 py-2 rounded-lg font-medium transition ${
                     selectedCategory === category
                       ? "bg-primary text-primary-foreground"
-                      : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                      : "bg-muted text-muted-foreground hover:bg-muted/70"
                   }`}
                 >
                   {category}
@@ -115,7 +115,7 @@ export default function BlogPage() {
                   href={`/blog/${article.slug}`}
                   className="group text-left h-full hover:opacity-80 transition"
                 >
-                  <div className="bg-secondary rounded-lg overflow-hidden h-full flex flex-col">
+                  <div className="bg-card border border-border rounded-lg overflow-hidden h-full flex flex-col">
                     {article.cover_image ? (
                       <img
                         src={article.cover_image}
@@ -123,7 +123,7 @@ export default function BlogPage() {
                         className="w-full h-40 object-cover group-hover:scale-105 transition duration-300"
                       />
                     ) : (
-                      <div className="w-full h-40 bg-gradient-to-br from-primary/20 to-secondary flex items-center justify-center">
+                      <div className="w-full h-40 bg-gradient-to-br from-primary/20 to-muted flex items-center justify-center">
                         <span className="text-4xl">📰</span>
                       </div>
                     )}
