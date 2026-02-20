@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     
     const { title, slug, excerpt, content, cover_image, video_url, author, category, tags, published } = body
 
-    console.log('Campos:', { title, slug, excerpt, content: cover_image, author, category, tags, published })
+    console.log('Campos:', { title, slug, excerpt, content, cover_image, author, category, tags, published })
 
     if (!title || !content || !author) {
       console.error('Campos obrigatórios faltando:', { title: !!title, content: !!content, author: !!author })

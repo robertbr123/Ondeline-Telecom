@@ -72,21 +72,31 @@ export default function AdminBlog() {
       const isNewPost = isCreating || !post.id || post.id === ''
       const method = isNewPost ? 'POST' : 'PUT'
       const url = isNewPost ? '/api/blog' : `/api/blog/${post.slug}`
-      
+
       // Preparar dados para enviar
       const postData = {
-        title: post.title,
-        slug: post.slug,
-        excerpt: post.excerpt,
-        content: post.content,
-        cover_image: post.cover_image,
-        video_url: post.video_url || '',
-        author: post.author,
-        category: post.category,
+        title: post.title?.trim() || '',
+        slug: post.slug?.trim() || '',
+        excerpt: post.excerpt?.trim() || '',
+        content: post.content?.trim() || '',
+        cover_image: post.cover_image?.trim() || '',
+        video_url: post.video_url?.trim() || '',
+        author: post.author?.trim() || '',
+        category: post.category || 'geral',
         tags: post.tags,
         published: post.published,
       }
-      
+
+      // Validação client-side antes de enviar
+      const missingFields: string[] = []
+      if (!postData.title) missingFields.push('Título')
+      if (!postData.content) missingFields.push('Conteúdo')
+      if (!postData.author) missingFields.push('Autor')
+      if (missingFields.length > 0) {
+        alert(`Preencha os campos obrigatórios:\n• ${missingFields.join('\n• ')}`)
+        return
+      }
+
       console.log('=== SALVANDO POST ===')
       console.log('isNewPost:', isNewPost)
       console.log('isCreating:', isCreating)
@@ -255,7 +265,7 @@ export default function AdminBlog() {
                 <input
                   type="text"
                   value={editingPost.title}
-                  onChange={(e) => setEditingPost({ ...editingPost, title: e.target.value })}
+                  onChange={(e) => { const v = e.target.value; setEditingPost(prev => prev ? { ...prev, title: v } : prev) }}
                   className="w-full px-3 py-2 bg-input border border-border rounded-lg"
                   placeholder="Título do post"
                 />
@@ -267,7 +277,7 @@ export default function AdminBlog() {
                   <input
                     type="text"
                     value={editingPost.slug}
-                    onChange={(e) => setEditingPost({ ...editingPost, slug: e.target.value })}
+                    onChange={(e) => { const v = e.target.value; setEditingPost(prev => prev ? { ...prev, slug: v } : prev) }}
                     className="w-full px-3 py-2 bg-input border border-border rounded-lg"
                     placeholder="url-amigavel-do-post"
                   />
@@ -277,7 +287,7 @@ export default function AdminBlog() {
                   <label className="block text-sm font-medium mb-2">Categoria</label>
                   <select
                     value={editingPost.category}
-                    onChange={(e) => setEditingPost({ ...editingPost, category: e.target.value })}
+                    onChange={(e) => { const v = e.target.value; setEditingPost(prev => prev ? { ...prev, category: v } : prev) }}
                     className="w-full px-3 py-2 bg-input border border-border rounded-lg"
                   >
                     <option value="geral">Geral</option>
@@ -292,7 +302,7 @@ export default function AdminBlog() {
                 <label className="block text-sm font-medium mb-2">Resumo (Excerpt)</label>
                 <textarea
                   value={editingPost.excerpt}
-                  onChange={(e) => setEditingPost({ ...editingPost, excerpt: e.target.value })}
+                  onChange={(e) => { const v = e.target.value; setEditingPost(prev => prev ? { ...prev, excerpt: v } : prev) }}
                   className="w-full px-3 py-2 bg-input border border-border rounded-lg h-20"
                   placeholder="Breve descrição do post..."
                 />
@@ -303,7 +313,7 @@ export default function AdminBlog() {
                 <input
                   type="text"
                   value={editingPost.cover_image}
-                  onChange={(e) => setEditingPost({ ...editingPost, cover_image: e.target.value })}
+                  onChange={(e) => { const v = e.target.value; setEditingPost(prev => prev ? { ...prev, cover_image: v } : prev) }}
                   className="w-full px-3 py-2 bg-input border border-border rounded-lg"
                   placeholder="https://exemplo.com/imagem.jpg"
                 />
@@ -314,7 +324,7 @@ export default function AdminBlog() {
                 <input
                   type="text"
                   value={editingPost.video_url}
-                  onChange={(e) => setEditingPost({ ...editingPost, video_url: e.target.value })}
+                  onChange={(e) => { const v = e.target.value; setEditingPost(prev => prev ? { ...prev, video_url: v } : prev) }}
                   className="w-full px-3 py-2 bg-input border border-border rounded-lg"
                   placeholder="https://exemplo.com/video.mp4"
                 />
@@ -326,7 +336,7 @@ export default function AdminBlog() {
                 <input
                   type="text"
                   value={editingPost.author}
-                  onChange={(e) => setEditingPost({ ...editingPost, author: e.target.value })}
+                  onChange={(e) => { const v = e.target.value; setEditingPost(prev => prev ? { ...prev, author: v } : prev) }}
                   className="w-full px-3 py-2 bg-input border border-border rounded-lg"
                   placeholder="Nome do autor"
                 />
@@ -337,10 +347,7 @@ export default function AdminBlog() {
                 <input
                   type="text"
                   value={editingPost.tags.join(', ')}
-                  onChange={(e) => setEditingPost({ 
-                    ...editingPost, 
-                    tags: e.target.value.split(',').map(t => t.trim()).filter(t => t) 
-                  })}
+                  onChange={(e) => { const v = e.target.value; setEditingPost(prev => prev ? { ...prev, tags: v.split(',').map(t => t.trim()).filter(t => t) } : prev) }}
                   className="w-full px-3 py-2 bg-input border border-border rounded-lg"
                   placeholder="internet, tecnologia, amazonas"
                 />
@@ -350,7 +357,7 @@ export default function AdminBlog() {
                 <label className="block text-sm font-medium mb-2">Conteúdo (Markdown/HTML) *</label>
                 <textarea
                   value={editingPost.content}
-                  onChange={(e) => setEditingPost({ ...editingPost, content: e.target.value })}
+                  onChange={(e) => { const v = e.target.value; setEditingPost(prev => prev ? { ...prev, content: v } : prev) }}
                   className="w-full px-3 py-2 bg-input border border-border rounded-lg h-64 font-mono text-sm"
                   placeholder="Escreva seu post aqui..."
                 />
@@ -361,7 +368,7 @@ export default function AdminBlog() {
                   <input
                     type="checkbox"
                     checked={editingPost.published}
-                    onChange={(e) => setEditingPost({ ...editingPost, published: e.target.checked })}
+                    onChange={(e) => { const v = e.target.checked; setEditingPost(prev => prev ? { ...prev, published: v } : prev) }}
                   />
                   <span className="text-sm font-medium">Publicar agora</span>
                 </label>
