@@ -73,8 +73,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let blogPages: MetadataRoute.Sitemap = []
   try {
     const blogResult = await query(`
-      SELECT slug, updated_at FROM blog_posts 
-      WHERE active = 1
+      SELECT slug, updated_at FROM blog_posts
+      WHERE published = 1
     `)
     blogPages = blogResult.rows.map((post: any) => ({
       url: `${baseUrl}/blog/${post.slug}`,
