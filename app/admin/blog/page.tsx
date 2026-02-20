@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Plus, Eye, Trash2, Edit, FileText } from 'lucide-react'
 import Link from 'next/link'
+import { ContentEditor } from '@/components/content-editor'
 
 interface BlogPost {
   id: string
@@ -354,12 +355,10 @@ export default function AdminBlog() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Conteúdo (Markdown/HTML) *</label>
-                <textarea
+                <label className="block text-sm font-medium mb-2">Conteúdo *</label>
+                <ContentEditor
                   value={editingPost.content}
-                  onChange={(e) => { const v = e.target.value; setEditingPost(prev => prev ? { ...prev, content: v } : prev) }}
-                  className="w-full px-3 py-2 bg-input border border-border rounded-lg h-64 font-mono text-sm"
-                  placeholder="Escreva seu post aqui..."
+                  onChange={(v) => setEditingPost((prev: BlogPost | null) => prev ? { ...prev, content: v } : prev)}
                 />
               </div>
 
