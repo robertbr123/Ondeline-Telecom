@@ -125,6 +125,7 @@ export async function initializeDatabase() {
         excerpt TEXT,
         content TEXT NOT NULL,
         cover_image TEXT,
+        video_url TEXT DEFAULT '',
         author TEXT NOT NULL,
         category TEXT DEFAULT 'geral',
         tags TEXT,
@@ -133,6 +134,11 @@ export async function initializeDatabase() {
         created_at TEXT NOT NULL,
         updated_at TEXT NOT NULL
       )
+    `)
+
+    // Migração: adicionar video_url se não existir (tabelas criadas antes desta versão)
+    await pool.query(`
+      ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS video_url TEXT DEFAULT ''
     `)
 
     // Tabela de materiais (downloads)
