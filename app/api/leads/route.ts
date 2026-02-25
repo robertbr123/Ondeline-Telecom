@@ -31,15 +31,24 @@ export async function POST(request: NextRequest) {
 
     // Validar dados
     const validatedData = leadSchema.parse(body)
+    const couponCode = body.coupon_code || null
 
     const id = nanoid()
     const now = new Date().toISOString()
 
     // Inserir no banco
     await query(`
-      INSERT INTO leads (id, name, email, phone, city, status, created_at, updated_at)
-      VALUES ($1, $2, $3, $4, $5, 'new', $6, $7)
-    `, [id, validatedData.name, validatedData.email, validatedData.phone, validatedData.city, now, now])
+      INSERT INTO leads (id, name, email, phone, city, status, coupon_code, created_at, updated_at)
+      VALUES ($1, $2, $3, $4, $5, 'new', $6, $7, $8)
+    `, [id, validatedData.name, validatedData.email, validatedData.phone, validatedData.city, couponCode, now, now])
+
+    // Incrementar uso do cupom se fornecido
+    if (couponCode) {
+      await query(
+        'UPDATE coupons SET current_uses = current_uses + 1 WHERE code = $1 AND active = 1',
+        [couponCode.toUpperCase()]
+      ).catch(() => {})
+    }
 
     // Enviar email de notificação
     try {

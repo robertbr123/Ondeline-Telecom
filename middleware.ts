@@ -17,6 +17,8 @@ const PUBLIC_ROUTES = [
   '/api/blog',
   '/api/features',
   '/api/referrals',
+  '/api/coupons/validate',
+  '/api/campaigns/',
 ] as const
 
 // Rotas públicas do site
@@ -28,6 +30,8 @@ const PUBLIC_PAGES = [
   '/eirunepe',
   '/itamarati',
   '/carauari',
+  '/promo',
+  '/empresas',
 ] as const
 
 // Extensões de arquivos estáticos

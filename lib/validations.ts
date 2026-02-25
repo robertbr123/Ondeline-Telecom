@@ -101,6 +101,39 @@ export const referralSchema = z.object({
 
 export type ReferralInput = z.infer<typeof referralSchema>
 
+// Cupons
+export const couponSchema = z.object({
+  code: z.string().min(3, 'Código deve ter pelo menos 3 caracteres').transform(v => v.toUpperCase()),
+  description: z.string().min(5, 'Descrição deve ter pelo menos 5 caracteres'),
+  discount_type: z.enum(['percentage', 'fixed'], { errorMap: () => ({ message: 'Tipo de desconto inválido' }) }),
+  discount_value: z.number().positive('Valor do desconto deve ser positivo'),
+  max_uses: z.number().int().min(0).default(0),
+  valid_from: z.string().min(1, 'Data de início é obrigatória'),
+  valid_until: z.string().min(1, 'Data de fim é obrigatória'),
+  active: z.boolean().default(true),
+})
+
+export type CouponInput = z.infer<typeof couponSchema>
+
+// Campanhas
+export const campaignSchema = z.object({
+  slug: z.string().min(3, 'Slug é obrigatório').regex(/^[a-z0-9-]+$/, 'Slug deve conter apenas letras minúsculas, números e hífens'),
+  title: z.string().min(3, 'Título é obrigatório'),
+  subtitle: z.string().optional().or(z.literal('')),
+  description: z.string().optional().or(z.literal('')),
+  hero_image: z.string().optional().or(z.literal('')),
+  cta_text: z.string().default('Contratar Agora'),
+  cta_whatsapp_message: z.string().optional().or(z.literal('')),
+  coupon_code: z.string().optional().or(z.literal('')),
+  default_city: z.string().optional().or(z.literal('')),
+  features: z.array(z.string()).default([]),
+  active: z.boolean().default(true),
+  starts_at: z.string().optional().or(z.literal('')),
+  ends_at: z.string().optional().or(z.literal('')),
+})
+
+export type CampaignInput = z.infer<typeof campaignSchema>
+
 // Site Config
 export const siteConfigSchema = z.object({
   title: z.string().min(5, 'Título é obrigatório'),

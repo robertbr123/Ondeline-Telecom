@@ -205,6 +205,53 @@ export async function initializeDatabase() {
       )
     `)
 
+    // Tabela de cupons/promoções
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS coupons (
+        id TEXT PRIMARY KEY,
+        code TEXT NOT NULL UNIQUE,
+        description TEXT NOT NULL,
+        discount_type TEXT NOT NULL,
+        discount_value REAL NOT NULL,
+        max_uses INTEGER DEFAULT 0,
+        current_uses INTEGER DEFAULT 0,
+        valid_from TEXT NOT NULL,
+        valid_until TEXT NOT NULL,
+        active INTEGER DEFAULT 1,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    `)
+
+    // Tabela de campanhas/landing pages
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS campaigns (
+        id TEXT PRIMARY KEY,
+        slug TEXT NOT NULL UNIQUE,
+        title TEXT NOT NULL,
+        subtitle TEXT,
+        description TEXT,
+        hero_image TEXT,
+        cta_text TEXT DEFAULT 'Contratar Agora',
+        cta_whatsapp_message TEXT,
+        coupon_code TEXT,
+        default_city TEXT,
+        features TEXT,
+        active INTEGER DEFAULT 1,
+        views INTEGER DEFAULT 0,
+        leads_count INTEGER DEFAULT 0,
+        starts_at TEXT,
+        ends_at TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    `)
+
+    // Adicionar coluna coupon_code na tabela leads (se não existir)
+    await pool.query(`
+      ALTER TABLE leads ADD COLUMN IF NOT EXISTS coupon_code TEXT
+    `).catch(() => {})
+
     // Inserir configurações padrão se não existirem
     const defaultConfig = await pool.query('SELECT COUNT(*) as count FROM site_config')
     if (parseInt(defaultConfig.rows[0].count) === 0) {

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { LogOut, Users, LayoutDashboard, Package, MessageSquare, Settings, BarChart3, FileText, BookOpen, Building2, HelpCircle, MapPin, Sparkles, Edit } from 'lucide-react'
+import { LogOut, Users, LayoutDashboard, Package, MessageSquare, Settings, BarChart3, FileText, BookOpen, Building2, HelpCircle, MapPin, Sparkles, Edit, Tag, Megaphone } from 'lucide-react'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -181,6 +181,24 @@ export default function AdminDashboard() {
             <MapPin className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition" />
             <h3 className="text-xl font-semibold mb-2">Cobertura</h3>
             <p className="text-sm text-muted-foreground">Áreas de cobertura</p>
+          </a>
+
+          <a
+            href="/admin/coupons"
+            className="p-6 rounded-xl border border-border bg-card/50 hover:border-secondary/50 transition group"
+          >
+            <Tag className="w-8 h-8 text-secondary mb-3 group-hover:scale-110 transition" />
+            <h3 className="text-xl font-semibold mb-2">Cupons</h3>
+            <p className="text-sm text-muted-foreground">Gerenciar promoções e cupons</p>
+          </a>
+
+          <a
+            href="/admin/campaigns"
+            className="p-6 rounded-xl border border-border bg-card/50 hover:border-accent/50 transition group"
+          >
+            <Megaphone className="w-8 h-8 text-accent mb-3 group-hover:scale-110 transition" />
+            <h3 className="text-xl font-semibold mb-2">Campanhas</h3>
+            <p className="text-sm text-muted-foreground">Landing pages promocionais</p>
           </a>
 
           <a

@@ -95,6 +95,14 @@ export function useReferrals() {
   return useAPI('/api/referrals')
 }
 
+export function useCoupons() {
+  return useAPI('/api/coupons')
+}
+
+export function useCampaigns() {
+  return useAPI('/api/campaigns')
+}
+
 export async function submitAPI<T>(
   endpoint: string,
   method: 'POST' | 'PUT' | 'DELETE',
