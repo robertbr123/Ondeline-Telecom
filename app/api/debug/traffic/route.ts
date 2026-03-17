@@ -11,6 +11,10 @@ if (!global.requestLogs) {
 }
 
 export async function GET(request: NextRequest) {
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 })
+  }
+
   try {
     const { searchParams } = new URL(request.url)
     const format = searchParams.get('format') || 'summary'

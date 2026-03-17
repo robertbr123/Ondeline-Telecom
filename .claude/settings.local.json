@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc:*)",
+      "Bash(python3:*)",
+      "Bash(node -e \"require\\(''fs''\\).writeFileSync\\(''/tmp/write_admin.js'', ''placeholder''\\)\")",
+      "Bash(npx next:*)"
+    ]
+  }
+}

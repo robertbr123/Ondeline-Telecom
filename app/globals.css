@@ -38,6 +38,9 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --emerald: oklch(0.6 0.2 160);
+  --emerald-foreground: oklch(0.98 0 0);
+  --neon-cyan: oklch(0.8 0.15 190);
 }
 
 .dark {
@@ -68,10 +71,12 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+  --emerald: oklch(0.6 0.2 160);
+  --emerald-foreground: oklch(0.98 0 0);
+  --neon-cyan: oklch(0.8 0.15 190);
 }
 
 @theme inline {
-  /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
   --font-sans: "Geist", "Geist Fallback";
   --font-mono: "Geist Mono", "Geist Mono Fallback";
   --color-background: var(--background);
@@ -110,6 +115,9 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-emerald: var(--emerald);
+  --color-emerald-foreground: var(--emerald-foreground);
+  --color-neon-cyan: var(--neon-cyan);
 }
 
 @layer base {
@@ -121,48 +129,393 @@
   }
 }
 
+/* ============================================
+   CAROUSEL
+   ============================================ */
 @keyframes carousel {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 .carousel-container {
   animation: carousel 30s linear infinite;
 }
-
 .carousel-container:hover {
   animation-play-state: paused;
 }
 
+/* ============================================
+   SLIDE UP (scroll reveal)
+   ============================================ */
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
 .animate-in {
   animation: slideUp 0.7s ease-out forwards;
 }
 
+/* ============================================
+   BOUNCE
+   ============================================ */
 @keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
-
 .animate-bounce {
   animation: bounce 2s infinite;
+}
+
+/* ============================================
+   AURORA BOREAL — Hero background
+   ============================================ */
+@keyframes aurora {
+  0%, 100% {
+    background-position: 0% 50%;
+    opacity: 0.3;
+  }
+  25% {
+    background-position: 50% 0%;
+    opacity: 0.5;
+  }
+  50% {
+    background-position: 100% 50%;
+    opacity: 0.4;
+  }
+  75% {
+    background-position: 50% 100%;
+    opacity: 0.6;
+  }
+}
+.aurora-bg {
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.15) 0%,
+    rgba(59, 130, 246, 0.1) 25%,
+    rgba(16, 185, 129, 0.12) 50%,
+    rgba(99, 102, 241, 0.1) 75%,
+    rgba(6, 182, 212, 0.15) 100%
+  );
+  background-size: 400% 400%;
+  animation: aurora 15s ease-in-out infinite;
+}
+
+/* ============================================
+   SHIMMER — Text gradient animation
+   ============================================ */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    #06b6d4 0%,
+    #3b82f6 25%,
+    #10b981 50%,
+    #6366f1 75%,
+    #06b6d4 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+/* ============================================
+   GLOW PULSE — Neon border pulse
+   ============================================ */
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(6, 182, 212, 0.3), 0 0 20px rgba(6, 182, 212, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.5), 0 0 40px rgba(6, 182, 212, 0.2);
+  }
+}
+.glow-pulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+/* ============================================
+   ORBITAL GLOW — Rotating border for highlighted plan
+   ============================================ */
+@keyframes orbital {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.orbital-border {
+  position: relative;
+  overflow: hidden;
+}
+.orbital-border::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    #06b6d4 10%,
+    #3b82f6 20%,
+    transparent 30%,
+    transparent 70%,
+    #10b981 80%,
+    #6366f1 90%,
+    transparent 100%
+  );
+  animation: orbital 4s linear infinite;
+  z-index: -1;
+}
+.orbital-border::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: oklch(0.06 0.02 250);
+  border-radius: inherit;
+  z-index: -1;
+}
+
+/* ============================================
+   RADAR PULSE — Coverage map
+   ============================================ */
+@keyframes radarPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.2);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+.radar-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 50%;
+  animation: radarPulse 3s ease-out infinite;
+}
+
+/* ============================================
+   MESH GRADIENT — CTA animated background
+   ============================================ */
+@keyframes meshMove {
+  0%, 100% { background-position: 0% 50%; }
+  25% { background-position: 100% 0%; }
+  50% { background-position: 100% 100%; }
+  75% { background-position: 0% 100%; }
+}
+.mesh-gradient {
+  background: linear-gradient(
+    -45deg,
+    #0f172a 0%,
+    #06b6d4 20%,
+    #3b82f6 40%,
+    #10b981 60%,
+    #6366f1 80%,
+    #0f172a 100%
+  );
+  background-size: 400% 400%;
+  animation: meshMove 12s ease infinite;
+}
+
+/* ============================================
+   FLOAT — Subtle floating animation
+   ============================================ */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ============================================
+   DOT GRID — Tech blueprint background
+   ============================================ */
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(6, 182, 212, 0.15) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* ============================================
+   GLASS CARD — Glassmorphism effect
+   ============================================ */
+.glass-card {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(6, 182, 212, 0.15);
+}
+
+/* ============================================
+   FIBER LINE — Animated connection line
+   ============================================ */
+@keyframes fiberFlow {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
+}
+.fiber-line {
+  stroke-dasharray: 8 12;
+  animation: fiberFlow 2s linear infinite;
+}
+
+/* ============================================
+   COUNTER GLOW — Stats number glow
+   ============================================ */
+.stat-glow {
+  text-shadow: 0 0 20px rgba(6, 182, 212, 0.5), 0 0 40px rgba(6, 182, 212, 0.2);
+}
+
+/* ============================================
+   PARTICLE FIELD — CSS particle background
+   ============================================ */
+@keyframes particleDrift {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+}
+
+/* ============================================
+   WAVE SEPARATOR — Rio divider
+   ============================================ */
+.wave-separator {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+.wave-separator svg {
+  display: block;
+  width: 100%;
+  height: 60px;
+}
+
+/* ============================================
+   TILT 3D — Card perspective
+   ============================================ */
+.tilt-card {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.3s ease;
+}
+.tilt-card:hover {
+  transform: rotateY(-5deg) rotateX(5deg) translateZ(10px);
+}
+
+/* ============================================
+   RIPPLE — Button ripple effect
+   ============================================ */
+@keyframes ripple {
+  0% { transform: scale(0); opacity: 0.6; }
+  100% { transform: scale(4); opacity: 0; }
+}
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+.ripple-effect::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  margin-top: -50px;
+  margin-left: -50px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 50%;
+  transform: scale(0);
+  opacity: 0;
+}
+.ripple-effect:hover::after {
+  animation: ripple 0.6s ease-out;
+}
+
+/* ============================================
+   WAVE PATTERN — Ondeline brand waves
+   ============================================ */
+@keyframes waveFlow {
+  0% { background-position-x: 0; }
+  100% { background-position-x: 200px; }
+}
+.wave-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20'%3E%3Cpath d='M0 10 Q25 0 50 10 Q75 20 100 10 Q125 0 150 10 Q175 20 200 10' fill='none' stroke='rgba(6,182,212,0.07)' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 200px 20px;
+  background-repeat: repeat;
+  animation: waveFlow 8s linear infinite;
+}
+
+/* ============================================
+   CITY MARKER GLOW
+   ============================================ */
+@keyframes markerGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(16, 185, 129, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.8), 0 0 40px rgba(16, 185, 129, 0.3); }
+}
+.marker-glow-green {
+  animation: markerGlow 2s ease-in-out infinite;
+}
+
+@keyframes markerGlowAmber {
+  0%, 100% { box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.8), 0 0 40px rgba(245, 158, 11, 0.3); }
+}
+.marker-glow-amber {
+  animation: markerGlowAmber 2s ease-in-out infinite;
+}
+
+/* ============================================
+   TEXT REVEAL — CTA entrance
+   ============================================ */
+@keyframes textReveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0 0% 0 0);
+    opacity: 1;
+  }
+}
+.text-reveal {
+  animation: textReveal 1s ease-out forwards;
+}
+
+/* ============================================
+   BADGE PULSE
+   ============================================ */
+@keyframes badgePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(6, 182, 212, 0);
+  }
+}
+.badge-pulse {
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+/* ============================================
+   ICON PULSE LIGHT
+   ============================================ */
+@keyframes iconPulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(6, 182, 212, 0.6), 0 0 50px rgba(6, 182, 212, 0.2);
+  }
+}
+.icon-pulse {
+  animation: iconPulse 3s ease-in-out infinite;
 }

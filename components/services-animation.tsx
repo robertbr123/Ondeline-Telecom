@@ -8,27 +8,31 @@ export function ServicesAnimation() {
   const services = [
     {
       name: "SaaS",
-      description: "Soluções em nuvem para sua empresa",
+      description: "Soluções em nuvem para sua empresa com alta disponibilidade e segurança",
       icon: Cloud,
-      color: "from-blue-500 to-blue-600",
+      gradient: "from-cyan-500 to-blue-600",
+      glowColor: "rgba(6, 182, 212, 0.4)",
     },
     {
       name: "Hospedagem",
-      description: "Hospedagem confiável e segura",
+      description: "Hospedagem confiável e segura com servidores de última geração",
       icon: Database,
-      color: "from-cyan-500 to-cyan-600",
+      gradient: "from-blue-500 to-indigo-600",
+      glowColor: "rgba(59, 130, 246, 0.4)",
     },
     {
       name: "Datacenter",
-      description: "Infraestrutura de dados robusta",
+      description: "Infraestrutura de dados robusta com redundância total",
       icon: Building2,
-      color: "from-purple-500 to-purple-600",
+      gradient: "from-purple-500 to-violet-600",
+      glowColor: "rgba(139, 92, 246, 0.4)",
     },
     {
       name: "Soluções para Governo",
-      description: "Sistemas especializados para órgãos públicos",
+      description: "Sistemas especializados para órgãos públicos com conformidade total",
       icon: Users,
-      color: "from-emerald-500 to-emerald-600",
+      gradient: "from-emerald-500 to-teal-600",
+      glowColor: "rgba(16, 185, 129, 0.4)",
     },
   ]
 
@@ -40,30 +44,77 @@ export function ServicesAnimation() {
   }, [])
 
   return (
-    <section className="w-full py-20 px-4 bg-gradient-to-b from-background to-card">
-      <div className="max-w-6xl mx-auto">
+    <section className="w-full py-24 px-4 bg-slate-950 dot-grid relative overflow-hidden">
+      {/* Subtle background glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-balance">Nossos Outros Serviços</h2>
-          <p className="text-lg text-muted-foreground">Soluções completas para sua empresa</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 text-balance">
+            Nossos Outros Serviços
+          </h2>
+          <p className="text-lg text-slate-400">Soluções completas para sua empresa</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service, idx) => {
             const Icon = service.icon
+            const isActive = activeService === idx
             return (
               <div
                 key={idx}
-                className={`relative p-6 rounded-xl transition-all duration-500 cursor-pointer ${
-                  activeService === idx
-                    ? `bg-gradient-to-br ${service.color} shadow-2xl scale-105`
-                    : "bg-card border border-border scale-100 hover:border-primary/50"
-                }`}
+                className="tilt-card cursor-pointer group"
                 onClick={() => setActiveService(idx)}
               >
-                <div className={`text-center ${activeService === idx ? "text-white" : "text-foreground"}`}>
-                  <Icon size={32} className={`mx-auto mb-3 ${activeService === idx ? "text-white" : "text-primary"}`} />
-                  <div className="text-xl font-bold mb-2">{service.name}</div>
-                  <div className="text-sm">{service.description}</div>
+                <div
+                  className={`relative p-8 rounded-2xl transition-all duration-500 h-full ${
+                    isActive
+                      ? "glass-card border-cyan-500/40 scale-105"
+                      : "glass-card hover:border-slate-600"
+                  }`}
+                  style={
+                    isActive
+                      ? { boxShadow: `0 0 30px ${service.glowColor}, 0 0 60px ${service.glowColor}` }
+                      : undefined
+                  }
+                >
+                  {/* Icon with pulse */}
+                  <div
+                    className={`w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-5 transition-all duration-500 ${
+                      isActive
+                        ? `bg-gradient-to-br ${service.gradient} icon-pulse`
+                        : "bg-slate-800 group-hover:bg-slate-700"
+                    }`}
+                  >
+                    <Icon
+                      size={28}
+                      className={`transition-colors duration-300 ${
+                        isActive ? "text-white" : "text-slate-400 group-hover:text-cyan-400"
+                      }`}
+                    />
+                  </div>
+
+                  <div className="text-center">
+                    <div
+                      className={`text-xl font-bold mb-2 transition-colors duration-300 ${
+                        isActive ? "text-white" : "text-slate-300"
+                      }`}
+                    >
+                      {service.name}
+                    </div>
+                    <div
+                      className={`text-sm leading-relaxed transition-colors duration-300 ${
+                        isActive ? "text-slate-300" : "text-slate-500"
+                      }`}
+                    >
+                      {service.description}
+                    </div>
+                  </div>
+
+                  {/* Active indicator */}
+                  {isActive && (
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full" />
+                  )}
                 </div>
               </div>
             )
