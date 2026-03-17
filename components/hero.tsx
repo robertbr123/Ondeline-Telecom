@@ -9,7 +9,8 @@ import Image from "next/image"
 const CITY_IMAGES = [
   { src: "/carauri.jpg", alt: "Carauari - Amazonas" },
   { src: "/itamarati.jpg", alt: "Itamarati - Amazonas" },
-  { src: "/amazon-expansion-map.jpg", alt: "Expansão Amazônia" },
+  { src: "/eirunepe.jpg", alt: "Eirunepé - Amazonas" },
+  { src: "/ipixuna-2.jpg", alt: "Ipixuna - Amazonas" },
 ]
 
 function CitySlideshow({ current }: { current: number }) {
