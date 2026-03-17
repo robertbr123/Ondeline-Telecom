@@ -7,7 +7,12 @@
       "Bash(npx next:*)",
       "Bash(node node_modules/.bin/next build)",
       "Bash(npm run:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(curl -s http://localhost:3000/api/plans)",
+      "Bash(curl -s http://localhost:5008/api/plans)",
+      "Bash(curl -s http://localhost:5008/api/features)",
+      "Bash(curl -s http://localhost:5008/api/faq)",
+      "Bash(curl -s http://localhost:5008/api/clients)"
     ]
   }
 }

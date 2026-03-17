@@ -17,8 +17,10 @@ const PUBLIC_ROUTES = [
   '/api/blog',
   '/api/features',
   '/api/referrals',
+  '/api/clients',
   '/api/coupons/validate',
   '/api/campaigns/',
+  '/api/health',
 ] as const
 
 // Rotas públicas do site
