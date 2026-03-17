@@ -18,13 +18,13 @@ export function Features() {
   const { data: features, loading } = useFeatures()
 
   const renderSkeleton = () => (
-    <section className="w-full py-24 px-4 bg-slate-900 relative overflow-hidden">
+    <section className="w-full py-24 px-4 dark:bg-slate-900 bg-white relative overflow-hidden">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 text-balance">
+          <h2 className="text-4xl md:text-5xl font-bold dark:text-white text-slate-900 mb-4 text-balance">
             Por que Escolher a Ondeline?
           </h2>
-          <p className="text-lg text-slate-400">
+          <p className="text-lg dark:text-slate-400 text-slate-600">
             Somos o provedor de internet mais confiável da Amazônia
           </p>
         </div>
@@ -41,7 +41,7 @@ export function Features() {
   if (!features || features.length === 0) return null
 
   return (
-    <section className="w-full py-24 px-4 bg-slate-900 relative overflow-hidden">
+    <section className="w-full py-24 px-4 dark:bg-slate-900 bg-white relative overflow-hidden">
       {/* Background mesh gradient */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl" />
@@ -50,10 +50,10 @@ export function Features() {
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 text-balance">
+          <h2 className="text-4xl md:text-5xl font-bold dark:text-white text-slate-900 mb-4 text-balance">
             Por que Escolher a Ondeline?
           </h2>
-          <p className="text-lg text-slate-400">
+          <p className="text-lg dark:text-slate-400 text-slate-600">
             Somos o provedor de internet mais confiável da Amazônia
           </p>
         </div>
@@ -95,10 +95,10 @@ export function Features() {
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                  <h3 className="text-xl font-bold dark:text-white text-slate-900 mb-2 group-hover:text-cyan-300 transition-colors">
                     {feature.title}
                   </h3>
-                  <p className="text-slate-400 text-sm leading-relaxed">
+                  <p className="dark:text-slate-400 text-slate-600 text-sm leading-relaxed">
                     {feature.description}
                   </p>
                 </div>

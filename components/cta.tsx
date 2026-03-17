@@ -24,12 +24,12 @@ export function CTA() {
             key={i}
             className="absolute rounded-full"
             style={{
-              width: `${2 + Math.random() * 3}px`,
-              height: `${2 + Math.random() * 3}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              width: `${2 + ((i * 7 + 3) % 30) / 10}px`,
+              height: `${2 + ((i * 11 + 5) % 30) / 10}px`,
+              left: `${((i * 37 + 13) % 100)}%`,
+              top: `${((i * 53 + 7) % 100)}%`,
               background: "rgba(255, 255, 255, 0.2)",
-              animation: `float ${4 + Math.random() * 4}s ease-in-out ${Math.random() * 3}s infinite`,
+              animation: `float ${4 + ((i * 17) % 40) / 10}s ease-in-out ${((i * 23) % 30) / 10}s infinite`,
             }}
           />
         ))}

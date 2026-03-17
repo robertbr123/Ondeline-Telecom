@@ -36,25 +36,43 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
   }, [target])
 
   return (
-    <div ref={ref} className="text-3xl md:text-4xl font-bold stat-glow text-cyan-400">
+    <div ref={ref} className="text-3xl md:text-4xl font-bold stat-glow dark:text-cyan-400 text-cyan-600">
       {count === 0 && !started.current ? "0" : count}
       {suffix}
     </div>
   )
 }
 
+// Pre-computed deterministic values to avoid hydration mismatch
+const PARTICLE_DATA = Array.from({ length: 30 }, (_, i) => ({
+  width: ((i * 7 + 3) % 30) / 10 + 1,
+  height: ((i * 11 + 5) % 30) / 10 + 1,
+  left: ((i * 37 + 13) % 100),
+  top: ((i * 53 + 7) % 100),
+  duration: 3 + ((i * 17) % 40) / 10,
+  delay: ((i * 23) % 30) / 10,
+  opacity: 0.4 + ((i * 19) % 40) / 100,
+}))
+
+const LINE_DATA = Array.from({ length: 12 }, (_, i) => ({
+  x1: 10 + ((i * 31 + 17) % 80),
+  y1: 10 + ((i * 47 + 23) % 80),
+  x2: 10 + ((i * 59 + 11) % 80),
+  y2: 10 + ((i * 41 + 29) % 80),
+}))
+
 function FiberParticles() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {Array.from({ length: 30 }).map((_, i) => (
+      {PARTICLE_DATA.map((p, i) => (
         <div
           key={i}
           className="absolute rounded-full"
           style={{
-            width: `${Math.random() * 3 + 1}px`,
-            height: `${Math.random() * 3 + 1}px`,
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            width: `${p.width}px`,
+            height: `${p.height}px`,
+            left: `${p.left}%`,
+            top: `${p.top}%`,
             background: i % 3 === 0
               ? "rgba(6, 182, 212, 0.6)"
               : i % 3 === 1
@@ -65,21 +83,20 @@ function FiberParticles() {
               : i % 3 === 1
               ? "0 0 6px rgba(59, 130, 246, 0.3)"
               : "0 0 6px rgba(16, 185, 129, 0.3)",
-            animation: `float ${3 + Math.random() * 4}s ease-in-out ${Math.random() * 3}s infinite`,
-            opacity: 0.4 + Math.random() * 0.4,
+            animation: `float ${p.duration}s ease-in-out ${p.delay}s infinite`,
+            opacity: p.opacity,
           }}
         />
       ))}
 
-      {/* Fiber connection lines */}
       <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-        {Array.from({ length: 12 }).map((_, i) => (
+        {LINE_DATA.map((l, i) => (
           <line
             key={i}
-            x1={`${10 + Math.random() * 80}%`}
-            y1={`${10 + Math.random() * 80}%`}
-            x2={`${10 + Math.random() * 80}%`}
-            y2={`${10 + Math.random() * 80}%`}
+            x1={`${l.x1}%`}
+            y1={`${l.y1}%`}
+            x2={`${l.x2}%`}
+            y2={`${l.y2}%`}
             stroke={i % 2 === 0 ? "rgba(6, 182, 212, 0.12)" : "rgba(16, 185, 129, 0.1)"}
             strokeWidth="1"
             className="fiber-line"
@@ -112,7 +129,7 @@ export function Hero() {
     <section
       ref={sectionRef}
       id="inicio"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-950"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden dark:bg-slate-950 bg-gradient-to-br from-cyan-50 to-blue-100"
     >
       {/* Aurora Boreal Background */}
       <div className="absolute inset-0 aurora-bg" />
@@ -126,7 +143,7 @@ export function Hero() {
       />
 
       {/* Dark overlay for depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-transparent to-slate-950" />
+      <div className="absolute inset-0 dark:bg-gradient-to-b dark:from-slate-950/50 dark:via-transparent dark:to-slate-950 bg-gradient-to-b from-white/30 via-transparent to-white/50" />
 
       {/* Fiber Particles */}
       <FiberParticles />
@@ -136,7 +153,7 @@ export function Hero() {
         {/* Glassmorphism Badge */}
         <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-card glow-pulse animate-float">
           <Wifi size={16} className="text-cyan-400" />
-          <span className="text-cyan-300 font-medium text-sm">
+          <span className="dark:text-cyan-300 text-cyan-600 font-medium text-sm">
             Fibra Optica no Coração da Floresta
           </span>
         </div>
@@ -144,12 +161,12 @@ export function Hero() {
         {/* Main Heading */}
         <div className="space-y-4">
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
-            <span className="text-white">A Amazônia</span>
+            <span className="dark:text-white text-slate-900">A Amazônia</span>
             <br />
             <span className="text-shimmer">Conectada</span>
           </h1>
 
-          <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl dark:text-slate-400 text-slate-600 max-w-3xl mx-auto leading-relaxed">
             A Ondeline leva internet de alta velocidade por fibra optica para
             Ipixuna e Eirunepe. Em breve: Itamarati e Carauari.
             O suporte mais rápido da região!
@@ -169,7 +186,7 @@ export function Hero() {
           <Button
             asChild
             variant="outline"
-            className="h-14 px-10 text-lg border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10 bg-transparent transition-all hover:scale-105 active:scale-95"
+            className="h-14 px-10 text-lg dark:border-cyan-500/30 border-cyan-500/50 dark:text-cyan-300 text-cyan-600 dark:hover:bg-cyan-500/10 hover:bg-cyan-500/10 bg-transparent transition-all hover:scale-105 active:scale-95"
           >
             <a href="#suporte">Saiba Mais</a>
           </Button>
@@ -205,7 +222,7 @@ export function Hero() {
                   target={stat.value}
                   suffix={stat.suffix}
                 />
-                <div className="text-sm text-slate-400 mt-2">{stat.label}</div>
+                <div className="text-sm dark:text-slate-400 text-slate-600 mt-2">{stat.label}</div>
               </div>
             )
           })}
@@ -213,7 +230,7 @@ export function Hero() {
       </div>
 
       {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-950 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-24 dark:bg-gradient-to-t dark:from-slate-950 dark:to-transparent bg-gradient-to-t from-white to-transparent" />
     </section>
   )
 }

@@ -25,7 +25,7 @@ export function Header() {
     <header
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/50 shadow-lg shadow-black/10"
+          ? "dark:bg-slate-950/90 bg-white/90 backdrop-blur-xl border-b dark:border-slate-800/50 border-slate-200/50 shadow-lg dark:shadow-black/10 shadow-black/5"
           : "bg-transparent"
       }`}
     >
@@ -36,22 +36,22 @@ export function Header() {
         </a>
 
         <nav className="hidden md:flex items-center gap-6">
-          <a href="/" className="text-slate-300 hover:text-cyan-400 transition text-sm font-medium">
+          <a href="/" className="dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition text-sm font-medium">
             Inicio
           </a>
-          <a href="#planos" className="text-slate-300 hover:text-cyan-400 transition text-sm font-medium">
+          <a href="#planos" className="dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition text-sm font-medium">
             Planos
           </a>
-          <a href="/empresas" className="text-slate-300 hover:text-cyan-400 transition text-sm font-medium">
+          <a href="/empresas" className="dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition text-sm font-medium">
             Empresas
           </a>
-          <a href="#suporte" className="text-slate-300 hover:text-cyan-400 transition text-sm font-medium">
+          <a href="#suporte" className="dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition text-sm font-medium">
             Suporte
           </a>
-          <a href="/blog" className="text-slate-300 hover:text-cyan-400 transition text-sm font-medium">
+          <a href="/blog" className="dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition text-sm font-medium">
             Blog
           </a>
-          <a href="/coverage" className="text-slate-300 hover:text-cyan-400 transition text-sm font-medium">
+          <a href="/coverage" className="dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition text-sm font-medium">
             Cobertura
           </a>
 
@@ -61,7 +61,7 @@ export function Header() {
             href="https://ondeline.sgp.tsmx.com.br/accounts/central/login"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-slate-300 hover:text-cyan-400 transition text-sm font-medium"
+            className="flex items-center gap-2 dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition text-sm font-medium"
           >
             <div className="relative">
               <User size={18} />
@@ -87,7 +87,7 @@ export function Header() {
         <div className="md:hidden flex items-center gap-3">
           <ThemeToggle />
           <button
-            className="md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-md text-slate-300"
+            className="md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-md dark:text-slate-300 text-slate-600"
             onClick={() => setIsOpen(!isOpen)}
             aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
             aria-expanded={isOpen}
@@ -98,24 +98,24 @@ export function Header() {
       </div>
 
       {isOpen && (
-        <nav className="md:hidden border-t border-slate-800 bg-slate-950/95 backdrop-blur-xl">
+        <nav className="md:hidden border-t dark:border-slate-800 border-slate-200 dark:bg-slate-950/95 bg-white/95 backdrop-blur-xl">
           <div className="px-4 py-4 space-y-4">
-            <a href="/" onClick={() => setIsOpen(false)} className="block text-slate-300 hover:text-cyan-400 transition">
+            <a href="/" onClick={() => setIsOpen(false)} className="block dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition">
               Inicio
             </a>
-            <a href="#planos" onClick={() => setIsOpen(false)} className="block text-slate-300 hover:text-cyan-400 transition">
+            <a href="#planos" onClick={() => setIsOpen(false)} className="block dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition">
               Planos
             </a>
-            <a href="/empresas" onClick={() => setIsOpen(false)} className="block text-slate-300 hover:text-cyan-400 transition">
+            <a href="/empresas" onClick={() => setIsOpen(false)} className="block dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition">
               Empresas
             </a>
-            <a href="#suporte" onClick={() => setIsOpen(false)} className="block text-slate-300 hover:text-cyan-400 transition">
+            <a href="#suporte" onClick={() => setIsOpen(false)} className="block dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition">
               Suporte
             </a>
-            <a href="/blog" onClick={() => setIsOpen(false)} className="block text-slate-300 hover:text-cyan-400 transition">
+            <a href="/blog" onClick={() => setIsOpen(false)} className="block dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition">
               Blog
             </a>
-            <a href="/coverage" onClick={() => setIsOpen(false)} className="block text-slate-300 hover:text-cyan-400 transition">
+            <a href="/coverage" onClick={() => setIsOpen(false)} className="block dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition">
               Cobertura
             </a>
             <a

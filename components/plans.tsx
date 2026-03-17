@@ -28,7 +28,7 @@ export function Plans() {
     <>
       <PreregistrationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
-      <section id="planos" className="py-24 px-4 bg-slate-950 relative overflow-hidden wave-pattern">
+      <section id="planos" className="py-24 px-4 dark:bg-slate-950 bg-gray-50 relative overflow-hidden wave-pattern">
         {/* Background effects */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/3 left-0 w-72 h-72 bg-cyan-500/5 rounded-full blur-3xl" />
@@ -37,10 +37,10 @@ export function Plans() {
 
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16 space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold text-white text-balance">
+            <h2 className="text-4xl md:text-5xl font-bold dark:text-white text-slate-900 text-balance">
               Planos que se Encaixam no seu Orçamento
             </h2>
-            <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+            <p className="text-lg dark:text-slate-400 text-slate-600 max-w-2xl mx-auto">
               Escolha o plano perfeito para suas necessidades
             </p>
           </div>
@@ -53,7 +53,7 @@ export function Plans() {
             </div>
           ) : activePlans.length === 0 ? (
             <div className="flex justify-center items-center py-12">
-              <div className="text-slate-500">Nenhum plano disponível</div>
+              <div className="dark:text-slate-500 text-slate-400">Nenhum plano disponível</div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -70,7 +70,7 @@ export function Plans() {
                   <div
                     className={`relative rounded-2xl p-7 h-full ${
                       plan.highlighted
-                        ? "bg-slate-950/95"
+                        ? "dark:bg-slate-950/95 bg-white"
                         : ""
                     }`}
                   >
@@ -83,8 +83,8 @@ export function Plans() {
                     )}
 
                     <div className="mb-6">
-                      <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
-                      <p className="text-slate-400 text-sm mb-4">{plan.description}</p>
+                      <h3 className="text-2xl font-bold dark:text-white text-slate-900 mb-2">{plan.name}</h3>
+                      <p className="dark:text-slate-400 text-slate-600 text-sm mb-4">{plan.description}</p>
                       <div className="flex items-baseline gap-2">
                         <span
                           className={`text-4xl font-bold ${
@@ -93,7 +93,7 @@ export function Plans() {
                         >
                           {plan.price}
                         </span>
-                        <span className="text-slate-500">/mês</span>
+                        <span className="dark:text-slate-500 text-slate-400">/mês</span>
                       </div>
                       <p className="text-sm text-emerald-400 font-semibold mt-2 flex items-center gap-1">
                         <Zap size={16} /> {plan.speed}
@@ -106,7 +106,7 @@ export function Plans() {
                           <div className="mt-0.5 w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
                             <Check size={12} className="text-emerald-400" />
                           </div>
-                          <span className="text-sm text-slate-300">{feature}</span>
+                          <span className="text-sm dark:text-slate-300 text-slate-600">{feature}</span>
                         </li>
                       ))}
                     </ul>
@@ -116,7 +116,7 @@ export function Plans() {
                       className={`w-full ripple-effect transition-all duration-300 ${
                         plan.highlighted
                           ? "bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/25 border-0"
-                          : "bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 hover:border-cyan-500/50"
+                          : "dark:bg-slate-800 dark:hover:bg-slate-700 bg-slate-100 hover:bg-slate-200 text-white dark:border-slate-700 border-slate-300 hover:border-cyan-500/50 border"
                       }`}
                     >
                       Contratar

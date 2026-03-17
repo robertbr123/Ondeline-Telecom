@@ -13,40 +13,44 @@ import { FloatCTA } from "@/components/float-cta"
 import { Footer } from "@/components/footer"
 import { AnalyticsScripts, GTMNoScript } from "@/components/analytics-scripts"
 
-function WaveDivider({ from, to, flip }: { from: string; to: string; flip?: boolean }) {
+function WaveDivider({ fromDark, toDark, fromLight, toLight, flip }: { fromDark: string; toDark: string; fromLight: string; toLight: string; flip?: boolean }) {
   return (
-    <div className={`wave-separator ${flip ? "rotate-180" : ""}`} style={{ background: to }}>
-      <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M0,0 C240,60 480,60 720,30 C960,0 1200,0 1440,30 L1440,0 L0,0 Z"
-          fill={from}
-        />
-      </svg>
-    </div>
+    <>
+      <div className={`wave-separator hidden dark:block ${flip ? "rotate-180" : ""}`} style={{ background: toDark }}>
+        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,0 C240,60 480,60 720,30 C960,0 1200,0 1440,30 L1440,0 L0,0 Z" fill={fromDark} />
+        </svg>
+      </div>
+      <div className={`wave-separator dark:hidden ${flip ? "rotate-180" : ""}`} style={{ background: toLight }}>
+        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,0 C240,60 480,60 720,30 C960,0 1200,0 1440,30 L1440,0 L0,0 Z" fill={fromLight} />
+        </svg>
+      </div>
+    </>
   )
 }
 
 export default function Home() {
   return (
-    <main className="w-full bg-slate-950">
+    <main className="w-full dark:bg-slate-950 bg-white">
       <AnalyticsScripts />
       <GTMNoScript />
       <Header />
       <Hero />
       <LeadCaptureModal />
-      <WaveDivider from="#020617" to="#0f172a" />
+      <WaveDivider fromDark="#020617" toDark="#0f172a" fromLight="#f9fafb" toLight="#ffffff" />
       <ServicesAnimation />
-      <WaveDivider from="#020617" to="#0f172a" />
+      <WaveDivider fromDark="#020617" toDark="#0f172a" fromLight="#f9fafb" toLight="#ffffff" />
       <Features />
-      <WaveDivider from="#0f172a" to="#020617" />
+      <WaveDivider fromDark="#0f172a" toDark="#020617" fromLight="#ffffff" toLight="#f9fafb" />
       <Plans />
-      <WaveDivider from="#020617" to="#0f172a" />
+      <WaveDivider fromDark="#020617" toDark="#0f172a" fromLight="#f9fafb" toLight="#ffffff" />
       <Support />
-      <WaveDivider from="#0f172a" to="#020617" />
+      <WaveDivider fromDark="#0f172a" toDark="#020617" fromLight="#ffffff" toLight="#f9fafb" />
       <Clients />
-      <WaveDivider from="#020617" to="#020617" />
+      <WaveDivider fromDark="#020617" toDark="#020617" fromLight="#f9fafb" toLight="#f9fafb" />
       <CoverageMap />
-      <WaveDivider from="#020617" to="#0f172a" />
+      <WaveDivider fromDark="#020617" toDark="#0f172a" fromLight="#f9fafb" toLight="#ffffff" />
       <FAQ />
       <CTA />
       <FloatCTA />

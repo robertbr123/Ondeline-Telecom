@@ -4,7 +4,10 @@
       "Bash(wc:*)",
       "Bash(python3:*)",
       "Bash(node -e \"require\\(''fs''\\).writeFileSync\\(''/tmp/write_admin.js'', ''placeholder''\\)\")",
-      "Bash(npx next:*)"
+      "Bash(npx next:*)",
+      "Bash(node node_modules/.bin/next build)",
+      "Bash(npm run:*)",
+      "Bash(npm install:*)"
     ]
   }
 }

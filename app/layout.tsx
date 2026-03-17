@@ -50,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning style={{ scrollBehavior: 'smooth' }}>
+    <html lang="pt-BR" className="dark" suppressHydrationWarning style={{ scrollBehavior: 'smooth' }}>
       <head>
         <script
           type="application/ld+json"

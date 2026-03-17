@@ -28,7 +28,7 @@ export function Support() {
   ]
 
   return (
-    <section id="suporte" className="py-24 px-4 bg-slate-900 relative overflow-hidden">
+    <section id="suporte" className="py-24 px-4 dark:bg-slate-900 bg-white relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
@@ -37,10 +37,10 @@ export function Support() {
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-16 space-y-4">
-          <h2 className="text-4xl md:text-5xl font-bold text-white">
+          <h2 className="text-4xl md:text-5xl font-bold dark:text-white text-slate-900">
             O Melhor Suporte da Região
           </h2>
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+          <p className="text-xl dark:text-slate-400 text-slate-600 max-w-2xl mx-auto">
             Você merece um suporte rápido, eficiente e que realmente funcione
           </p>
         </div>
@@ -67,10 +67,10 @@ export function Support() {
                   </div>
                 </div>
 
-                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">
+                <h3 className="text-xl font-bold dark:text-white text-slate-900 mb-3 group-hover:text-cyan-300 transition-colors">
                   {feature.title}
                 </h3>
-                <p className="text-slate-400 leading-relaxed">{feature.description}</p>
+                <p className="dark:text-slate-400 text-slate-600 leading-relaxed">{feature.description}</p>
               </div>
             )
           })}

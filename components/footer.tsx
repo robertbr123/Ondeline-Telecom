@@ -9,7 +9,7 @@ export function Footer() {
   const { config } = useSiteConfig()
 
   return (
-    <footer className="bg-slate-950 border-t border-slate-800/50 py-16 px-4 relative">
+    <footer className="dark:bg-slate-950 bg-gray-50 border-t dark:border-slate-800/50 border-slate-200 py-16 px-4 relative">
       {/* Subtle top glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
 
@@ -20,14 +20,14 @@ export function Footer() {
               <LogoOndeline size={36} />
               <h3 className="font-bold text-lg text-cyan-400">Ondeline</h3>
             </a>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm dark:text-slate-400 text-slate-600">
               Conectando o Amazonas com internet rápida e confiável.
             </p>
           </div>
 
           <div>
-            <h4 className="font-bold mb-4 text-white text-sm uppercase tracking-wider">Sobre</h4>
-            <ul className="space-y-2 text-sm text-slate-400">
+            <h4 className="font-bold mb-4 dark:text-white text-slate-900 text-sm uppercase tracking-wider">Sobre</h4>
+            <ul className="space-y-2 text-sm dark:text-slate-400 text-slate-600">
               <li>
                 <a href="/#sobre" className="hover:text-cyan-400 transition">Quem Somos</a>
               </li>
@@ -47,8 +47,8 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold mb-4 text-white text-sm uppercase tracking-wider">Suporte</h4>
-            <ul className="space-y-2 text-sm text-slate-400">
+            <h4 className="font-bold mb-4 dark:text-white text-slate-900 text-sm uppercase tracking-wider">Suporte</h4>
+            <ul className="space-y-2 text-sm dark:text-slate-400 text-slate-600">
               <li>
                 <a href="#faq" className="hover:text-cyan-400 transition">Dúvidas</a>
               </li>
@@ -65,8 +65,8 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold mb-4 text-white text-sm uppercase tracking-wider">Contato</h4>
-            <ul className="space-y-3 text-sm text-slate-400">
+            <h4 className="font-bold mb-4 dark:text-white text-slate-900 text-sm uppercase tracking-wider">Contato</h4>
+            <ul className="space-y-3 text-sm dark:text-slate-400 text-slate-600">
               <li className="flex items-center gap-2">
                 <Phone size={16} className="text-cyan-500" />{" "}
                 {config.contactPhone || "(92) 98460-7721"}
@@ -87,8 +87,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-slate-800/50 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
+        <div className="border-t dark:border-slate-800/50 border-slate-200 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center text-sm dark:text-slate-500 text-slate-400">
             <p>&copy; {new Date().getFullYear()} Ondeline. Todos os direitos reservados.</p>
             <div className="flex gap-6 mt-4 md:mt-0">
               <a href="/privacidade" className="hover:text-cyan-400 transition">Privacidade</a>

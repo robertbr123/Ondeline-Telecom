@@ -5,18 +5,13 @@ const nextConfig = {
   },
   transpilePackages: ['framer-motion'],
   images: {
+    unoptimized: true,
     remotePatterns: [
       { protocol: 'https', hostname: '**' },
       { protocol: 'http', hostname: 'localhost' },
     ],
   },
   output: 'standalone',
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  experimental: {
-    serverMinification: true,
-  },
   async headers() {
     return [
       {

@@ -44,16 +44,16 @@ export function ServicesAnimation() {
   }, [])
 
   return (
-    <section className="w-full py-24 px-4 bg-slate-950 dot-grid relative overflow-hidden">
+    <section className="w-full py-24 px-4 dark:bg-slate-950 bg-gray-50 dot-grid relative overflow-hidden">
       {/* Subtle background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 text-balance">
+          <h2 className="text-4xl md:text-5xl font-bold dark:text-white text-slate-900 mb-4 text-balance">
             Nossos Outros Serviços
           </h2>
-          <p className="text-lg text-slate-400">Soluções completas para sua empresa</p>
+          <p className="text-lg dark:text-slate-400 text-slate-600">Soluções completas para sua empresa</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -83,7 +83,7 @@ export function ServicesAnimation() {
                     className={`w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-5 transition-all duration-500 ${
                       isActive
                         ? `bg-gradient-to-br ${service.gradient} icon-pulse`
-                        : "bg-slate-800 group-hover:bg-slate-700"
+                        : "dark:bg-slate-800 bg-slate-200 dark:group-hover:bg-slate-700 group-hover:bg-slate-300"
                     }`}
                   >
                     <Icon
@@ -97,14 +97,14 @@ export function ServicesAnimation() {
                   <div className="text-center">
                     <div
                       className={`text-xl font-bold mb-2 transition-colors duration-300 ${
-                        isActive ? "text-white" : "text-slate-300"
+                        isActive ? "dark:text-white text-slate-900" : "dark:text-slate-300 text-slate-700"
                       }`}
                     >
                       {service.name}
                     </div>
                     <div
                       className={`text-sm leading-relaxed transition-colors duration-300 ${
-                        isActive ? "text-slate-300" : "text-slate-500"
+                        isActive ? "dark:text-slate-300 text-slate-600" : "dark:text-slate-500 text-slate-500"
                       }`}
                     >
                       {service.description}

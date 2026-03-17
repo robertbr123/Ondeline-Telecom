@@ -50,7 +50,7 @@ export function CoverageMap() {
     "https://www.openstreetmap.org/export/embed.html?bbox=-73.5%2C-8.5%2C-65.5%2C-3.5&layer=mapnik"
 
   return (
-    <section className="w-full py-24 px-4 bg-slate-950 relative overflow-hidden">
+    <section className="w-full py-24 px-4 dark:bg-slate-950 bg-gray-50 relative overflow-hidden">
       {/* Radar background effect */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
         <div className="relative w-[800px] h-[800px]">
@@ -62,10 +62,10 @@ export function CoverageMap() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 text-balance">
+          <h2 className="text-4xl md:text-5xl font-bold dark:text-white text-slate-900 mb-4 text-balance">
             Nossa Cobertura na Amazônia
           </h2>
-          <p className="text-lg text-slate-400">
+          <p className="text-lg dark:text-slate-400 text-slate-600">
             Estamos em crescimento constante para melhor atender você
           </p>
         </div>
@@ -84,7 +84,7 @@ export function CoverageMap() {
             />
 
             {/* Dark overlay */}
-            <div className="absolute inset-0 bg-slate-950/30 pointer-events-none" />
+            <div className="absolute inset-0 dark:bg-slate-950/30 bg-white/30 pointer-events-none" />
 
             {/* City markers */}
             <div className="absolute inset-0">
@@ -92,7 +92,7 @@ export function CoverageMap() {
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 glass-card px-4 py-3 rounded-lg z-50">
                   <div className="flex items-center gap-3">
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-cyan-400"></div>
-                    <span className="text-slate-300">Carregando cidades...</span>
+                    <span className="dark:text-slate-300 text-slate-600">Carregando cidades...</span>
                   </div>
                 </div>
               ) : (
@@ -145,7 +145,7 @@ export function CoverageMap() {
                                 <CheckCircle2 size={16} />
                                 Cobertura Ativa
                               </div>
-                              <p className="text-slate-300 text-sm">
+                              <p className="dark:text-slate-300 text-slate-600 text-sm">
                                 {area.description || "Internet de alta qualidade"}
                               </p>
                             </div>
@@ -181,7 +181,7 @@ export function CoverageMap() {
                                 <Clock size={16} />
                                 Em Breve
                               </div>
-                              <p className="text-slate-300 text-sm">
+                              <p className="dark:text-slate-300 text-slate-600 text-sm">
                                 {area.description || "Previsão 2026 • Faça seu pré-cadastro"}
                               </p>
                             </div>
@@ -196,17 +196,17 @@ export function CoverageMap() {
 
             {/* Legend */}
             <div className="absolute bottom-4 left-4 glass-card rounded-xl p-4 shadow-xl">
-              <h4 className="text-white font-bold text-sm mb-3">Legenda</h4>
+              <h4 className="dark:text-white text-slate-900 font-bold text-sm mb-3">Legenda</h4>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-emerald-500 rounded-full marker-glow-green" />
-                  <span className="text-slate-300 text-sm">
+                  <span className="dark:text-slate-300 text-slate-600 text-sm">
                     Cobertura Ativa ({activeAreas.length})
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-amber-500 rounded-full marker-glow-amber" />
-                  <span className="text-slate-300 text-sm">
+                  <span className="dark:text-slate-300 text-slate-600 text-sm">
                     Em Breve ({comingSoonAreas.length})
                   </span>
                 </div>
@@ -217,7 +217,7 @@ export function CoverageMap() {
             <div className="absolute top-4 right-4 glass-card rounded-xl px-4 py-2 shadow-xl">
               <div className="flex items-center gap-2">
                 <MapPin className="text-cyan-400" size={18} />
-                <span className="text-white font-medium">Amazonas, Brasil</span>
+                <span className="dark:text-white text-slate-900 font-medium">Amazonas, Brasil</span>
               </div>
             </div>
           </div>
@@ -251,7 +251,7 @@ export function CoverageMap() {
                     <Clock size={20} />
                   )}
                 </div>
-                <h3 className="text-lg font-bold text-white mb-1">{area.city}</h3>
+                <h3 className="text-lg font-bold dark:text-white text-slate-900 mb-1">{area.city}</h3>
                 <p
                   className={`text-xs font-medium ${
                     area.status === "active" ? "text-emerald-400" : "text-amber-400"
@@ -266,7 +266,7 @@ export function CoverageMap() {
 
         {!loading && areas.length === 0 && (
           <div className="mt-8 p-6 rounded-xl glass-card text-center">
-            <p className="text-slate-400">
+            <p className="dark:text-slate-400 text-slate-600">
               Nenhuma cidade cadastrada ainda. Adicione cidades no painel administrativo.
             </p>
           </div>
@@ -279,10 +279,10 @@ export function CoverageMap() {
               <MapPin className="text-cyan-400" size={24} />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white mb-2">
+              <h3 className="text-lg font-bold dark:text-white text-slate-900 mb-2">
                 Não encontrou sua cidade?
               </h3>
-              <p className="text-slate-400">
+              <p className="dark:text-slate-400 text-slate-600">
                 Estamos expandindo constantemente nossa cobertura pela região amazônica.
                 Deixe seu interesse registrado e entraremos em contato assim que chegarmos
                 em sua região.

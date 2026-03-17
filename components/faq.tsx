@@ -19,7 +19,7 @@ export function FAQ() {
   const { data: faqs, loading } = useFAQs()
 
   return (
-    <section className="w-full py-24 px-4 bg-slate-900 relative overflow-hidden">
+    <section className="w-full py-24 px-4 dark:bg-slate-900 bg-white relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 right-0 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl" />
@@ -28,10 +28,10 @@ export function FAQ() {
 
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 text-balance">
+          <h2 className="text-4xl md:text-5xl font-bold dark:text-white text-slate-900 mb-4 text-balance">
             Perguntas Frequentes
           </h2>
-          <p className="text-lg text-slate-400">Tire suas dúvidas sobre nossos serviços</p>
+          <p className="text-lg dark:text-slate-400 text-slate-600">Tire suas dúvidas sobre nossos serviços</p>
         </div>
 
         {loading ? (
@@ -42,7 +42,7 @@ export function FAQ() {
           </div>
         ) : !faqs || faqs.length === 0 ? (
           <div className="flex justify-center items-center py-12">
-            <div className="text-slate-500">Nenhuma pergunta disponível</div>
+            <div className="dark:text-slate-500 text-slate-400">Nenhuma pergunta disponível</div>
           </div>
         ) : (
           <div className="space-y-4">
@@ -61,7 +61,7 @@ export function FAQ() {
                     onClick={() => setOpenIdx(isOpen ? -1 : idx)}
                     className="w-full p-6 flex items-center justify-between hover:bg-white/5 transition-colors"
                   >
-                    <h3 className={`text-lg font-semibold text-left transition-colors ${isOpen ? "text-cyan-300" : "text-white"}`}>
+                    <h3 className={`text-lg font-semibold text-left transition-colors ${isOpen ? "text-cyan-300" : "dark:text-white text-slate-900"}`}>
                       {faq.question}
                     </h3>
                     <ChevronDown
@@ -75,7 +75,7 @@ export function FAQ() {
                       isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
                     }`}
                   >
-                    <div className="px-6 pb-6 pt-2 border-t border-slate-700/50 text-slate-300 leading-relaxed">
+                    <div className="px-6 pb-6 pt-2 border-t dark:border-slate-700/50 border-slate-200 dark:text-slate-300 text-slate-600 leading-relaxed">
                       {faq.answer}
                     </div>
                   </div>
