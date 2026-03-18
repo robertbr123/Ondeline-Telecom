@@ -15,6 +15,10 @@ export interface SiteConfig {
   linkedin: string
   keywords: string[]
   logoUrl: string
+  // Hero
+  heroTitle: string
+  heroSubtitle: string
+  heroBadge: string
   // SEO
   googleAnalyticsId: string
   googleTagManagerId: string
@@ -37,6 +41,10 @@ const defaultConfig: SiteConfig = {
   linkedin: "",
   keywords: ["internet", "wifi", "amazonas", "ipixuna", "eirunepe", "itamarati", "carauari", "provedor", "fibra óptica"],
   logoUrl: "/logo-ondeline.png",
+  // Hero
+  heroTitle: "Ondeline",
+  heroSubtitle: "Internet de alta velocidade por fibra óptica para Ipixuna e Eirunepé. Em breve: Itamarati e Carauari. O suporte mais rápido da região!",
+  heroBadge: "Fibra Óptica no Coração da Floresta",
   // SEO
   googleAnalyticsId: "",
   googleTagManagerId: "",

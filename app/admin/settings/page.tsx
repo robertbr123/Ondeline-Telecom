@@ -19,6 +19,10 @@ interface SiteConfig {
   linkedin: string
   keywords: string[]
   logoUrl: string
+  // Hero
+  heroTitle: string
+  heroSubtitle: string
+  heroBadge: string
   // SEO
   googleAnalyticsId: string
   googleTagManagerId: string
@@ -42,6 +46,10 @@ export default function AdminSettings() {
     linkedin: '',
     keywords: [],
     logoUrl: '/logo-ondeline.png',
+    // Hero
+    heroTitle: 'Ondeline',
+    heroSubtitle: 'Internet de alta velocidade por fibra óptica para Ipixuna e Eirunepé. Em breve: Itamarati e Carauari. O suporte mais rápido da região!',
+    heroBadge: 'Fibra Óptica no Coração da Floresta',
     // SEO
     googleAnalyticsId: '',
     googleTagManagerId: '',
@@ -171,7 +179,7 @@ export default function AdminSettings() {
                 <div className="relative w-24 h-24 rounded-xl border-2 border-dashed border-border flex items-center justify-center bg-muted/30 overflow-hidden">
                   {config.logoUrl ? (
                     <Image
-                      src={config.logoUrl}
+                      src={config.logoUrl.startsWith("/uploads/") ? config.logoUrl.replace("/uploads/", "/api/uploads/") : config.logoUrl}
                       alt="Logo atual"
                       fill
                       className="object-contain p-2"
@@ -249,6 +257,48 @@ export default function AdminSettings() {
                   })}
                   className="w-full px-3 py-2 bg-input border border-border rounded-lg"
                 />
+              </div>
+            </div>
+
+            <div className="p-6 rounded-xl border border-border bg-card/50 space-y-4">
+              <h2 className="text-lg font-semibold mb-4">Hero (Página Inicial)</h2>
+              <p className="text-sm text-muted-foreground mb-2">
+                Configure os textos que aparecem na seção principal do site.
+              </p>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Título Principal</label>
+                <input
+                  type="text"
+                  value={config.heroTitle}
+                  onChange={(e) => setConfig({ ...config, heroTitle: e.target.value })}
+                  className="w-full px-3 py-2 bg-input border border-border rounded-lg"
+                  placeholder="Ondeline"
+                />
+                <p className="text-xs text-muted-foreground mt-1">Texto grande que aparece no topo (ex: &quot;Ondeline&quot;)</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Subtítulo / Descrição</label>
+                <textarea
+                  value={config.heroSubtitle}
+                  onChange={(e) => setConfig({ ...config, heroSubtitle: e.target.value })}
+                  className="w-full px-3 py-2 bg-input border border-border rounded-lg h-24"
+                  placeholder="Internet de alta velocidade..."
+                />
+                <p className="text-xs text-muted-foreground mt-1">Parágrafo abaixo do título principal</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Badge Flutuante</label>
+                <input
+                  type="text"
+                  value={config.heroBadge}
+                  onChange={(e) => setConfig({ ...config, heroBadge: e.target.value })}
+                  className="w-full px-3 py-2 bg-input border border-border rounded-lg"
+                  placeholder="Fibra Óptica no Coração da Floresta"
+                />
+                <p className="text-xs text-muted-foreground mt-1">Texto do badge que flutua acima do título</p>
               </div>
             </div>
 

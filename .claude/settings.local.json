@@ -12,7 +12,11 @@
       "Bash(curl -s http://localhost:5008/api/plans)",
       "Bash(curl -s http://localhost:5008/api/features)",
       "Bash(curl -s http://localhost:5008/api/faq)",
-      "Bash(curl -s http://localhost:5008/api/clients)"
+      "Bash(curl -s http://localhost:5008/api/clients)",
+      "Bash(grep -r api/site/config /c/Users/ontec/Videos/github/Ondeline-Telecom/app --include=*.tsx --include=*.ts)",
+      "Bash(find /c/Users/ontec/Videos/github/Ondeline-Telecom -name *migrations* -o -name *schema* -o -name *init*)",
+      "Bash(grep -r site_config /c/Users/ontec/Videos/github/Ondeline-Telecom --include=*.sql --include=*.ts --include=*.js)",
+      "Bash(grep -r 'CREATE TABLE' /c/Users/ontec/Videos/github/Ondeline-Telecom --include=*.sql)"
     ]
   }
 }

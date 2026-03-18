@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes)
     await writeFile(filePath, buffer)
 
-    const logoUrl = `/uploads/${fileName}?t=${Date.now()}`
+    const logoUrl = `/api/uploads/${fileName}?t=${Date.now()}`
 
     return NextResponse.json({
       success: true,

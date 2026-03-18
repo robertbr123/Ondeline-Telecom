@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Wifi, Zap, Award, Users } from "lucide-react"
 import Image from "next/image"
+import { useSiteConfig } from "@/lib/site-config-context"
 
 // ── Background city images with crossfade ──────────────────────────
 const CITY_IMAGES = [
@@ -213,6 +214,7 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
 
 // ── Main Hero ───────────────────────────────────────────────────────
 export function Hero() {
+  const { config } = useSiteConfig()
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 })
   const [slideIndex, setSlideIndex] = useState(0)
   const sectionRef = useRef<HTMLElement>(null)
@@ -269,7 +271,7 @@ export function Hero() {
         <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-card glow-pulse animate-float">
           <Wifi size={16} className="text-cyan-400" />
           <span className="text-cyan-300 font-medium text-sm">
-            Fibra Óptica no Coração da Floresta
+            {config.heroBadge || "Fibra Óptica no Coração da Floresta"}
           </span>
         </div>
 
@@ -277,17 +279,14 @@ export function Hero() {
         <div className="space-y-4">
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight">
             <span className="text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]">
-              Ondeline
+              {config.heroTitle || "Ondeline"}
             </span>
             <br />
             <TypewriterText />
           </h1>
 
           <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
-            Internet de alta velocidade por fibra óptica para
-            Ipixuna e Eirunepé. Em breve: Itamarati e Carauari.
-            <br className="hidden sm:block" />
-            O suporte mais rápido da região!
+            {config.heroSubtitle || "Internet de alta velocidade por fibra óptica para Ipixuna e Eirunepé. Em breve: Itamarati e Carauari. O suporte mais rápido da região!"}
           </p>
         </div>
 
