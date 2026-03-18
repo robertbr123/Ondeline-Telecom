@@ -1,138 +1,114 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, TrendingUp, Users, Target, Calendar } from 'lucide-react'
+import { ArrowLeft, TrendingUp, Users, Target, Calendar, Eye, FileText, BarChart3 } from 'lucide-react'
 import Link from 'next/link'
 
-interface Lead {
-  id: string
-  name: string
-  email: string
-  phone: string
-  city: string
-  status: string
-  created_at: string
+interface AnalyticsData {
+  leads: {
+    total: number
+    totalAllTime: number
+    byStatus: Record<string, number>
+    byCity: Record<string, number>
+    byDay: { date: string; count: number }[]
+    conversionRate: number
+    newToday: number
+  }
+  blog: {
+    totalPosts: number
+    totalViews: number
+    topPosts: { title: string; slug: string; views: number; category: string }[]
+    byCategory: Record<string, number>
+  }
+  plans: {
+    popularity: { plan: string; count: number }[]
+  }
 }
 
-interface Stats {
-  totalLeads: number
-  newLeads: number
-  contactedLeads: number
-  convertedLeads: number
-  lostLeads: number
-  conversionRate: number
-  leadsByCity: { [key: string]: number }
-  leadsByDay: { date: string; count: number }[]
-  leadsByStatus: { [key: string]: number }
+function MiniBarChart({ data, color = "bg-cyan-500" }: { data: { label: string; value: number }[]; color?: string }) {
+  const maxVal = Math.max(...data.map(d => d.value), 1)
+  return (
+    <div className="flex items-end gap-1 h-32">
+      {data.map((d, i) => (
+        <div key={i} className="flex-1 flex flex-col items-center gap-1">
+          <span className="text-[10px] text-muted-foreground">{d.value || ""}</span>
+          <div
+            className={`w-full ${color} rounded-t transition-all duration-500 min-h-[2px]`}
+            style={{ height: `${Math.max((d.value / maxVal) * 100, 2)}%` }}
+            title={`${d.label}: ${d.value}`}
+          />
+          <span className="text-[10px] text-muted-foreground truncate max-w-full">{d.label}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function HorizontalBar({ items, colors }: { items: { label: string; value: number }[]; colors: string[] }) {
+  const maxVal = Math.max(...items.map(i => i.value), 1)
+  return (
+    <div className="space-y-3">
+      {items.map((item, i) => (
+        <div key={item.label}>
+          <div className="flex justify-between text-sm mb-1">
+            <span className="text-foreground">{item.label}</span>
+            <span className="font-semibold">{item.value}</span>
+          </div>
+          <div className="w-full bg-muted rounded-full h-2.5">
+            <div
+              className={`h-2.5 rounded-full transition-all duration-700 ${colors[i % colors.length]}`}
+              style={{ width: `${Math.max((item.value / maxVal) * 100, 3)}%` }}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+const statusLabels: Record<string, string> = {
+  new: 'Novos',
+  contacted: 'Contatados',
+  converted: 'Convertidos',
+  lost: 'Perdidos',
+}
+
+const statusColors: Record<string, string> = {
+  new: 'bg-blue-500',
+  contacted: 'bg-yellow-500',
+  converted: 'bg-green-500',
+  lost: 'bg-red-500',
 }
 
 export default function AdminAnalytics() {
-  const [leads, setLeads] = useState<Lead[]>([])
-  const [stats, setStats] = useState<Stats | null>(null)
+  const [data, setData] = useState<AnalyticsData | null>(null)
   const [loading, setLoading] = useState(true)
-  const [dateRange, setDateRange] = useState<'7d' | '30d' | '90d'>('7d')
+  const [dateRange, setDateRange] = useState<'7d' | '30d' | '90d'>('30d')
 
   useEffect(() => {
-    fetchData()
+    const days = dateRange === '7d' ? 7 : dateRange === '30d' ? 30 : 90
+    setLoading(true)
+    fetch(`/api/admin/analytics?days=${days}`)
+      .then(r => r.json())
+      .then(res => {
+        if (res.success) setData(res.data)
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false))
   }, [dateRange])
 
-  const fetchData = async () => {
-    try {
-      const res = await fetch('/api/leads')
-      const data = await res.json()
-      if (data.success) {
-        setLeads(data.data || [])
-        calculateStats(data.data || [])
-      }
-    } catch (error) {
-      console.error('Erro ao buscar dados:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const calculateStats = (leadsData: Lead[]) => {
-    const now = new Date()
-    const startDate = new Date()
-    
-    switch (dateRange) {
-      case '7d':
-        startDate.setDate(now.getDate() - 7)
-        break
-      case '30d':
-        startDate.setDate(now.getDate() - 30)
-        break
-      case '90d':
-        startDate.setDate(now.getDate() - 90)
-        break
-    }
-
-    const filteredLeads = leadsData.filter(lead => 
-      new Date(lead.created_at) >= startDate
-    )
-
-    const totalLeads = filteredLeads.length
-    const newLeads = filteredLeads.filter(l => l.status === 'new').length
-    const contactedLeads = filteredLeads.filter(l => l.status === 'contacted').length
-    const convertedLeads = filteredLeads.filter(l => l.status === 'converted').length
-    const lostLeads = filteredLeads.filter(l => l.status === 'lost').length
-    const conversionRate = totalLeads > 0 ? ((convertedLeads / totalLeads) * 100).toFixed(1) : '0'
-
-    // Leads por cidade
-    const leadsByCity: { [key: string]: number } = {}
-    filteredLeads.forEach(lead => {
-      leadsByCity[lead.city] = (leadsByCity[lead.city] || 0) + 1
-    })
-
-    // Leads por dia
-    const leadsByDay: { date: string; count: number }[] = []
-    const daysMap: { [key: string]: number } = {}
-    
-    filteredLeads.forEach(lead => {
-      const date = new Date(lead.created_at).toLocaleDateString('pt-BR')
-      daysMap[date] = (daysMap[date] || 0) + 1
-    })
-
-    Object.keys(daysMap).forEach(date => {
-      leadsByDay.push({ date, count: daysMap[date] })
-    })
-    leadsByDay.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-
-    // Leads por status
-    const leadsByStatus: { [key: string]: number } = {
-      new: newLeads,
-      contacted: contactedLeads,
-      converted: convertedLeads,
-      lost: lostLeads
-    }
-
-    setStats({
-      totalLeads,
-      newLeads,
-      contactedLeads,
-      convertedLeads,
-      lostLeads,
-      conversionRate: parseFloat(conversionRate as string),
-      leadsByCity,
-      leadsByDay,
-      leadsByStatus
-    })
-  }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'new': return 'bg-blue-500'
-      case 'contacted': return 'bg-yellow-500'
-      case 'converted': return 'bg-green-500'
-      case 'lost': return 'bg-red-500'
-      default: return 'bg-gray-500'
-    }
-  }
-
-  const getCityNames = () => {
-    return ['Ipixuna', 'Eirunepe', 'Itamarati', 'Carauari']
-  }
+  // Prepare chart data for leads by day (show last N entries based on range)
+  const dailyChartData = useMemo(() => {
+    if (!data) return []
+    const entries = data.leads.byDay
+    // Show only last portion for readability
+    const show = dateRange === '7d' ? entries : entries.slice(-15)
+    return show.map(d => ({
+      label: d.date.substring(5), // MM-DD
+      value: d.count,
+    }))
+  }, [data, dateRange])
 
   if (loading) {
     return (
@@ -144,6 +120,22 @@ export default function AdminAnalytics() {
     )
   }
 
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="flex justify-center items-center h-64">
+          <div className="text-muted-foreground">Erro ao carregar dados</div>
+        </div>
+      </div>
+    )
+  }
+
+  const cityData = Object.entries(data.leads.byCity).map(([label, value]) => ({ label, value }))
+  const statusData = Object.entries(data.leads.byStatus).map(([key, value]) => ({
+    label: statusLabels[key] || key,
+    value,
+  }))
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border">
@@ -154,165 +146,168 @@ export default function AdminAnalytics() {
           >
             <ArrowLeft size={16} /> Voltar
           </Link>
-          <h1 className="text-2xl font-bold mt-4">Analytics Avançado</h1>
+          <h1 className="text-2xl font-bold mt-4">Analytics</h1>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Filtros de Data */}
+        {/* Date range filter */}
         <div className="mb-8 flex flex-wrap gap-2">
-          <Button
-            variant={dateRange === '7d' ? 'default' : 'outline'}
-            onClick={() => setDateRange('7d')}
-          >
-            Últimos 7 dias
-          </Button>
-          <Button
-            variant={dateRange === '30d' ? 'default' : 'outline'}
-            onClick={() => setDateRange('30d')}
-          >
-            Últimos 30 dias
-          </Button>
-          <Button
-            variant={dateRange === '90d' ? 'default' : 'outline'}
-            onClick={() => setDateRange('90d')}
-          >
-            Últimos 90 dias
-          </Button>
+          {(['7d', '30d', '90d'] as const).map(range => (
+            <Button
+              key={range}
+              variant={dateRange === range ? 'default' : 'outline'}
+              onClick={() => setDateRange(range)}
+              size="sm"
+            >
+              {range === '7d' ? '7 dias' : range === '30d' ? '30 dias' : '90 dias'}
+            </Button>
+          ))}
         </div>
 
-        {stats && (
-          <>
-            {/* Cards de Estatísticas */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              <div className="p-6 rounded-xl border border-border bg-card/50">
-                <div className="flex items-center gap-3 mb-2">
-                  <Users className="w-5 h-5 text-primary" />
-                  <span className="text-sm text-muted-foreground">Total de Leads</span>
-                </div>
-                <div className="text-3xl font-bold">{stats.totalLeads}</div>
-              </div>
-
-              <div className="p-6 rounded-xl border border-border bg-card/50">
-                <div className="flex items-center gap-3 mb-2">
-                  <Target className="w-5 h-5 text-secondary" />
-                  <span className="text-sm text-muted-foreground">Novos Leads</span>
-                </div>
-                <div className="text-3xl font-bold text-secondary">{stats.newLeads}</div>
-              </div>
-
-              <div className="p-6 rounded-xl border border-border bg-card/50">
-                <div className="flex items-center gap-3 mb-2">
-                  <TrendingUp className="w-5 h-5 text-accent" />
-                  <span className="text-sm text-muted-foreground">Taxa de Conversão</span>
-                </div>
-                <div className="text-3xl font-bold text-accent">{stats.conversionRate}%</div>
-              </div>
-
-              <div className="p-6 rounded-xl border border-border bg-card/50">
-                <div className="flex items-center gap-3 mb-2">
-                  <Calendar className="w-5 h-5 text-primary" />
-                  <span className="text-sm text-muted-foreground">Convertidos</span>
-                </div>
-                <div className="text-3xl font-bold text-primary">{stats.convertedLeads}</div>
-              </div>
+        {/* KPI Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="p-5 rounded-xl border border-border bg-card/50">
+            <div className="flex items-center gap-2 mb-2">
+              <Users className="w-4 h-4 text-cyan-500" />
+              <span className="text-xs text-muted-foreground">Total de Leads</span>
             </div>
+            <div className="text-2xl font-bold">{data.leads.total}</div>
+            <div className="text-xs text-muted-foreground mt-1">
+              {data.leads.totalAllTime} total (histórico)
+            </div>
+          </div>
 
-            {/* Gráfico de Leads por Dia */}
-            <div className="mb-8 p-6 rounded-xl border border-border bg-card/50">
-              <h2 className="text-xl font-semibold mb-4">Leads por Dia</h2>
-              <div className="h-64 flex items-end gap-1">
-                {stats.leadsByDay.map((day, idx) => (
-                  <div key={idx} className="flex-1 flex flex-col items-center">
-                    <div
-                      className="w-full bg-primary/80 hover:bg-primary transition-colors rounded-t"
-                      style={{
-                        height: `${Math.max((day.count / Math.max(...stats.leadsByDay.map(d => d.count))) * 100, 5)}%`,
-                      }}
-                      title={`${day.date}: ${day.count} leads`}
-                    />
-                    <div className="text-xs text-muted-foreground mt-1 -rotate-45 origin-bottom-left">
-                      {day.date}
-                    </div>
+          <div className="p-5 rounded-xl border border-border bg-card/50">
+            <div className="flex items-center gap-2 mb-2">
+              <Target className="w-4 h-4 text-blue-500" />
+              <span className="text-xs text-muted-foreground">Novos Hoje</span>
+            </div>
+            <div className="text-2xl font-bold text-blue-500">{data.leads.newToday}</div>
+          </div>
+
+          <div className="p-5 rounded-xl border border-border bg-card/50">
+            <div className="flex items-center gap-2 mb-2">
+              <TrendingUp className="w-4 h-4 text-green-500" />
+              <span className="text-xs text-muted-foreground">Taxa de Conversão</span>
+            </div>
+            <div className="text-2xl font-bold text-green-500">{data.leads.conversionRate}%</div>
+          </div>
+
+          <div className="p-5 rounded-xl border border-border bg-card/50">
+            <div className="flex items-center gap-2 mb-2">
+              <Eye className="w-4 h-4 text-violet-500" />
+              <span className="text-xs text-muted-foreground">Views do Blog</span>
+            </div>
+            <div className="text-2xl font-bold text-violet-500">{data.blog.totalViews}</div>
+            <div className="text-xs text-muted-foreground mt-1">
+              {data.blog.totalPosts} posts publicados
+            </div>
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-6 mb-8">
+          {/* Leads per day chart */}
+          <div className="p-6 rounded-xl border border-border bg-card/50">
+            <div className="flex items-center gap-2 mb-4">
+              <Calendar className="w-4 h-4 text-muted-foreground" />
+              <h2 className="font-semibold">Leads por Dia</h2>
+            </div>
+            {dailyChartData.length > 0 ? (
+              <MiniBarChart data={dailyChartData} color="bg-cyan-500" />
+            ) : (
+              <p className="text-sm text-muted-foreground">Sem dados no período</p>
+            )}
+          </div>
+
+          {/* Leads by status */}
+          <div className="p-6 rounded-xl border border-border bg-card/50">
+            <h2 className="font-semibold mb-4">Leads por Status</h2>
+            <div className="grid grid-cols-2 gap-4">
+              {Object.entries(data.leads.byStatus).map(([status, count]) => (
+                <div key={status} className="flex items-center gap-3 p-3 rounded-lg bg-background/50">
+                  <div className={`w-3 h-3 rounded-full ${statusColors[status] || 'bg-gray-500'}`} />
+                  <div>
+                    <div className="text-lg font-bold">{count}</div>
+                    <div className="text-xs text-muted-foreground">{statusLabels[status] || status}</div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
+          </div>
+        </div>
 
-            {/* Gráfico de Leads por Cidade */}
-            <div className="mb-8 p-6 rounded-xl border border-border bg-card/50">
-              <h2 className="text-xl font-semibold mb-4">Leads por Cidade</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {getCityNames().map(city => (
-                  <div key={city} className="text-center">
-                    <div className="text-2xl font-bold text-primary mb-1">
-                      {stats.leadsByCity[city] || 0}
-                    </div>
-                    <div className="text-sm text-muted-foreground">{city}</div>
-                    <div className="mt-2 w-full bg-slate-700 rounded-full h-2">
-                      <div
-                        className="bg-primary h-2 rounded-full transition-all"
-                        style={{
-                          width: `${Math.max((stats.leadsByCity[city] || 0) / Math.max(...Object.values(stats.leadsByCity)) * 100, 5)}%`
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
+        <div className="grid lg:grid-cols-2 gap-6 mb-8">
+          {/* Leads by city */}
+          <div className="p-6 rounded-xl border border-border bg-card/50">
+            <h2 className="font-semibold mb-4">Leads por Cidade</h2>
+            <HorizontalBar
+              items={cityData}
+              colors={['bg-cyan-500', 'bg-blue-500', 'bg-emerald-500', 'bg-violet-500']}
+            />
+          </div>
+
+          {/* Plans popularity */}
+          <div className="p-6 rounded-xl border border-border bg-card/50">
+            <div className="flex items-center gap-2 mb-4">
+              <BarChart3 className="w-4 h-4 text-muted-foreground" />
+              <h2 className="font-semibold">Planos Mais Procurados</h2>
             </div>
+            {data.plans.popularity.length > 0 ? (
+              <HorizontalBar
+                items={data.plans.popularity.map(p => ({ label: p.plan, value: p.count }))}
+                colors={['bg-emerald-500', 'bg-cyan-500', 'bg-blue-500', 'bg-violet-500']}
+              />
+            ) : (
+              <p className="text-sm text-muted-foreground">Sem dados de planos nos leads</p>
+            )}
+          </div>
+        </div>
 
-            {/* Gráfico de Leads por Status */}
-            <div className="mb-8 p-6 rounded-xl border border-border bg-card/50">
-              <h2 className="text-xl font-semibold mb-4">Leads por Status</h2>
-              <div className="flex flex-wrap gap-4">
-                {Object.entries(stats.leadsByStatus).map(([status, count]) => (
-                  <div key={status} className="flex-1 min-w-[200px] p-4 rounded-lg bg-background/50">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="capitalize font-semibold">{status === 'new' ? 'Novos' : status === 'contacted' ? 'Contatados' : status === 'converted' ? 'Convertidos' : 'Perdidos'}</span>
-                      <div className={`w-4 h-4 rounded-full ${getStatusColor(status)}`}></div>
-                    </div>
-                    <div className="text-3xl font-bold">{count}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {((count / stats.totalLeads) * 100).toFixed(1)}%
-                    </div>
-                  </div>
-                ))}
-              </div>
+        {/* Blog section */}
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* Top posts */}
+          <div className="p-6 rounded-xl border border-border bg-card/50">
+            <div className="flex items-center gap-2 mb-4">
+              <FileText className="w-4 h-4 text-muted-foreground" />
+              <h2 className="font-semibold">Posts Mais Lidos</h2>
             </div>
-
-            {/* Detalhamento */}
-            <div className="p-6 rounded-xl border border-border bg-card/50">
-              <h2 className="text-xl font-semibold mb-4">Resumo Detalhado</h2>
+            {data.blog.topPosts.length > 0 ? (
               <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 rounded-lg bg-background/50">
-                  <span className="text-muted-foreground">Total de Leads</span>
-                  <span className="font-semibold">{stats.totalLeads}</span>
-                </div>
-                <div className="flex justify-between items-center p-3 rounded-lg bg-background/50">
-                  <span className="text-muted-foreground">Novos Leads</span>
-                  <span className="font-semibold">{stats.newLeads}</span>
-                </div>
-                <div className="flex justify-between items-center p-3 rounded-lg bg-background/50">
-                  <span className="text-muted-foreground">Contatados</span>
-                  <span className="font-semibold">{stats.contactedLeads}</span>
-                </div>
-                <div className="flex justify-between items-center p-3 rounded-lg bg-background/50">
-                  <span className="text-muted-foreground">Convertidos</span>
-                  <span className="font-semibold text-green-500">{stats.convertedLeads}</span>
-                </div>
-                <div className="flex justify-between items-center p-3 rounded-lg bg-background/50">
-                  <span className="text-muted-foreground">Perdidos</span>
-                  <span className="font-semibold text-red-500">{stats.lostLeads}</span>
-                </div>
-                <div className="flex justify-between items-center p-3 rounded-lg bg-background/50 border border-primary/30">
-                  <span className="text-muted-foreground font-semibold">Taxa de Conversão</span>
-                  <span className="font-bold text-primary text-xl">{stats.conversionRate}%</span>
-                </div>
+                {data.blog.topPosts.map((post, i) => (
+                  <div key={post.slug} className="flex items-center justify-between p-3 rounded-lg bg-background/50">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className="text-sm font-bold text-muted-foreground w-5">{i + 1}</span>
+                      <div className="min-w-0">
+                        <div className="text-sm font-medium truncate">{post.title}</div>
+                        <div className="text-xs text-muted-foreground">{post.category}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 text-sm font-semibold text-violet-500 shrink-0 ml-2">
+                      <Eye className="w-3 h-3" />
+                      {post.views}
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          </>
-        )}
+            ) : (
+              <p className="text-sm text-muted-foreground">Nenhum post publicado</p>
+            )}
+          </div>
+
+          {/* Blog by category */}
+          <div className="p-6 rounded-xl border border-border bg-card/50">
+            <h2 className="font-semibold mb-4">Posts por Categoria</h2>
+            {Object.keys(data.blog.byCategory).length > 0 ? (
+              <HorizontalBar
+                items={Object.entries(data.blog.byCategory).map(([label, value]) => ({ label, value }))}
+                colors={['bg-violet-500', 'bg-pink-500', 'bg-amber-500', 'bg-emerald-500']}
+              />
+            ) : (
+              <p className="text-sm text-muted-foreground">Sem categorias</p>
+            )}
+          </div>
+        </div>
       </main>
     </div>
   )

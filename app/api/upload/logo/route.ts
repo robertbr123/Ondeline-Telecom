@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { writeFile, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
 import path from 'path'
+import { apiLogger } from '@/lib/logger'
 
 export async function POST(request: NextRequest) {
   try {
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
       message: 'Logo atualizado com sucesso',
     })
   } catch (error) {
-    console.error('Erro ao fazer upload:', error)
+    apiLogger.error({ err: error }, 'Logo upload failed')
     return NextResponse.json(
       { success: false, error: 'Erro ao fazer upload do arquivo' },
       { status: 500 }

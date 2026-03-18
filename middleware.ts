@@ -21,6 +21,9 @@ const PUBLIC_ROUTES = [
   '/api/coupons/validate',
   '/api/campaigns/',
   '/api/health',
+  '/api/speedtest',
+  '/api/status',
+  '/api/blog/comments',
 ] as const
 
 // Rotas públicas do site
@@ -34,6 +37,7 @@ const PUBLIC_PAGES = [
   '/carauari',
   '/promo',
   '/empresas',
+  '/teste-velocidade',
 ] as const
 
 // Extensões de arquivos estáticos

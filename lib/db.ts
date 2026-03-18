@@ -1,6 +1,7 @@
 import { Pool } from 'pg'
 import bcrypt from 'bcryptjs'
 import { nanoid } from 'nanoid'
+import { dbLogger } from './logger'
 
 // Connection string do PostgreSQL
 const connectionString = process.env.DATABASE_URL
@@ -12,8 +13,8 @@ const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build' ||
 
 // Verificar se DATABASE_URL está configurado
 if (!connectionString && !isBuildTime) {
-  console.warn('⚠️  DATABASE_URL não está configurado. O app não funcionará corretamente.')
-  console.warn('Configure a variável DATABASE_URL no Dokploy antes do deploy.')
+  dbLogger.warn('DATABASE_URL não está configurado. O app não funcionará corretamente.')
+  dbLogger.warn('Configure a variável DATABASE_URL no Dokploy antes do deploy.')
 }
 
 // Criar pool de conexões (apenas se DATABASE_URL existe e não estamos em build time)
@@ -26,7 +27,7 @@ if (connectionString && !isBuildTime) {
   
   const sslConfig = useSSL ? { rejectUnauthorized: false } : false
   
-  console.log(`🔗 Database connection: SSL=${useSSL}`)
+  dbLogger.info({ ssl: useSSL }, 'Database connection configured')
   
   pool = new Pool({
     connectionString,
@@ -36,7 +37,7 @@ if (connectionString && !isBuildTime) {
     connectionTimeoutMillis: 10000,
   })
 } else if (isBuildTime) {
-  console.log('🔨 Build time detected - skipping database connection')
+  dbLogger.info('Build time detected - skipping database connection')
 }
 
 // Inicializar tabelas
@@ -44,12 +45,12 @@ export async function initializeDatabase() {
   try {
     // Pular durante build time
     if (isBuildTime) {
-      console.log('🔨 Build time - skipping database initialization')
+      dbLogger.info('Build time - skipping database initialization')
       return
     }
 
     if (!pool) {
-      console.warn('⚠️  Pulando inicialização do banco: pool não disponível (DATABASE_URL não configurada)')
+      dbLogger.warn('Skipping database initialization: pool not available (DATABASE_URL not configured)')
       return
     }
 
@@ -246,6 +247,35 @@ export async function initializeDatabase() {
         updated_at TEXT NOT NULL
       )
     `)
+
+    // Tabela de verificações de uptime
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS uptime_checks (
+        id SERIAL PRIMARY KEY,
+        service TEXT NOT NULL,
+        status TEXT NOT NULL,
+        response_time INTEGER,
+        checked_at TEXT NOT NULL
+      )
+    `)
+
+    // Tabela de comentários do blog
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS blog_comments (
+        id TEXT PRIMARY KEY,
+        post_id TEXT NOT NULL REFERENCES blog_posts(id) ON DELETE CASCADE,
+        author_name TEXT NOT NULL,
+        author_email TEXT NOT NULL,
+        content TEXT NOT NULL,
+        approved INTEGER DEFAULT 0,
+        created_at TEXT NOT NULL
+      )
+    `)
+
+    // Adicionar coluna score nos leads (lead scoring)
+    await pool.query(`
+      ALTER TABLE leads ADD COLUMN IF NOT EXISTS score INTEGER DEFAULT 0
+    `).catch(() => {})
 
     // Adicionar coluna coupon_code na tabela leads (se não existir)
     await pool.query(`
@@ -531,7 +561,7 @@ export async function initializeDatabase() {
 
     const adminExists = await pool.query('SELECT username, password_hash FROM admin_users WHERE username = $1', [adminUsername])
     if (adminExists.rows.length === 0) {
-      console.log(`🔐 Creating admin user: ${adminUsername}`)
+      dbLogger.info({ username: adminUsername }, 'Creating admin user')
       await pool.query(`
         INSERT INTO admin_users (username, password_hash, role, created_at)
         VALUES ($1, $2, 'admin', $3)
@@ -539,12 +569,12 @@ export async function initializeDatabase() {
     } else if (process.env.ADMIN_PASSWORD) {
       // Sempre atualizar a senha se ADMIN_PASSWORD estiver definida
       await pool.query('UPDATE admin_users SET password_hash = $1 WHERE username = $2', [adminPasswordHash, adminUsername])
-      console.log(`🔐 Admin password updated for user: ${adminUsername}`)
+      dbLogger.info({ username: adminUsername }, 'Admin password updated')
     }
 
-    console.log('✅ Database initialized successfully')
+    dbLogger.info('Database initialized successfully')
   } catch (error) {
-    console.error('❌ Error initializing database:', error)
+    dbLogger.error({ err: error }, 'Error initializing database')
     throw error
   }
 }
@@ -560,7 +590,7 @@ async function ensureInitialized() {
       .then(() => { dbInitialized = true })
       .catch((err) => {
         dbInitPromise = null // permite tentar novamente em caso de erro
-        console.error('❌ Error initializing database:', err)
+        dbLogger.error({ err }, 'Error initializing database')
       })
   }
   await dbInitPromise

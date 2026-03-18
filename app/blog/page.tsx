@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Calendar, User, Eye } from "lucide-react"
+import { Calendar, User, Eye, Search } from "lucide-react"
 import Link from "next/link"
 
 interface Article {
@@ -23,6 +23,7 @@ export default function BlogPage() {
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos")
+  const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
     fetchArticles()
@@ -52,8 +53,13 @@ export default function BlogPage() {
   }
 
   const categories = ["Todos", ...new Set(articles.map((a) => a.category).filter(Boolean))]
-  const filteredArticles =
-    selectedCategory === "Todos" ? articles : articles.filter((a) => a.category === selectedCategory)
+  const filteredArticles = articles.filter((a) => {
+    const matchesCategory = selectedCategory === "Todos" || a.category === selectedCategory
+    const matchesSearch = !searchQuery ||
+      a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      a.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
+    return matchesCategory && matchesSearch
+  })
 
   if (loading) {
     return (
@@ -82,6 +88,18 @@ export default function BlogPage() {
             <p className="text-muted-foreground text-lg">
               Dicas, notícias e informações sobre internet de qualidade na Amazônia
             </p>
+          </div>
+
+          {/* Search bar */}
+          <div className="mb-6 relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Buscar artigos..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-11 pr-4 py-3 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition"
+            />
           </div>
 
           {categories.length > 1 && (

@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useState } from 'react'
-import { ArrowLeft, Eye, Clock } from 'lucide-react'
+import { useEffect, useState, useMemo } from 'react'
+import { ArrowLeft, Eye, Clock, MessageSquare, Send } from 'lucide-react'
 import Link from 'next/link'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
@@ -22,15 +22,68 @@ interface BlogPost {
   created_at: string
 }
 
+interface Comment {
+  id: string
+  post_id: string
+  author_name: string
+  content: string
+  created_at: string
+}
+
+interface TOCItem {
+  id: string
+  text: string
+  level: number
+}
+
+function extractTOC(html: string): TOCItem[] {
+  const headingRegex = /<h([2-3])[^>]*>(.*?)<\/h\1>/gi
+  const items: TOCItem[] = []
+  let match
+  while ((match = headingRegex.exec(html)) !== null) {
+    const level = parseInt(match[1])
+    const text = match[2].replace(/<[^>]+>/g, '').trim()
+    const id = text.toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
+    items.push({ id, text, level })
+  }
+  return items
+}
+
+function addIdsToHeadings(html: string): string {
+  return html.replace(/<h([2-3])([^>]*)>(.*?)<\/h\1>/gi, (_, level, attrs, text) => {
+    const plainText = text.replace(/<[^>]+>/g, '').trim()
+    const id = plainText.toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
+    return `<h${level}${attrs} id="${id}">${text}</h${level}>`
+  })
+}
+
 export default function BlogPostContent({ slug }: { slug: string }) {
   const [post, setPost] = useState<BlogPost | null>(null)
   const [loading, setLoading] = useState(true)
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([])
+  const [comments, setComments] = useState<Comment[]>([])
+  const [commentForm, setCommentForm] = useState({ name: '', email: '', content: '' })
+  const [submitting, setSubmitting] = useState(false)
+  const [commentMsg, setCommentMsg] = useState('')
 
   useEffect(() => {
     fetchPost()
     fetchRelatedPosts()
   }, [slug])
+
+  useEffect(() => {
+    if (post) {
+      fetchComments(post.id)
+    }
+  }, [post?.id])
 
   const fetchPost = async () => {
     try {
@@ -48,12 +101,74 @@ export default function BlogPostContent({ slug }: { slug: string }) {
     try {
       const res = await fetch('/api/blog')
       const data = await res.json()
-      if (data.success) {
+      if (data.success && post) {
+        const others = (data.data || []).filter((p: BlogPost) => p.published && p.slug !== slug)
+        // Score by shared category and tags
+        const scored = others.map((p: BlogPost) => {
+          let score = 0
+          if (p.category === post.category) score += 3
+          if (post.tags && p.tags) {
+            for (const tag of p.tags) {
+              if (post.tags.includes(tag)) score += 2
+            }
+          }
+          return { ...p, _score: score }
+        })
+        scored.sort((a: any, b: any) => b._score - a._score)
+        setRelatedPosts(scored.slice(0, 3))
+      } else if (data.success) {
+        // Post not loaded yet, just grab first 3 others
         const others = (data.data || []).filter((p: BlogPost) => p.published && p.slug !== slug)
         setRelatedPosts(others.slice(0, 3))
       }
     } catch (error) {
       console.error('Erro ao buscar posts relacionados:', error)
+    }
+  }
+
+  // Re-fetch related posts when post loads (for proper scoring)
+  useEffect(() => {
+    if (post) fetchRelatedPosts()
+  }, [post?.id])
+
+  const fetchComments = async (postId: string) => {
+    try {
+      const res = await fetch(`/api/blog/comments?postId=${postId}`)
+      const data = await res.json()
+      if (data.success) setComments(data.data || [])
+    } catch (error) {
+      console.error('Erro ao buscar comentários:', error)
+    }
+  }
+
+  const submitComment = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!post || !commentForm.name || !commentForm.content) return
+
+    setSubmitting(true)
+    setCommentMsg('')
+    try {
+      const res = await fetch('/api/blog/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          postId: post.id,
+          authorName: commentForm.name,
+          authorEmail: commentForm.email,
+          content: commentForm.content,
+        }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setCommentMsg('Comentário enviado! Será publicado após aprovação.')
+        setCommentForm({ name: '', email: '', content: '' })
+      } else {
+        setCommentMsg(data.error || 'Erro ao enviar comentário')
+      }
+    } catch {
+      setCommentMsg('Erro ao enviar comentário')
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -70,6 +185,9 @@ export default function BlogPostContent({ slug }: { slug: string }) {
     const text = post ? `Confira: *${post.title}*\n${url}` : url
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank')
   }
+
+  const toc = useMemo(() => post ? extractTOC(post.content) : [], [post?.content])
+  const processedContent = useMemo(() => post ? addIdsToHeadings(post.content) : '', [post?.content])
 
   if (loading) {
     return (
@@ -154,6 +272,25 @@ export default function BlogPostContent({ slug }: { slug: string }) {
             <img src={post.cover_image} alt={post.title} className="w-full rounded-xl mb-8 object-cover max-h-96" />
           ) : null}
 
+          {/* Table of Contents */}
+          {toc.length >= 3 && (
+            <nav className="mb-8 p-5 rounded-xl border border-border bg-card/50">
+              <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Índice</h2>
+              <ul className="space-y-1.5">
+                {toc.map((item) => (
+                  <li key={item.id} className={item.level === 3 ? 'pl-4' : ''}>
+                    <a
+                      href={`#${item.id}`}
+                      className="text-sm text-muted-foreground hover:text-primary transition"
+                    >
+                      {item.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+
           {/* Excerpt */}
           {post.excerpt && (
             <p className="text-lg text-muted-foreground mb-8 italic border-l-4 border-primary pl-6">
@@ -162,7 +299,7 @@ export default function BlogPostContent({ slug }: { slug: string }) {
           )}
 
           {/* Conteúdo */}
-          <div className="prose prose-invert max-w-none mb-8" dangerouslySetInnerHTML={{ __html: post.content }} />
+          <div className="prose prose-invert max-w-none mb-8" dangerouslySetInnerHTML={{ __html: processedContent }} />
 
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (
@@ -174,6 +311,77 @@ export default function BlogPostContent({ slug }: { slug: string }) {
               ))}
             </div>
           )}
+
+          {/* Comments Section */}
+          <div className="border-t border-border pt-10 mb-12">
+            <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+              <MessageSquare size={20} />
+              Comentários ({comments.length})
+            </h3>
+
+            {/* Comment form */}
+            <form onSubmit={submitComment} className="mb-8 p-5 rounded-xl border border-border bg-card/50">
+              <div className="grid sm:grid-cols-2 gap-4 mb-4">
+                <input
+                  type="text"
+                  placeholder="Seu nome *"
+                  value={commentForm.name}
+                  onChange={(e) => setCommentForm(prev => ({ ...prev, name: e.target.value }))}
+                  required
+                  className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                />
+                <input
+                  type="email"
+                  placeholder="Seu email (opcional)"
+                  value={commentForm.email}
+                  onChange={(e) => setCommentForm(prev => ({ ...prev, email: e.target.value }))}
+                  className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                />
+              </div>
+              <textarea
+                placeholder="Escreva seu comentário... *"
+                value={commentForm.content}
+                onChange={(e) => setCommentForm(prev => ({ ...prev, content: e.target.value }))}
+                required
+                rows={3}
+                maxLength={2000}
+                className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm resize-none mb-3"
+              />
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">
+                  {commentForm.content.length}/2000
+                </span>
+                <button
+                  type="submit"
+                  disabled={submitting || !commentForm.name || !commentForm.content}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition disabled:opacity-50"
+                >
+                  <Send size={14} />
+                  {submitting ? 'Enviando...' : 'Enviar'}
+                </button>
+              </div>
+              {commentMsg && (
+                <p className="mt-3 text-sm text-muted-foreground">{commentMsg}</p>
+              )}
+            </form>
+
+            {/* Comments list */}
+            {comments.length > 0 ? (
+              <div className="space-y-4">
+                {comments.map((comment) => (
+                  <div key={comment.id} className="p-4 rounded-lg border border-border bg-card/30">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-medium text-sm text-foreground">{comment.author_name}</span>
+                      <span className="text-xs text-muted-foreground">{formatDate(comment.created_at)}</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">{comment.content}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Nenhum comentário ainda. Seja o primeiro!</p>
+            )}
+          </div>
 
           {/* Posts Relacionados */}
           {relatedPosts.length > 0 && (

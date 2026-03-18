@@ -1,64 +1,50 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { CheckCircle, XCircle, Clock, Activity } from "lucide-react"
+import { CheckCircle, XCircle, Clock, Activity, RefreshCw } from "lucide-react"
 
-interface StatusItem {
+interface ServiceData {
   service: string
   status: "operational" | "degraded" | "down"
-  uptime: number
+  responseTime: number | null
   lastCheck: string
 }
 
+interface StatusData {
+  overall: "operational" | "degraded" | "down"
+  services: ServiceData[]
+  uptime: Record<string, number>
+  lastUpdated: string
+}
+
 export default function StatusPage() {
-  const [lastUpdated, setLastUpdated] = useState(new Date())
-  
-  const services: StatusItem[] = [
-    {
-      service: "Internet - Ipixuna",
-      status: "operational",
-      uptime: 99.5,
-      lastCheck: "2 min atrás"
-    },
-    {
-      service: "Internet - Eirunepe",
-      status: "operational",
-      uptime: 99.2,
-      lastCheck: "1 min atrás"
-    },
-    {
-      service: "Servidor Principal",
-      status: "operational",
-      uptime: 99.9,
-      lastCheck: "30 seg atrás"
-    },
-    {
-      service: "Sistema de Cobrança",
-      status: "operational",
-      uptime: 99.8,
-      lastCheck: "5 min atrás"
-    },
-    {
-      service: "Suporte Técnico",
-      status: "operational",
-      uptime: 98.5,
-      lastCheck: "1 min atrás"
+  const [data, setData] = useState<StatusData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
+
+  const fetchStatus = useCallback(async (isRefresh = false) => {
+    if (isRefresh) setRefreshing(true)
+    try {
+      const res = await fetch("/api/status", { cache: "no-store" })
+      const json = await res.json()
+      if (json.success) setData(json.data)
+    } catch (error) {
+      console.error("Failed to fetch status:", error)
+    } finally {
+      setLoading(false)
+      setRefreshing(false)
     }
-  ]
-
-  const overallStatus = "operational" as const
-  const overallUptime = 99.4
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setLastUpdated(new Date())
-    }, 30000)
-    return () => clearInterval(timer)
   }, [])
 
-  const getStatusIcon = (status: StatusItem["status"]) => {
+  useEffect(() => {
+    fetchStatus()
+    const interval = setInterval(() => fetchStatus(), 60000) // refresh every 60s
+    return () => clearInterval(interval)
+  }, [fetchStatus])
+
+  const getStatusIcon = (status: string) => {
     switch (status) {
       case "operational":
         return <CheckCircle className="w-6 h-6 text-green-500" />
@@ -66,30 +52,58 @@ export default function StatusPage() {
         return <Clock className="w-6 h-6 text-yellow-500" />
       case "down":
         return <XCircle className="w-6 h-6 text-red-500" />
+      default:
+        return <Activity className="w-6 h-6 text-gray-500" />
     }
   }
 
-  const getStatusText = (status: StatusItem["status"]) => {
+  const getStatusText = (status: string) => {
     switch (status) {
-      case "operational":
-        return "Operacional"
-      case "degraded":
-        return "Degradado"
-      case "down":
-        return "Indisponível"
+      case "operational": return "Operacional"
+      case "degraded": return "Degradado"
+      case "down": return "Indisponível"
+      default: return "Desconhecido"
     }
   }
 
-  const getStatusColor = (status: StatusItem["status"]) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
-      case "operational":
-        return "text-green-500"
-      case "degraded":
-        return "text-yellow-500"
-      case "down":
-        return "text-red-500"
+      case "operational": return "text-green-500"
+      case "degraded": return "text-yellow-500"
+      case "down": return "text-red-500"
+      default: return "text-gray-500"
     }
   }
+
+  const getOverallBanner = (status: string) => {
+    switch (status) {
+      case "operational":
+        return { bg: "bg-green-500/10 border-green-500/20", text: "Todos os Sistemas Operacionais" }
+      case "degraded":
+        return { bg: "bg-yellow-500/10 border-yellow-500/20", text: "Desempenho Degradado Detectado" }
+      case "down":
+        return { bg: "bg-red-500/10 border-red-500/20", text: "Interrupção Detectada" }
+      default:
+        return { bg: "bg-gray-500/10 border-gray-500/20", text: "Verificando..." }
+    }
+  }
+
+  if (loading) {
+    return (
+      <main className="w-full min-h-screen">
+        <Header />
+        <section className="pt-32 pb-20 px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <Activity className="w-8 h-8 text-cyan-500 animate-pulse mx-auto mb-4" />
+            <p className="text-muted-foreground">Verificando status dos serviços...</p>
+          </div>
+        </section>
+        <Footer />
+      </main>
+    )
+  }
+
+  const banner = getOverallBanner(data?.overall || "operational")
 
   return (
     <main className="w-full min-h-screen">
@@ -103,27 +117,34 @@ export default function StatusPage() {
             </p>
           </div>
 
-          {/* Status Geral */}
-          <div className="bg-card border border-border rounded-2xl p-8 mb-8">
-            <div className="flex items-center justify-between mb-6">
+          {/* Overall Status Banner */}
+          <div className={`rounded-2xl border p-8 mb-8 ${banner.bg}`}>
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                {getStatusIcon(overallStatus)}
+                {getStatusIcon(data?.overall || "operational")}
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground">
-                    {overallStatus === "operational" ? "Todos os Sistemas Operacionais" : "Problemas Detectados"}
-                  </h2>
-                  <p className="text-muted-foreground">
-                    Uptime geral nos últimos 90 dias: <span className="font-semibold text-foreground">{overallUptime}%</span>
-                  </p>
+                  <h2 className="text-2xl font-bold text-foreground">{banner.text}</h2>
+                  {data && (
+                    <p className="text-muted-foreground text-sm mt-1">
+                      Última verificação: {new Date(data.lastUpdated).toLocaleTimeString("pt-BR")}
+                    </p>
+                  )}
                 </div>
               </div>
-              <Activity className="w-12 h-12 text-primary animate-pulse" />
+              <button
+                onClick={() => fetchStatus(true)}
+                disabled={refreshing}
+                className="p-2 rounded-lg hover:bg-background/50 transition-colors"
+                title="Atualizar"
+              >
+                <RefreshCw className={`w-5 h-5 text-muted-foreground ${refreshing ? "animate-spin" : ""}`} />
+              </button>
             </div>
           </div>
 
-          {/* Lista de Serviços */}
+          {/* Services List */}
           <div className="space-y-4">
-            {services.map((service, index) => (
+            {data?.services.map((service, index) => (
               <div key={index} className="bg-card border border-border rounded-xl p-6 hover:border-primary/50 transition">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -136,45 +157,55 @@ export default function StatusPage() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-foreground">{service.uptime}%</p>
-                    <p className="text-sm text-muted-foreground">Uptime 90 dias</p>
+                    {data.uptime[service.service] !== undefined && (
+                      <>
+                        <p className="text-2xl font-bold text-foreground">{data.uptime[service.service]}%</p>
+                        <p className="text-sm text-muted-foreground">Uptime 24h</p>
+                      </>
+                    )}
                   </div>
                 </div>
                 <div className="mt-4 pt-4 border-t border-border">
                   <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <span>Última verificação: {service.lastCheck}</span>
-                    <span>Resposta: <span className="text-green-500">~15ms</span></span>
+                    <span>Última verificação: {new Date(service.lastCheck).toLocaleTimeString("pt-BR")}</span>
+                    {service.responseTime !== null && (
+                      <span>
+                        Resposta:{" "}
+                        <span className={service.responseTime < 500 ? "text-green-500" : service.responseTime < 2000 ? "text-yellow-500" : "text-red-500"}>
+                          {service.responseTime}ms
+                        </span>
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Informações Adicionais */}
+          {/* Info Cards */}
           <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-muted/30 rounded-xl p-6">
               <h3 className="text-lg font-semibold text-foreground mb-3">Tempo de Resposta</h3>
               <p className="text-muted-foreground">
-                Nossa equipe técnica monitora todos os sistemas 24 horas por dia. 
+                Nossa equipe técnica monitora todos os sistemas 24 horas por dia.
                 Em caso de problemas, respondemos em até 15 minutos.
               </p>
             </div>
             <div className="bg-muted/30 rounded-xl p-6">
               <h3 className="text-lg font-semibold text-foreground mb-3">Compromisso de Qualidade</h3>
               <p className="text-muted-foreground">
-                Garantimos 99% de uptime para todos os nossos serviços. 
+                Garantimos 99% de uptime para todos os nossos serviços.
                 Caso não atinja esse índice, oferecemos crédito no próximo boleto.
               </p>
             </div>
           </div>
 
-          {/* Última Atualização */}
+          {/* Auto-refresh notice */}
           <div className="mt-12 text-center text-sm text-muted-foreground">
-            <p>Última atualização: {lastUpdated.toLocaleTimeString('pt-BR')}</p>
-            <p className="mt-2">Os dados são atualizados automaticamente a cada 30 segundos</p>
+            <p>Os dados são atualizados automaticamente a cada 60 segundos</p>
           </div>
 
-          {/* Botão de Contato */}
+          {/* Contact Button */}
           <div className="mt-8 text-center">
             <a
               href="/#suporte"

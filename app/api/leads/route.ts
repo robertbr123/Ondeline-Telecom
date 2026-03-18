@@ -4,6 +4,8 @@ import { z } from 'zod'
 import nodemailer from 'nodemailer'
 import { query } from '@/lib/db'
 import { leadSchema } from '@/lib/validations'
+import { leadLogger, emailLogger } from '@/lib/logger'
+import { calculateLeadScore } from '@/lib/lead-scoring'
 
 // GET - Listar leads (admin)
 export async function GET(request: NextRequest) {
@@ -16,7 +18,7 @@ export async function GET(request: NextRequest) {
       data: leads,
     })
   } catch (error) {
-    console.error('Erro ao buscar leads:', error)
+    leadLogger.error({ err: error }, 'Failed to fetch leads')
     return NextResponse.json(
       { success: false, error: 'Erro ao buscar leads' },
       { status: 500 }
@@ -36,11 +38,20 @@ export async function POST(request: NextRequest) {
     const id = nanoid()
     const now = new Date().toISOString()
 
+    // Calculate lead score
+    const score = calculateLeadScore({
+      city: validatedData.city,
+      plan_interest: body.plan_interest || null,
+      coupon_code: couponCode,
+      email: validatedData.email,
+      phone: validatedData.phone,
+    })
+
     // Inserir no banco
     await query(`
-      INSERT INTO leads (id, name, email, phone, city, status, coupon_code, created_at, updated_at)
-      VALUES ($1, $2, $3, $4, $5, 'new', $6, $7, $8)
-    `, [id, validatedData.name, validatedData.email, validatedData.phone, validatedData.city, couponCode, now, now])
+      INSERT INTO leads (id, name, email, phone, city, status, coupon_code, score, created_at, updated_at)
+      VALUES ($1, $2, $3, $4, $5, 'new', $6, $7, $8, $9)
+    `, [id, validatedData.name, validatedData.email, validatedData.phone, validatedData.city, couponCode, score, now, now])
 
     // Incrementar uso do cupom se fornecido
     if (couponCode) {
@@ -76,7 +87,7 @@ export async function POST(request: NextRequest) {
         `,
       })
     } catch (emailError) {
-      console.error('Erro ao enviar email:', emailError)
+      emailLogger.error({ err: emailError }, 'Failed to send lead notification email')
       // Não falhar se o email não for enviado
     }
 
@@ -93,7 +104,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.error('Erro ao criar lead:', error)
+    leadLogger.error({ err: error }, 'Failed to create lead')
     return NextResponse.json(
       { success: false, error: 'Erro ao criar lead' },
       { status: 500 }

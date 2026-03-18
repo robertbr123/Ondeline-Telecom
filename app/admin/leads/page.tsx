@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Phone, Mail, MapPin, Clock } from 'lucide-react'
+import { ArrowLeft, Phone, Mail, MapPin, Clock, Flame, Snowflake, Sun } from 'lucide-react'
 import Link from 'next/link'
 
 interface Lead {
@@ -12,12 +12,14 @@ interface Lead {
   phone: string
   city: string
   status: string
+  score: number
   created_at: string
 }
 
 export default function AdminLeads() {
   const [leads, setLeads] = useState<Lead[]>([])
   const [loading, setLoading] = useState(true)
+  const [sortBy, setSortBy] = useState<'date' | 'score'>('score')
 
   useEffect(() => {
     fetchLeads()
@@ -67,6 +69,12 @@ export default function AdminLeads() {
     }
   }
 
+  const getScoreBadge = (score: number) => {
+    if (score >= 70) return { label: 'Quente', icon: Flame, color: 'text-red-500 bg-red-500/10 border-red-500/20' }
+    if (score >= 40) return { label: 'Morno', icon: Sun, color: 'text-yellow-500 bg-yellow-500/10 border-yellow-500/20' }
+    return { label: 'Frio', icon: Snowflake, color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' }
+  }
+
   const getStatusLabel = (status: string) => {
     switch (status) {
       case 'new':
@@ -92,7 +100,25 @@ export default function AdminLeads() {
           >
             <ArrowLeft size={16} /> Voltar
           </Link>
-          <h1 className="text-2xl font-bold mt-4">Gerenciar Leads</h1>
+          <div className="flex items-center justify-between mt-4">
+            <h1 className="text-2xl font-bold">Gerenciar Leads</h1>
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant={sortBy === 'score' ? 'default' : 'outline'}
+                onClick={() => setSortBy('score')}
+              >
+                <Flame size={14} className="mr-1" /> Por Score
+              </Button>
+              <Button
+                size="sm"
+                variant={sortBy === 'date' ? 'default' : 'outline'}
+                onClick={() => setSortBy('date')}
+              >
+                <Clock size={14} className="mr-1" /> Por Data
+              </Button>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -107,7 +133,11 @@ export default function AdminLeads() {
           </div>
         ) : (
           <div className="space-y-4">
-            {leads.map((lead) => (
+            {[...leads].sort((a, b) =>
+              sortBy === 'score'
+                ? (b.score || 0) - (a.score || 0)
+                : new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+            ).map((lead) => (
               <div
                 key={lead.id}
                 className="p-6 rounded-xl border border-border bg-card/50"
@@ -116,11 +146,23 @@ export default function AdminLeads() {
                   <div className="flex-1 space-y-3">
                     <div>
                       <h3 className="text-lg font-semibold">{lead.name}</h3>
-                      <span
-                        className={`inline-block px-2 py-1 rounded-md text-xs font-medium border ${getStatusColor(lead.status)}`}
-                      >
-                        {getStatusLabel(lead.status)}
-                      </span>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span
+                          className={`inline-block px-2 py-1 rounded-md text-xs font-medium border ${getStatusColor(lead.status)}`}
+                        >
+                          {getStatusLabel(lead.status)}
+                        </span>
+                        {lead.score > 0 && (() => {
+                          const badge = getScoreBadge(lead.score)
+                          const Icon = badge.icon
+                          return (
+                            <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium border ${badge.color}`}>
+                              <Icon size={12} />
+                              {badge.label} ({lead.score})
+                            </span>
+                          )
+                        })()}
+                      </div>
                     </div>
 
                     <div className="space-y-2">
