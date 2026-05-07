@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Geist, Geist_Mono, Manrope } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/lib/theme-context"
 import { Providers } from "./providers"
@@ -8,9 +8,11 @@ import { getSiteConfig } from "@/lib/site-config"
 import { Toaster } from "sonner"
 import SkipLink from "@/components/skip-link"
 import "./globals.css"
+import "@/styles/ondeline2.css"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap", weight: ["300","400","500","600","700","800"] })
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await getSiteConfig()
@@ -75,13 +77,13 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`font-sans antialiased`}>
+      <body className={`font-sans antialiased ${manrope.variable}`}>
         <SkipLink />
         <Providers>
           <ThemeProvider>
-            <main id="main-content" tabIndex={-1}>
+            <div id="main-content" tabIndex={-1}>
               {children}
-            </main>
+            </div>
             <Toaster 
               position="top-right"
               expand={true}

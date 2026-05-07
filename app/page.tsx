@@ -1,60 +1,35 @@
-import { Header } from "@/components/header"
-import { Hero } from "@/components/hero"
-import { LeadCaptureModal } from "@/components/lead-capture-modal"
-import { ServicesAnimation } from "@/components/services-animation"
-import { Features } from "@/components/features"
-import { Plans } from "@/components/plans"
-import { Support } from "@/components/support"
-import { Clients } from "@/components/clients"
-import { CoverageMap } from "@/components/coverage-map"
-import { FAQ } from "@/components/faq"
-import { CTA } from "@/components/cta"
-import { FloatCTA } from "@/components/float-cta"
-import { Footer } from "@/components/footer"
+import { getSiteConfig } from "@/lib/site-config"
+import { Topbar } from "@/components/on2/Topbar"
+import { Nav } from "@/components/on2/Nav"
+import { Hero } from "@/components/on2/Hero"
+import { Planos } from "@/components/on2/Planos"
+import { Cobertura } from "@/components/on2/Cobertura"
+import { Porque } from "@/components/on2/Porque"
+import { SpeedBanner } from "@/components/on2/SpeedBanner"
+import { Depoimentos } from "@/components/on2/Depoimentos"
+import { CTASection } from "@/components/on2/CTASection"
+import { Footer } from "@/components/on2/Footer"
 import { AnalyticsScripts, GTMNoScript } from "@/components/analytics-scripts"
 
-function WaveDivider({ fromDark, toDark, fromLight, toLight, flip }: { fromDark: string; toDark: string; fromLight: string; toLight: string; flip?: boolean }) {
-  return (
-    <>
-      <div className={`wave-separator hidden dark:block ${flip ? "rotate-180" : ""}`} style={{ background: toDark }}>
-        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,0 C240,60 480,60 720,30 C960,0 1200,0 1440,30 L1440,0 L0,0 Z" fill={fromDark} />
-        </svg>
-      </div>
-      <div className={`wave-separator dark:hidden ${flip ? "rotate-180" : ""}`} style={{ background: toLight }}>
-        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,0 C240,60 480,60 720,30 C960,0 1200,0 1440,30 L1440,0 L0,0 Z" fill={fromLight} />
-        </svg>
-      </div>
-    </>
-  )
-}
+export default async function Home() {
+  const config = await getSiteConfig()
+  const wa = config.whatsappNumber || "5592984607721"
+  const phone = config.contactPhone || "(92) 98460-7721"
 
-export default function Home() {
   return (
-    <main className="w-full dark:bg-slate-950 bg-white">
+    <div className="on2">
       <AnalyticsScripts />
       <GTMNoScript />
-      <Header />
-      <Hero />
-      <LeadCaptureModal />
-      <WaveDivider fromDark="#020617" toDark="#0f172a" fromLight="#f9fafb" toLight="#ffffff" />
-      <ServicesAnimation />
-      <WaveDivider fromDark="#020617" toDark="#0f172a" fromLight="#f9fafb" toLight="#ffffff" />
-      <Features />
-      <WaveDivider fromDark="#0f172a" toDark="#020617" fromLight="#ffffff" toLight="#f9fafb" />
-      <Plans />
-      <WaveDivider fromDark="#020617" toDark="#0f172a" fromLight="#f9fafb" toLight="#ffffff" />
-      <Support />
-      <WaveDivider fromDark="#0f172a" toDark="#020617" fromLight="#ffffff" toLight="#f9fafb" />
-      <Clients />
-      <WaveDivider fromDark="#020617" toDark="#020617" fromLight="#f9fafb" toLight="#f9fafb" />
-      <CoverageMap />
-      <WaveDivider fromDark="#020617" toDark="#0f172a" fromLight="#f9fafb" toLight="#ffffff" />
-      <FAQ />
-      <CTA />
-      <FloatCTA />
-      <Footer />
-    </main>
+      <Topbar phone={phone} />
+      <Nav whatsapp={wa} />
+      <Hero whatsapp={wa} />
+      <Planos whatsapp={wa} />
+      <Cobertura />
+      <Porque />
+      <SpeedBanner />
+      <Depoimentos />
+      <CTASection whatsapp={wa} phone={phone} />
+      <Footer whatsapp={wa} phone={phone} />
+    </div>
   )
 }
