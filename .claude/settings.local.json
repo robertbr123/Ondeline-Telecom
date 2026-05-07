@@ -19,7 +19,14 @@
       "Bash(grep -r 'CREATE TABLE' /c/Users/ontec/Videos/github/Ondeline-Telecom --include=*.sql)",
       "Bash(npx tsc *)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(sed -i '' 's|import Image from \"next/image\"|import { LogoImg } from \"@/components/on2/LogoImg\"|' /Users/robertalbino/Documents/GitHub/Ondeline-Telecom/app/coverage/page.tsx)",
+      "Bash(sed -i '' 's|<Image src=\"/logo-ondeline.png\" alt=\"Ondeline\" width={140} height={36} style={{ height: 36, width: \"auto\" }} />|<LogoImg height={36} />|g' /Users/robertalbino/Documents/GitHub/Ondeline-Telecom/app/coverage/page.tsx)",
+      "Bash(sed -i '' 's|<Image src=\"/logo-ondeline.png\" alt=\"Ondeline\" width={120} height={32} style={{ height: 32, width: \"auto\", filter: \"brightness\\(0\\) invert\\(1\\)\" }} />|<LogoImg height={32} filterInvert />|g' /Users/robertalbino/Documents/GitHub/Ondeline-Telecom/app/coverage/page.tsx)",
+      "Bash(sed -i '' 's|import Image from \"next/image\"|import { LogoImg } from \"@/components/on2/LogoImg\"|' /Users/robertalbino/Documents/GitHub/Ondeline-Telecom/app/trabalhe-conosco/page.tsx)",
+      "Bash(sed -i '' 's|<Image src=\"/logo-ondeline.png\" alt=\"Ondeline\" width={140} height={36} style={{ height: 36, width: \"auto\" }} />|<LogoImg height={36} />|g' /Users/robertalbino/Documents/GitHub/Ondeline-Telecom/app/trabalhe-conosco/page.tsx)",
+      "Bash(sed -i '' 's|<Image src=\"/logo-ondeline.png\" alt=\"Ondeline\" width={140} height={36} style={{ height: 36, width: \"auto\" }} />|<LogoImg height={36} />|g' \"/Users/robertalbino/Documents/GitHub/Ondeline-Telecom/app/blog/[slug]/BlogPostContent.tsx\")",
+      "Bash(sed -i '' 's|<Image src=\"/logo-ondeline.png\" alt=\"Ondeline\" width={120} height={32} style={{ height: 32, width: \"auto\", filter: \"brightness\\(0\\) invert\\(1\\)\" }} />|<LogoImg height={32} filterInvert />|g' \"/Users/robertalbino/Documents/GitHub/Ondeline-Telecom/app/blog/[slug]/BlogPostContent.tsx\")"
     ]
   }
 }

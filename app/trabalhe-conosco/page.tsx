@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import Image from "next/image"
+import { LogoImg } from "@/components/on2/LogoImg"
 import { Icon } from "@/components/on2/Icon"
 
 const WA = "5592984607721"
@@ -54,7 +54,7 @@ export default function TrabalheConoscoPage() {
       <nav className="on2-nav" style={{ position: "relative" }}>
         <div className="on2-shell on2-nav-inner">
           <Link href="/" className="on2-nav-logo">
-            <Image src="/logo-ondeline.png" alt="Ondeline" width={140} height={36} style={{ height: 36, width: "auto" }} />
+            <LogoImg height={36} />
           </Link>
           <div className="on2-nav-links" style={{ display: "flex", gap: 8, alignItems: "center" }}>
             <Link href="/#planos" className="on2-nav-link">Planos</Link>
@@ -222,7 +222,7 @@ export default function TrabalheConoscoPage() {
       <footer className="on2-footer">
         <div className="on2-shell on2-footer-inner">
           <div className="on2-footer-logo">
-            <Image src="/logo-ondeline.png" alt="Ondeline" width={120} height={32} style={{ height: 32, width: "auto", filter: "brightness(0) invert(1)" }} />
+            <LogoImg height={32} filterInvert />
           </div>
           <div className="on2-footer-copy">© 2023–2026 Ondeline Telecom · Vale do Juruá / AM</div>
         </div>

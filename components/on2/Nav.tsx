@@ -4,9 +4,10 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Icon } from "./Icon"
 
-export function Nav({ whatsapp }: { whatsapp?: string }) {
+export function Nav({ whatsapp, logo }: { whatsapp?: string; logo?: string }) {
   const [open, setOpen] = useState(false)
   const wa = whatsapp || "5592984607721"
+  const logoSrc = logo || "/logo-ondeline.png"
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : ""
@@ -19,7 +20,7 @@ export function Nav({ whatsapp }: { whatsapp?: string }) {
     <nav className="on2-nav">
       <div className="on2-shell on2-nav-inner">
         <a href="/" className="on2-nav-logo">
-          <Image src="/logo-ondeline.png" alt="Ondeline" width={140} height={40} style={{ height: 40, width: "auto" }} />
+          <Image src={logoSrc} alt="Ondeline" width={140} height={40} style={{ height: 40, width: "auto" }} />
         </a>
 
         <div className="on2-nav-links">

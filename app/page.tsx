@@ -15,13 +15,14 @@ export default async function Home() {
   const config = await getSiteConfig()
   const wa = config.whatsappNumber || "5592984607721"
   const phone = config.contactPhone || "(92) 98460-7721"
+  const logo = config.logoUrl || "/logo-ondeline.png"
 
   return (
     <div className="on2">
       <AnalyticsScripts />
       <GTMNoScript />
       <Topbar phone={phone} />
-      <Nav whatsapp={wa} />
+      <Nav whatsapp={wa} logo={logo} />
       <Hero whatsapp={wa} />
       <Planos whatsapp={wa} />
       <Cobertura />
@@ -29,7 +30,7 @@ export default async function Home() {
       <SpeedBanner />
       <Depoimentos />
       <CTASection whatsapp={wa} phone={phone} />
-      <Footer whatsapp={wa} phone={phone} />
+      <Footer whatsapp={wa} phone={phone} logo={logo} />
     </div>
   )
 }

@@ -1,16 +1,17 @@
 import Image from "next/image"
 import { Icon } from "./Icon"
 
-export function Footer({ whatsapp, phone }: { whatsapp?: string; phone?: string }) {
+export function Footer({ whatsapp, phone, logo }: { whatsapp?: string; phone?: string; logo?: string }) {
   const wa = whatsapp || "5592984607721"
   const tel = phone || "(92) 98460-7721"
+  const logoSrc = logo || "/logo-ondeline.png"
 
   return (
     <footer className="on2-footer">
       <div className="on2-shell">
         <div className="on2-foot-top">
           <div className="on2-foot-brand">
-            <Image src="/logo-ondeline.png" alt="Ondeline" width={140} height={44} style={{ height: 44, width: "auto", marginBottom: 20, filter: "brightness(1.2)" }} />
+            <Image src={logoSrc} alt="Ondeline" width={140} height={44} style={{ height: 44, width: "auto", marginBottom: 20, filter: "brightness(1.2)" }} />
             <p>Provedor de internet por fibra óptica do Vale do Juruá. Conexão sem limites para cada canto do Amazonas.</p>
           </div>
           <div>

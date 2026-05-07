@@ -287,14 +287,14 @@ function CityCTASoon({ city, wa }: { city: CityData; wa: string }) {
   )
 }
 
-export function CityPage({ city, whatsapp, phone }: { city: CityData; whatsapp?: string; phone?: string }) {
+export function CityPage({ city, whatsapp, phone, logo }: { city: CityData; whatsapp?: string; phone?: string; logo?: string }) {
   const wa = whatsapp || "5592984607721"
   const ph = phone || "(92) 98460-7721"
 
   return (
     <div className="on2">
       <Topbar phone={ph} />
-      <Nav whatsapp={wa} />
+      <Nav whatsapp={wa} logo={logo} />
       <CityHero city={city} wa={wa} />
       <CityStats city={city} />
       {city.bairros && <CityBairros city={city} />}
@@ -305,7 +305,7 @@ export function CityPage({ city, whatsapp, phone }: { city: CityData; whatsapp?:
       ) : (
         <CityCTASoon city={city} wa={wa} />
       )}
-      <Footer whatsapp={wa} phone={ph} />
+      <Footer whatsapp={wa} phone={ph} logo={logo} />
     </div>
   )
 }

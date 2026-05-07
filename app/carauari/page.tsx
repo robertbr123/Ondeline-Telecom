@@ -32,5 +32,5 @@ const CITY: CityData = {
 
 export default async function CarauariPage() {
   const config = await getSiteConfig()
-  return <CityPage city={CITY} whatsapp={config.whatsappNumber} phone={config.contactPhone} />
+  return <CityPage city={CITY} whatsapp={config.whatsappNumber} phone={config.contactPhone} logo={config.logoUrl} />
 }
