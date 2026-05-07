@@ -4,10 +4,11 @@ import { CITIES, FAQ_CATEGORIES, BLOG_CATEGORIES, MATERIAL_CATEGORIES, FEATURE_I
 // Lead/Pré-cadastro
 export const leadSchema = z.object({
   name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
-  email: z.string().email('Email inválido'),
-  phone: z.string().min(14, 'Telefone inválido').regex(/^\(\d{2}\)\s?\d{4,5}-\d{4}$/, 'Formato: (92) 98460-7721'),
-  city: z.enum(CITIES, { errorMap: () => ({ message: 'Cidade inválida' }) }),
+  email: z.string().optional().default(''),
+  phone: z.string().min(8, 'Telefone inválido'),
+  city: z.string().min(2, 'Cidade obrigatória'),
   plan_interest: z.string().optional(),
+  planInterest: z.string().optional(),
   notes: z.string().optional(),
 })
 

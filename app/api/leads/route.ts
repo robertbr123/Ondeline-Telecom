@@ -34,6 +34,8 @@ export async function POST(request: NextRequest) {
     // Validar dados
     const validatedData = leadSchema.parse(body)
     const couponCode = body.coupon_code || null
+    // aceita tanto planInterest (frontend) quanto plan_interest (admin)
+    const planInterest = body.planInterest || body.plan_interest || validatedData.planInterest || validatedData.plan_interest || null
 
     const id = nanoid()
     const now = new Date().toISOString()
@@ -41,17 +43,17 @@ export async function POST(request: NextRequest) {
     // Calculate lead score
     const score = calculateLeadScore({
       city: validatedData.city,
-      plan_interest: body.plan_interest || null,
+      plan_interest: planInterest,
       coupon_code: couponCode,
-      email: validatedData.email,
+      email: validatedData.email || '',
       phone: validatedData.phone,
     })
 
     // Inserir no banco
     await query(`
-      INSERT INTO leads (id, name, email, phone, city, status, coupon_code, score, created_at, updated_at)
-      VALUES ($1, $2, $3, $4, $5, 'new', $6, $7, $8, $9)
-    `, [id, validatedData.name, validatedData.email, validatedData.phone, validatedData.city, couponCode, score, now, now])
+      INSERT INTO leads (id, name, email, phone, city, plan_interest, status, coupon_code, score, created_at, updated_at)
+      VALUES ($1, $2, $3, $4, $5, $6, 'new', $7, $8, $9, $10)
+    `, [id, validatedData.name, validatedData.email || '', validatedData.phone, validatedData.city, planInterest, couponCode, score, now, now])
 
     // Incrementar uso do cupom se fornecido
     if (couponCode) {
