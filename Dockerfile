@@ -11,7 +11,7 @@ COPY package.json pnpm-lock.yaml* ./
 
 # Instalar pnpm e dependências (build scripts de sharp e oxide serão executados automaticamente)
 RUN corepack enable pnpm
-RUN pnpm install --no-frozen-lockfile
+RUN pnpm install --no-frozen-lockfile --config.dangerously-allow-all-builds=true
 
 # Copiar resto do código
 COPY . .
