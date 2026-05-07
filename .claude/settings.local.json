@@ -16,7 +16,10 @@
       "Bash(grep -r api/site/config /c/Users/ontec/Videos/github/Ondeline-Telecom/app --include=*.tsx --include=*.ts)",
       "Bash(find /c/Users/ontec/Videos/github/Ondeline-Telecom -name *migrations* -o -name *schema* -o -name *init*)",
       "Bash(grep -r site_config /c/Users/ontec/Videos/github/Ondeline-Telecom --include=*.sql --include=*.ts --include=*.js)",
-      "Bash(grep -r 'CREATE TABLE' /c/Users/ontec/Videos/github/Ondeline-Telecom --include=*.sql)"
+      "Bash(grep -r 'CREATE TABLE' /c/Users/ontec/Videos/github/Ondeline-Telecom --include=*.sql)",
+      "Bash(npx tsc *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
     ]
   }
 }

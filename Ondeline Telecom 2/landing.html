@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Ondeline · 1 Giga por R$ 99,90 — só este mês no Vale do Juruá</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/shared.css"/>
+<style>
+  /* landing-specific */
+  .landing-nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .landing-nav .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 0;
+  }
+  .landing-nav .logo img { height: 36px; }
+  .landing-nav .phone-cta {
+    font-weight: 800; font-size: 14px; letter-spacing: -0.01em;
+    color: var(--ink); text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .landing-nav .phone-cta .num { color: var(--teal); }
+
+  .urgency-strip {
+    background: var(--ink); color: #fff;
+    text-align: center; font-size: 13px; font-weight: 600;
+    letter-spacing: 0.01em; padding: 10px 20px;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    flex-wrap: wrap;
+  }
+  .urgency-strip .flash {
+    background: var(--accent); color: #fff;
+    padding: 3px 10px; border-radius: 6px;
+    font-weight: 800; font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .urgency-strip .pulse-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #FFC94A;
+    box-shadow: 0 0 0 0 rgba(255,201,74,0.7);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255,201,74,0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(255,201,74,0); }
+    100% { box-shadow: 0 0 0 0 rgba(255,201,74,0); }
+  }
+
+  .lhero {
+    position: relative;
+    background: linear-gradient(180deg, #F7FAFB 0%, #ffffff 100%);
+    padding: 56px 0 80px;
+    overflow: hidden;
+  }
+  .lhero::before {
+    content: "";
+    position: absolute; top: -300px; right: -200px;
+    width: 700px; height: 700px; border-radius: 50%;
+    background: radial-gradient(circle, var(--teal-soft) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .lhero-grid {
+    display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px;
+    align-items: start; position: relative; z-index: 1;
+  }
+  .lhero-left .chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #FFF4E5; color: var(--accent);
+    padding: 8px 14px; border-radius: 999px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .lhero-left h1 {
+    font-size: clamp(40px, 5.5vw, 72px);
+    line-height: 1.02; letter-spacing: -0.035em;
+    font-weight: 800; margin: 20px 0 24px;
+    text-wrap: balance;
+  }
+  .lhero-left h1 .giga {
+    color: var(--teal);
+    position: relative; white-space: nowrap;
+  }
+  .lhero-left h1 .giga::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 8px;
+    background: var(--accent-soft, #FFE4DA);
+    z-index: -1;
+  }
+  .lhero-left .sub {
+    font-size: 19px; color: var(--ink-2); line-height: 1.55;
+    margin-bottom: 32px; max-width: 52ch;
+  }
+
+  .price-block {
+    display: flex; align-items: flex-end; gap: 16px; margin-bottom: 28px;
+    padding: 20px 24px; background: #fff;
+    border: 2px solid var(--ink); border-radius: 18px;
+    box-shadow: 6px 6px 0 var(--ink);
+    max-width: 420px;
+  }
+  .price-block .was {
+    font-size: 14px; font-weight: 600; color: var(--ink-mute);
+    text-decoration: line-through; margin-bottom: 4px;
+  }
+  .price-block .now {
+    font-size: 48px; font-weight: 800; letter-spacing: -0.03em;
+    line-height: 1; color: var(--teal);
+  }
+  .price-block .now small {
+    font-size: 18px; color: var(--ink); font-weight: 700;
+  }
+  .price-block .save {
+    display: inline-block;
+    background: var(--accent); color: #fff;
+    padding: 4px 10px; border-radius: 6px;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.04em;
+    margin-top: 6px;
+  }
+
+  .countdown {
+    display: flex; gap: 10px; margin-bottom: 32px;
+    align-items: center;
+  }
+  .countdown .label {
+    font-size: 12px; font-weight: 700; color: var(--ink-mute);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    margin-right: 8px;
+  }
+  .countdown .box {
+    background: var(--ink); color: #fff;
+    min-width: 58px; padding: 10px 6px;
+    border-radius: 10px; text-align: center;
+  }
+  .countdown .box .n {
+    font-size: 24px; font-weight: 800; letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .countdown .box .u {
+    font-size: 10px; font-weight: 600; color: #94a3b8;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .benefits {
+    display: grid; gap: 12px; margin-bottom: 32px;
+  }
+  .benefits .item {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 16px; font-weight: 600; color: var(--ink);
+  }
+  .benefits .item .ck {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--teal); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    flex: none;
+  }
+
+  .trust-row {
+    display: flex; align-items: center; gap: 20px;
+    padding-top: 24px; border-top: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+  .trust-row .stars { color: #FFC94A; font-size: 16px; }
+  .trust-row .text {
+    font-size: 13px; color: var(--ink-2); font-weight: 600;
+  }
+  .trust-row .text strong { color: var(--ink); }
+
+  /* form card */
+  .lform-wrap {
+    position: sticky; top: 96px;
+  }
+  .lform {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 30px 60px -20px rgba(10,37,64,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  .lform::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0;
+    height: 6px; background: linear-gradient(90deg, var(--teal) 0%, var(--accent) 100%);
+  }
+  .lform .kicker {
+    display: inline-block; background: var(--teal-soft); color: var(--teal);
+    padding: 6px 12px; border-radius: 8px;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .lform h3 {
+    font-size: 26px; font-weight: 800; letter-spacing: -0.02em;
+    line-height: 1.15; margin-bottom: 8px;
+  }
+  .lform p.fs {
+    font-size: 14px; color: var(--ink-mute); margin-bottom: 22px; font-weight: 500;
+  }
+  .lform label {
+    display: block; font-size: 12px; font-weight: 700;
+    color: var(--ink-mute); letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 6px; margin-top: 14px;
+  }
+  .lform input, .lform select {
+    width: 100%; padding: 14px 16px;
+    font-size: 15px; font-weight: 500;
+    border: 1.5px solid var(--line); border-radius: 12px;
+    background: #F7FAFB; color: var(--ink);
+    font-family: inherit; transition: all 0.15s;
+  }
+  .lform input:focus, .lform select:focus {
+    outline: none; border-color: var(--teal);
+    background: #fff; box-shadow: 0 0 0 4px var(--teal-soft);
+  }
+  .lform button {
+    margin-top: 24px; width: 100%;
+    padding: 18px 24px;
+    font-size: 16px; font-weight: 800; letter-spacing: -0.01em;
+    background: var(--teal); color: #fff;
+    border: none; border-radius: 14px;
+    font-family: inherit; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 10px 20px -8px rgba(15,184,179,0.6);
+  }
+  .lform button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 28px -8px rgba(15,184,179,0.7);
+  }
+  .lform .guarantee {
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 18px; padding: 12px; background: #F7FAFB;
+    border-radius: 10px;
+    font-size: 12px; color: var(--ink-2); font-weight: 600;
+    line-height: 1.45;
+  }
+  .lform .guarantee .sh {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--teal-soft); color: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    flex: none;
+  }
+
+  .lform-sent {
+    text-align: center; padding: 32px 0;
+  }
+  .lform-sent .check {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--teal); color: #fff;
+    font-size: 36px; display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+  }
+  .lform-sent h4 {
+    font-size: 24px; font-weight: 800; letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+  .lform-sent p { color: var(--ink-2); font-size: 15px; line-height: 1.5; }
+
+  /* social proof strip */
+  .proof-strip {
+    background: var(--ink); color: #fff;
+    padding: 50px 0;
+  }
+  .proof-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+    text-align: center;
+  }
+  .proof-grid .v {
+    font-size: 46px; font-weight: 800; letter-spacing: -0.03em;
+    color: var(--teal-bright); line-height: 1;
+  }
+  .proof-grid .k {
+    font-size: 13px; color: #94a3b8; font-weight: 600;
+    letter-spacing: 0.04em; margin-top: 8px;
+  }
+
+  /* why-switch */
+  .switch-sec { padding: 96px 0; background: #F7FAFB; }
+  .switch-head { text-align: center; max-width: 720px; margin: 0 auto 48px; }
+  .switch-head h2 {
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 800; letter-spacing: -0.025em;
+    line-height: 1.05; margin-bottom: 14px;
+  }
+  .switch-head h2 span { color: var(--teal); }
+  .switch-head p { font-size: 17px; color: var(--ink-2); line-height: 1.55; }
+
+  .compare {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    max-width: 960px; margin: 0 auto;
+  }
+  .compare .col {
+    background: #fff; border-radius: 20px; padding: 32px;
+    border: 1px solid var(--line);
+  }
+  .compare .col.bad { background: #FFF1EE; border-color: #FFD4C8; }
+  .compare .col.good { background: var(--teal-soft); border-color: var(--teal); border-width: 2px; }
+  .compare .col h4 {
+    font-size: 20px; font-weight: 800; letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+  .compare .col .lbl {
+    font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .compare .bad .lbl { color: #C63C1A; }
+  .compare .good .lbl { color: var(--teal); }
+  .compare ul { list-style: none; padding: 0; margin: 20px 0 0; }
+  .compare li {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; font-size: 15px; color: var(--ink); font-weight: 500;
+    border-bottom: 1px dashed rgba(10,37,64,0.1);
+  }
+  .compare li:last-child { border-bottom: none; }
+  .compare li .mk { flex: none; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; margin-top: 2px; }
+  .compare .bad li .mk { background: #FFD4C8; color: #C63C1A; }
+  .compare .good li .mk { background: var(--teal); color: #fff; }
+
+  /* FAQ */
+  .faq-sec { padding: 96px 0; background: #fff; }
+  .faq-list { max-width: 780px; margin: 40px auto 0; }
+  .faq-item {
+    border-bottom: 1px solid var(--line);
+    padding: 20px 0;
+  }
+  .faq-item summary {
+    font-size: 17px; font-weight: 700; letter-spacing: -0.01em;
+    cursor: pointer; list-style: none;
+    display: flex; justify-content: space-between; align-items: center; gap: 20px;
+    color: var(--ink);
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after {
+    content: "+"; font-size: 24px; font-weight: 300;
+    color: var(--teal); flex: none;
+    transition: transform 0.2s;
+  }
+  .faq-item[open] summary::after { transform: rotate(45deg); }
+  .faq-item p {
+    margin-top: 12px; color: var(--ink-2); font-size: 15px; line-height: 1.6;
+  }
+
+  /* final CTA */
+  .final-cta {
+    background: linear-gradient(135deg, var(--teal) 0%, #0A2540 100%);
+    color: #fff; padding: 80px 0; text-align: center;
+  }
+  .final-cta h2 {
+    font-size: clamp(32px, 4.5vw, 52px);
+    font-weight: 800; letter-spacing: -0.025em; line-height: 1.05;
+    margin-bottom: 16px; text-wrap: balance;
+  }
+  .final-cta p {
+    font-size: 18px; color: rgba(255,255,255,0.85);
+    max-width: 560px; margin: 0 auto 32px; line-height: 1.55;
+  }
+  .final-cta .ccta {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #fff; color: var(--ink);
+    padding: 18px 32px; border-radius: 14px;
+    font-weight: 800; font-size: 17px; text-decoration: none;
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3);
+    transition: transform 0.15s;
+  }
+  .final-cta .ccta:hover { transform: translateY(-2px); }
+
+  .lfoot {
+    background: var(--ink); color: #94a3b8;
+    padding: 30px 0; text-align: center; font-size: 13px;
+  }
+  .lfoot a { color: var(--teal-bright); text-decoration: none; font-weight: 600; }
+
+  @media (max-width: 900px) {
+    .lhero-grid { grid-template-columns: 1fr; gap: 32px; }
+    .lform-wrap { position: static; }
+    .proof-grid { grid-template-columns: repeat(2, 1fr); gap: 32px 16px; }
+    .compare { grid-template-columns: 1fr; }
+    .countdown .box { min-width: 48px; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="assets/shared.jsx"></script>
+<script type="text/babel">
+
+function UrgencyStrip() {
+  return (
+    <div className="urgency-strip">
+      <span className="flash">⚡ Oferta relâmpago</span>
+      <span className="pulse-dot"></span>
+      <span>Só este mês: instalação grátis + primeiro mês por R$ 49,90 em todo o Vale do Juruá</span>
+    </div>
+  );
+}
+
+function LandingNav() {
+  return (
+    <div className="landing-nav">
+      <div className="shell nav-inner">
+        <a href="index.html" className="logo"><img src="assets/logo-ondeline.png" alt="Ondeline"/></a>
+        <a href="tel:+5592984607721" className="phone-cta">
+          <Icon name="phone" size={16}/>
+          <span>Central <span className="num">(92) 98460-7721</span></span>
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function Countdown() {
+  const [t, setT] = React.useState(() => ({ d: 3, h: 14, m: 27, s: 42 }));
+  React.useEffect(() => {
+    const id = setInterval(() => {
+      setT(prev => {
+        let { d, h, m, s } = prev;
+        s--;
+        if (s < 0) { s = 59; m--; }
+        if (m < 0) { m = 59; h--; }
+        if (h < 0) { h = 23; d--; }
+        if (d < 0) { d = 0; h = 0; m = 0; s = 0; }
+        return { d, h, m, s };
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
+  const pad = n => String(n).padStart(2, "0");
+  return (
+    <div className="countdown">
+      <span className="label">Termina em:</span>
+      <div className="box"><div className="n">{pad(t.d)}</div><div className="u">dias</div></div>
+      <div className="box"><div className="n">{pad(t.h)}</div><div className="u">horas</div></div>
+      <div className="box"><div className="n">{pad(t.m)}</div><div className="u">min</div></div>
+      <div className="box"><div className="n">{pad(t.s)}</div><div className="u">seg</div></div>
+    </div>
+  );
+}
+
+function LeadForm() {
+  const [sent, setSent] = React.useState(false);
+  return (
+    <div className="lform-wrap">
+      <div className="lform">
+        {!sent ? (
+          <form onSubmit={e => { e.preventDefault(); setSent(true); }}>
+            <span className="kicker">Garanta o seu · Grátis</span>
+            <h3>Receba a proposta no WhatsApp em 5 minutos</h3>
+            <p className="fs">Sem compromisso. A gente confirma disponibilidade no seu endereço e envia tudo pronto.</p>
+
+            <label>Nome completo</label>
+            <input required placeholder="Seu nome"/>
+
+            <label>WhatsApp</label>
+            <input required type="tel" placeholder="(92) 98460-7721"/>
+
+            <label>Cidade</label>
+            <select>
+              <option>Ipixuna</option>
+              <option>Eirunepé</option>
+              <option>Itamarati</option>
+              <option>Carauari (lista de espera)</option>
+              <option>Juruá (lista de espera)</option>
+            </select>
+
+            <label>Endereço ou bairro</label>
+            <input required placeholder="Rua, número e bairro"/>
+
+            <button type="submit">
+              Quero minha proposta agora <Icon name="arrow" size={18}/>
+            </button>
+
+            <div className="guarantee">
+              <div className="sh"><Icon name="shield" size={16}/></div>
+              <div>Sem taxa de instalação · Fidelidade opcional · Cancelamento sem multa nos primeiros 15 dias</div>
+            </div>
+          </form>
+        ) : (
+          <div className="lform-sent">
+            <div className="check">✓</div>
+            <h4>Pedido recebido!</h4>
+            <p>Em até <strong>5 minutos</strong> você recebe um WhatsApp do nosso time confirmando a disponibilidade e enviando o contrato pronto pra assinar.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function LandingHero() {
+  return (
+    <section className="lhero">
+      <div className="shell">
+        <div className="lhero-grid">
+          <div className="lhero-left">
+            <span className="chip">🔥 Oferta de lançamento · maio/2026</span>
+            <h1>
+              Internet de <span className="giga">1 Giga</span> na sua casa por <span style={{color:"var(--teal)"}}>R$ 99,90</span><span style={{color:"var(--ink-mute)", fontSize:"0.55em"}}>/mês</span>
+            </h1>
+            <p className="sub">Fibra óptica dedicada, Wi-Fi 6 incluso, suporte 24 horas feito por gente do Vale do Juruá. Sem fidelidade obrigatória. Instalação em até 48 horas.</p>
+
+            <div className="price-block">
+              <div>
+                <div className="was">De R$ 199,90/mês</div>
+                <div className="now">R$ 99<small>,90/mês</small></div>
+                <span className="save">Você economiza R$ 1.200/ano</span>
+              </div>
+            </div>
+
+            <Countdown/>
+
+            <div className="benefits">
+              <div className="item"><span className="ck"><Icon name="check" size={14}/></span>Instalação <strong style={{marginLeft:4}}>grátis</strong> neste mês (economia de R$ 299)</div>
+              <div className="item"><span className="ck"><Icon name="check" size={14}/></span>Roteador Wi-Fi 6 em comodato — sem custo</div>
+              <div className="item"><span className="ck"><Icon name="check" size={14}/></span>Fibra dedicada, velocidade real garantida 1:1</div>
+              <div className="item"><span className="ck"><Icon name="check" size={14}/></span>Suporte local 24/7 em português e no WhatsApp</div>
+              <div className="item"><span className="ck"><Icon name="check" size={14}/></span>Cancelamento sem multa nos primeiros 15 dias</div>
+            </div>
+
+            <div className="trust-row">
+              <div className="stars">★★★★★</div>
+              <div className="text"><strong>4,9</strong> em 312 avaliações · <strong>+1.200</strong> famílias conectadas no Juruá</div>
+            </div>
+          </div>
+
+          <LeadForm/>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ProofStrip() {
+  const items = [
+    { v: "+1.200", k: "Famílias já conectadas" },
+    { v: "99,98%", k: "Uptime comprovado" },
+    { v: "<5min", k: "Resposta no WhatsApp" },
+    { v: "48h", k: "Prazo médio de instalação" },
+  ];
+  return (
+    <section className="proof-strip">
+      <div className="shell">
+        <div className="proof-grid">
+          {items.map((it, i) => (
+            <div key={i}>
+              <div className="v">{it.v}</div>
+              <div className="k">{it.k}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WhySwitch() {
+  const bad = [
+    "Velocidade cai toda hora, principalmente à noite",
+    "Suporte demora dias ou fica em fila de call center",
+    "Internet via rádio ou satélite com alta latência",
+    "Contratos com fidelidade longa e multas altas",
+    "Técnico vem de outra cidade, quando vem",
+  ];
+  const good = [
+    "Fibra óptica dedicada 1:1 — mesma velocidade 24h",
+    "WhatsApp com resposta em minutos, técnico local",
+    "Latência de capital, ideal para jogos e chamadas",
+    "Fidelidade opcional e cancelamento sem multa",
+    "Equipe Ondeline mora e trabalha aqui, no Juruá",
+  ];
+  return (
+    <section className="switch-sec">
+      <div className="shell">
+        <div className="switch-head">
+          <span className="sec-lbl">Por que trocar</span>
+          <h2 style={{marginTop:14}}>Cansou de internet que <span>some quando mais precisa</span>?</h2>
+          <p>A diferença entre a Ondeline e as opções antigas no Vale do Juruá é visível no primeiro dia.</p>
+        </div>
+        <div className="compare">
+          <div className="col bad">
+            <div className="lbl">Internet antiga</div>
+            <h4>O que você tem hoje</h4>
+            <ul>
+              {bad.map((b, i) => (
+                <li key={i}><span className="mk">✕</span>{b}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="col good">
+            <div className="lbl">Ondeline</div>
+            <h4>O que você passa a ter</h4>
+            <ul>
+              {good.map((g, i) => (
+                <li key={i}><span className="mk">✓</span>{g}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FAQ() {
+  const qs = [
+    { q: "A oferta de R$ 99,90 é só no primeiro mês?", a: "Não. Os R$ 99,90 valem pelos primeiros 12 meses de contrato. Depois disso, o valor passa para R$ 139,90/mês, que continua sendo um dos melhores preços por 1 Giga da região. Você recebe um aviso com 30 dias de antecedência antes de qualquer reajuste." },
+    { q: "Minha região tem cobertura?", a: "A Ondeline atende Ipixuna, Eirunepé e Itamarati com rede ativa, e está em implantação em Carauari e Juruá. Preencha o formulário com seu endereço e em 5 minutos confirmamos se a fibra já passa na sua rua." },
+    { q: "Tem fidelidade? E se eu quiser cancelar?", a: "A fidelidade é opcional — 12 meses para garantir a promoção. Você pode também contratar sem fidelidade (valor um pouco maior) e cancelar quando quiser. Nos primeiros 15 dias, cancelamento é 100% gratuito em qualquer modalidade." },
+    { q: "Quanto tempo demora a instalação?", a: "48 horas em Eirunepé, Ipixuna e Itamarati. Se o endereço já tem infraestrutura pronta, instalamos no mesmo dia. Você escolhe o horário pelo WhatsApp — manhã, tarde ou sábado." },
+    { q: "O Wi-Fi é bom pra casa toda?", a: "Incluímos um roteador Wi-Fi 6 de alto desempenho em comodato (sem custo). Para casas grandes ou com muitos cômodos, oferecemos kit Mesh com 2 ou 3 pontos, também em comodato no plano de 1 Giga." },
+    { q: "Como é o atendimento se der problema?", a: "Nosso suporte é 24/7 via WhatsApp, com tempo médio de resposta abaixo de 5 minutos. O time é todo local — atende em português, sem robô, sem fila. Se precisar, técnico vai até sua casa no mesmo dia." },
+  ];
+  return (
+    <section className="faq-sec">
+      <div className="shell">
+        <div className="switch-head">
+          <span className="sec-lbl">Dúvidas frequentes</span>
+          <h2 style={{marginTop:14}}>Perguntas que <span>todo novo cliente faz</span></h2>
+        </div>
+        <div className="faq-list">
+          {qs.map((it, i) => (
+            <details className="faq-item" key={i}>
+              <summary>{it.q}</summary>
+              <p>{it.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FinalCTA() {
+  return (
+    <section className="final-cta">
+      <div className="shell">
+        <h2>Ainda dá tempo de pegar a oferta deste mês.</h2>
+        <p>1 Giga por R$ 99,90 com instalação grátis e roteador Wi-Fi 6 incluso. A partir do dia 30, a promoção acaba e o preço volta a R$ 139,90.</p>
+        <a href="#top" onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="ccta">
+          Quero garantir minha vaga <Icon name="arrow" size={18}/>
+        </a>
+      </div>
+    </section>
+  );
+}
+
+function LandingFooter() {
+  return (
+    <footer className="lfoot">
+      <div className="shell">
+        © 2023–2026 Ondeline Telecom · CNPJ 00.000.000/0001-00 · Vale do Juruá / AM · <a href="index.html">Site institucional</a> · <a href="empresarial.html">Planos empresariais</a>
+      </div>
+    </footer>
+  );
+}
+
+function App() {
+  return (
+    <div id="top">
+      <FadeInSetup/>
+      <UrgencyStrip/>
+      <LandingNav/>
+      <LandingHero/>
+      <ProofStrip/>
+      <WhySwitch/>
+      <FAQ/>
+      <FinalCTA/>
+      <LandingFooter/>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

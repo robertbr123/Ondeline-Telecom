@@ -1,0 +1,38 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-05-07T02:38:56.338Z",
+  "source": "auto-postool",
+  "partial": false,
+  "phase": null,
+  "phase_name": null,
+  "phase_dir": null,
+  "plan": null,
+  "task": null,
+  "total_tasks": null,
+  "status": "auto-checkpoint",
+  "completed_tasks": [],
+  "remaining_tasks": [],
+  "blockers": [],
+  "human_actions_pending": [],
+  "decisions": [],
+  "uncommitted_files": [
+    {
+      "status": "M",
+      "path": ".DS_Store"
+    },
+    {
+      "status": "M",
+      "path": ".claude/settings.local.json"
+    },
+    {
+      "status": "??",
+      "path": ".planning/"
+    },
+    {
+      "status": "??",
+      "path": "\"Ondeline Telecom 2/\""
+    }
+  ],
+  "next_action": null,
+  "context_notes": "Recent commits:\n7655e88 novo design homepage: migra Ondeline Telecom 2 para Next.js\n2bbf0dd novas features\nfb0d2aa update logo\ne86038c update ipixuna e eirunepe hero\n3af85f9 update hero"
+}

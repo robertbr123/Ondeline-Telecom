@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Ondeline em Juruá — Amazonas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/shared.css"/>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel">
+/* Ondeline shared components: Topbar, Nav, Footer, Icon */
+
+function Icon({ name, size = 24 }) {
+  const common = { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" };
+  const paths = {
+    fiber: <><path d="M3 12c3 0 3-5 9-5s6 10 9 5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></>,
+    support: <><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1v-6h3v4zM3 19a2 2 0 0 0 2 2h1v-6H3v4z"/></>,
+    wifi: <><path d="M5 12.55a11 11 0 0 1 14 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></>,
+    shield: <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></>,
+    bolt: <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>,
+    heart: <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>,
+    check: <path d="m5 12 5 5L20 7"/>,
+    arrow: <><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></>,
+    wa: <path d="M17.5 14.4c-.3-.1-1.8-.9-2-1s-.5-.1-.7.2c-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3z"/>,
+    ig: <><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></>,
+    fb: <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>,
+    pin: <><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></>,
+    clock: <><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></>,
+    globe: <><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></>,
+    stream: <><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M8 2v4M16 2v4M2 12h20"/></>,
+    game: <><rect x="2" y="7" width="20" height="10" rx="3"/><path d="M7 12h2M8 11v2M15 12h.01M17 13h.01M13 11h.01"/></>,
+    home: <><path d="M3 10 12 3l9 7v10a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2z"/></>,
+    building: <><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M10 22v-4h4v4"/></>,
+    server: <><rect x="2" y="3" width="20" height="7" rx="2"/><rect x="2" y="14" width="20" height="7" rx="2"/><path d="M6 6.5h.01M6 17.5h.01"/></>,
+    chart: <><path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-5"/></>,
+    cloud: <path d="M17.5 19a4.5 4.5 0 1 0-.5-8.95A6 6 0 0 0 6.5 12H6a4 4 0 0 0 0 8h11.5z"/>,
+    phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>,
+    mail: <><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></>,
+    users: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></>,
+    video: <><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m16 10 6-4v12l-6-4"/></>,
+    book: <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15zM4 19.5V22h16"/>,
+  };
+  return <svg {...common}>{paths[name] || <circle cx="12" cy="12" r="6"/>}</svg>;
+}
+
+function Topbar() {
+  return (
+    <div className="topbar">
+      <div className="shell row">
+        <div className="left">
+          <span><span className="dot"></span>Rede online · 99,98% uptime</span>
+          <span style={{opacity:0.6}}>|</span>
+          <span>Vale do Juruá · AM</span>
+        </div>
+        <div className="left">
+          <span>Central: <a href="tel:+5592984607721">(92) 98460-7721</a></span>
+          <span style={{opacity:0.4}}>|</span>
+          <a href="#">2ª via</a>
+          <a href="#">Área do cliente</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Nav({ home = "index.html", active }) {
+  const link = (href, label) => (
+    <a href={href} style={active === label ? { color: "var(--teal)" } : undefined}>{label}</a>
+  );
+  return (
+    <nav className="nav">
+      <div className="shell nav-inner">
+        <a href={home} className="nav-logo">
+          <img src="../assets/logo-ondeline.png" alt="Ondeline"/>
+        </a>
+        <div className="nav-links">
+          {link(home + "#planos", "Planos")}
+          <a href="empresarial.html" style={active === "empresarial" ? { color: "var(--teal)" } : undefined}>Empresarial</a>
+          <a href={home + "#cobertura"}>Cobertura</a>
+          <a href={home + "#porque"}>Por que Ondeline</a>
+          <a href={home + "#contato"}>Contato</a>
+        </div>
+        <a className="nav-cta" href={home + "#contato"}>
+          Assine agora <Icon name="arrow" size={18}/>
+        </a>
+      </div>
+    </nav>
+  );
+}
+
+function Footer({ home = "index.html" }) {
+  return (
+    <footer>
+      <div className="shell">
+        <div className="foot-top">
+          <div className="foot-brand">
+            <img src="../assets/logo-ondeline.png" alt="Ondeline"/>
+            <p>Provedor de internet por fibra óptica do Vale do Juruá. Conexão sem limites para cada canto do Amazonas.</p>
+          </div>
+          <div>
+            <h5>Planos</h5>
+            <ul>
+              <li><a href={home + "#planos"}>Residencial</a></li>
+              <li><a href="empresarial.html">Empresarial</a></li>
+              <li><a href="empresarial.html">Link dedicado</a></li>
+              <li><a href="empresarial.html">IP fixo</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5>Cidades</h5>
+            <ul>
+              <li><a href="cidades/ipixuna.html">Ipixuna</a></li>
+              <li><a href="cidades/eirunepe.html">Eirunepé</a></li>
+              <li><a href="cidades/itamarati.html">Itamarati</a></li>
+              <li><a href="cidades/carauari.html">Carauari</a></li>
+              <li><a href="cidades/jurua.html">Juruá</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5>Contato</h5>
+            <ul>
+              <li><a href="https://wa.me/5592984607721" target="_blank" rel="noopener">WhatsApp (92) 98460-7721</a></li>
+              <li><a href="#">contato@ondeline.net</a></li>
+              <li><a href="tel:+5592984607721">(92) 98460-7721</a></li>
+              <li><a href="#">Seja revenda</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="foot-bot">
+          <div>© 2023–2026 Ondeline Telecom · CNPJ 00.000.000/0001-00</div>
+          <div className="socials">
+            <a href="https://wa.me/5592984607721" target="_blank" rel="noopener" aria-label="WhatsApp"><Icon name="wa" size={18}/></a>
+            <a href="#" aria-label="Instagram"><Icon name="ig" size={18}/></a>
+            <a href="#" aria-label="Facebook"><Icon name="fb" size={18}/></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function FadeInSetup() {
+  React.useEffect(() => {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("in"); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll(".sec, .cta, footer, .hero, .fade-target").forEach(s => {
+      s.classList.add("fade-in");
+      io.observe(s);
+    });
+    return () => io.disconnect();
+  }, []);
+  return null;
+}
+
+Object.assign(window, { Icon, Topbar, Nav, Footer, FadeInSetup });
+
+</script>
+<script type="text/babel">
+/* Ondeline — Página de cidade (template reutilizável) */
+
+function CityHero({ city }) {
+  const activeTag = city.status === "active";
+  return (
+    <section className="page-hero">
+      <div className="shell">
+        <div className="crumbs">
+          <a href="../index.html">Início</a>
+          <span className="sep">/</span>
+          <a href="../index.html#cobertura">Cobertura</a>
+          <span className="sep">/</span>
+          <span>{city.name}</span>
+        </div>
+        <div className="city-hero-grid">
+          <div>
+            <span className="sec-lbl">{activeTag ? "Rede ativa" : "Em implantação"}</span>
+            <h1 style={{marginTop:16}}>Ondeline em <span>{city.name}</span></h1>
+            <p className="lead">{city.intro}</p>
+            <div className="pill-row">
+              {city.highlights.map((h, i) => (
+                <span className="pill" key={i}><Icon name="check" size={16}/> {h}</span>
+              ))}
+            </div>
+            <div className="hero-actions" style={{marginTop:32}}>
+              {activeTag ? (
+                <>
+                  <a href="#planos-cidade" className="btn btn-primary">Ver planos em {city.name} <Icon name="arrow" size={18}/></a>
+                  <a href="#contato-cidade" className="btn btn-ghost">Quero instalar</a>
+                </>
+              ) : (
+                <a href="#waitlist" className="btn btn-accent">Entrar na lista de espera <Icon name="arrow" size={18}/></a>
+              )}
+            </div>
+          </div>
+
+          <div className="city-photo" data-label={`FOTO DA CIDADE · ${city.name.toUpperCase()}\n\n[substituir por imagem real]`}>
+            <div className="tag-floating">
+              <span className="ld" style={{background: activeTag ? "#4ade80" : "var(--accent)"}}></span>
+              {activeTag ? "Rede operando" : "Em obras"}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CityStats({ city }) {
+  return (
+    <section style={{padding:"40px 0"}}>
+      <div className="shell">
+        <div className="city-stats">
+          {city.stats.map((s, i) => (
+            <div className="cell" key={i}>
+              <div className="v">{s.v}</div>
+              <div className="k">{s.k}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CityBairros({ city }) {
+  if (!city.bairros) return null;
+  return (
+    <section className="sec alt">
+      <div className="shell">
+        <div className="sec-head">
+          <span className="sec-lbl">Cobertura detalhada</span>
+          <h2>Bairros atendidos em <span>{city.name}</span></h2>
+          <p>Sua rua está na nossa rede? Confira abaixo — e se não estiver, deixe seu contato que avisamos assim que a fibra chegar.</p>
+        </div>
+        <div className="bairros">
+          {city.bairros.map((b, i) => (
+            <div className={"bairro " + (b.soon ? "soon" : "")} key={i}>
+              <span className="dotg"></span>
+              {b.name}
+              {b.soon && <span style={{marginLeft:"auto", fontSize:11, fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase", color:"var(--accent)"}}>Em breve</span>}
+            </div>
+          ))}
+        </div>
+        <p style={{marginTop:24, fontSize:13, color:"var(--ink-mute)", fontWeight:500}}>
+          Não encontrou seu bairro? Mande seu endereço pelo WhatsApp <a href="https://wa.me/5592984607721" target="_blank" rel="noopener" style={{color:"var(--teal)", fontWeight:700}}>(92) 98460-7721</a> que confirmamos em minutos.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function CityPlanos({ city }) {
+  if (city.status !== "active") return null;
+  return (
+    <section className="sec" id="planos-cidade">
+      <div className="shell">
+        <div className="sec-head center">
+          <span className="sec-lbl">Planos em {city.name}</span>
+          <h2>Fibra óptica disponível <span>agora</span> na sua casa.</h2>
+          <p>Todos os planos disponíveis em {city.name} com instalação grátis em contratos anuais.</p>
+        </div>
+        <div className="planos-grid">
+          {[
+            { name:"ESSENCIAL", speed:"300", unit:"MEGA", note:"Para navegar e assistir", price:"99", cents:"90", features:["Fibra dedicada","Wi-Fi 5 incluso","Upload 150 Mbps","Suporte 7 dias"] },
+            { name:"FLUXO", speed:"600", unit:"MEGA", note:"O mais escolhido", price:"139", cents:"90", features:["Fibra dedicada","Wi-Fi 6 incluso","Upload simétrico 600","Suporte 24h","Instalação grátis"], featured:true },
+            { name:"CORRENTEZA", speed:"1", unit:"GIGA", note:"Sem abrir mão de nada", price:"199", cents:"90", features:["Fibra dedicada","Wi-Fi 6 Mesh","Upload simétrico 1G","Suporte prioritário","IP fixo opcional"] },
+          ].map((p, i) => (
+            <div className={"plan " + (p.featured ? "featured" : "")} key={i}>
+              {p.featured && <div className="plan-badge">Mais escolhido</div>}
+              <div className="plan-name">{p.name}</div>
+              <div className="plan-speed"><span className="n">{p.speed}</span><span className="u">{p.unit}</span></div>
+              <div className="plan-note">{p.note}</div>
+              <div className="plan-price">R$ {p.price}<small>,{p.cents}/mês</small></div>
+              <div className="plan-price-alt">Instalação grátis em {city.name}</div>
+              <ul>{p.features.map((f,j) => <li key={j}>{f}</li>)}</ul>
+              <a href="#contato-cidade" className={"btn " + (p.featured ? "btn-primary" : "btn-ghost")}>Quero este plano <Icon name="arrow" size={16}/></a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CityLoja({ city }) {
+  return (
+    <section className="sec alt">
+      <div className="shell">
+        <div style={{display:"grid", gridTemplateColumns:"1fr 1fr", gap:48, alignItems:"center"}}>
+          <div>
+            <span className="sec-lbl">Atendimento local</span>
+            <h2 style={{fontSize:"clamp(32px,4vw,48px)", fontWeight:800, letterSpacing:"-0.025em", lineHeight:1.05, marginTop:16, marginBottom:18}}>
+              A gente está <span style={{color:"var(--teal)"}}>aqui, em {city.name}</span>.
+            </h2>
+            <p style={{fontSize:17, color:"var(--ink-2)", lineHeight:1.55, marginBottom:28, maxWidth:"50ch"}}>
+              {city.loja.desc}
+            </p>
+            <div style={{display:"flex", flexDirection:"column", gap:18}}>
+              {city.loja.items.map((it, i) => (
+                <div key={i} style={{display:"flex", alignItems:"flex-start", gap:14}}>
+                  <div style={{width:42, height:42, borderRadius:12, background:"var(--teal-soft)", color:"var(--teal)", display:"flex", alignItems:"center", justifyContent:"center", flex:"none"}}>
+                    <Icon name={it.icon} size={20}/>
+                  </div>
+                  <div>
+                    <div style={{fontSize:12, fontWeight:700, color:"var(--ink-mute)", letterSpacing:"0.08em", textTransform:"uppercase"}}>{it.k}</div>
+                    <div style={{fontSize:17, fontWeight:700, marginTop:4}}>{it.v}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="city-photo" data-label={`LOJA / TIME ONDELINE · ${city.name.toUpperCase()}\n\n[foto do time local]`}></div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CityCTA({ city }) {
+  const [sent, setSent] = React.useState(false);
+  const isSoon = city.status !== "active";
+  return (
+    <section className="cta" id={isSoon ? "waitlist" : "contato-cidade"}>
+      <div className="shell">
+        <div className="cta-card">
+          <div style={{position:"relative", zIndex:1}}>
+            <span className="sec-lbl" style={{background:"rgba(255,255,255,0.2)", color:"#fff"}}>
+              {isSoon ? "Lista de espera" : `Instalação em ${city.name}`}
+            </span>
+            <h2 style={{marginTop:16}}>
+              {isSoon ? `A Ondeline está chegando em ${city.name}.` : `Fibra na sua casa em ${city.name}, em até 48h.`}
+            </h2>
+            <p>
+              {isSoon
+                ? `Cadastre seu WhatsApp para ser um dos primeiros assinantes quando a rede chegar em ${city.name}. Vaga garantida sem compromisso.`
+                : "Deixa seus dados que nosso time entra em contato em menos de 1 hora útil com toda a disponibilidade pro seu endereço."}
+            </p>
+          </div>
+          <form className="cta-form" onSubmit={e => { e.preventDefault(); setSent(true); }}>
+            {!sent ? (
+              <>
+                <h3>{isSoon ? "Entrar na lista" : "Solicitar instalação"}</h3>
+                <label>Nome completo</label>
+                <input required placeholder="Seu nome"/>
+                <label>WhatsApp</label>
+                <input required placeholder="(92) 98460-7721"/>
+                <label>Endereço / bairro em {city.name}</label>
+                <input required placeholder="Rua, bairro ou referência"/>
+                {!isSoon && (
+                  <>
+                    <label>Plano de interesse</label>
+                    <select>
+                      <option>Essencial · 300 Mega</option>
+                      <option>Fluxo · 600 Mega</option>
+                      <option>Correnteza · 1 Giga</option>
+                      <option>Ainda não sei</option>
+                    </select>
+                  </>
+                )}
+                <button className="btn btn-primary" type="submit">
+                  {isSoon ? "Quero ser avisado" : "Quero instalar"} <Icon name="arrow" size={16}/>
+                </button>
+              </>
+            ) : (
+              <div className="cta-thanks">
+                <div className="check">✓</div>
+                <h4>{isSoon ? "Você está na lista!" : "Pedido recebido!"}</h4>
+                <p>{isSoon ? `Vamos avisar assim que a Ondeline chegar em ${city.name}.` : "Nossa equipe entra em contato em até 1 hora útil."}</p>
+              </div>
+            )}
+          </form>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CityApp({ city }) {
+  React.useEffect(() => { document.title = `Ondeline em ${city.name} — ${city.state}`; }, [city]);
+  return (
+    <>
+      <FadeInSetup/>
+      <Topbar/>
+      <Nav home="../index.html"/>
+      <CityHero city={city}/>
+      <CityStats city={city}/>
+      <CityBairros city={city}/>
+      <CityPlanos city={city}/>
+      <CityLoja city={city}/>
+      <CityCTA city={city}/>
+      <Footer home="../index.html"/>
+    </>
+  );
+}
+
+window.CityApp = CityApp;
+
+</script>
+<script type="text/babel">
+const city = {"slug":"jurua","name":"Juruá","state":"Amazonas","status":"soon","intro":"Juruá e o quinto municipio do nosso plano de expansao. A rede Ondeline chega em Juruá no ultimo trimestre de 2026, completando a cobertura do Vale do Juruá.","highlights":["Em planejamento","Previsao Q4 2026","Lista de espera aberta","Planos a partir de R$ 99"],"stats":[{"v":"Q4/26","k":"Previsão de operação"},{"v":"+140","k":"Pré-cadastros"},{"v":"3","k":"Bairros previstos"},{"v":"0","k":"Taxa de cadastro"}],"bairros":[{"name":"Centro","soon":true},{"name":"Nova Jurua","soon":true},{"name":"Beira-Rio","soon":true}],"loja":{"desc":"A ativacao da rede em Jurua vem junto com a abertura do nosso ponto de atendimento local.","items":[{"icon":"pin","k":"Loja","v":"Planejada · Centro de Jurua"},{"icon":"clock","k":"Abertura prevista","v":"Quarto trimestre de 2026"},{"icon":"phone","k":"Lista de espera","v":"WhatsApp (97) 9 9999-0000"}]}};
+ReactDOM.createRoot(document.getElementById("root")).render(<CityApp city={city}/>);
+</script>
+</body>
+</html>

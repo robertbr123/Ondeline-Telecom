@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Ondeline Business — Internet dedicada para empresas do Vale do Juruá</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/shared.css"/>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="assets/shared.jsx"></script>
+<script type="text/babel">
+function BizHero() {
+  return (
+    <section className="page-hero dark">
+      <div className="shell">
+        <div className="crumbs">
+          <a href="index.html">Início</a>
+          <span className="sep">/</span>
+          <span>Empresarial</span>
+        </div>
+        <div style={{display:"grid", gridTemplateColumns:"1.2fr 1fr", gap:48, alignItems:"center"}} className="biz-hero-inner">
+          <div>
+            <span className="sec-lbl" style={{background:"rgba(20,212,207,0.15)", color:"var(--teal-bright)"}}>Ondeline Business</span>
+            <h1 style={{marginTop:16}}>Sua empresa <span>nunca mais</span> vai parar por causa da internet.</h1>
+            <p className="lead">Link dedicado, IP fixo, SLA em contrato e atendimento prioritário. A mesma qualidade de rede de uma capital — no coração do Vale do Juruá.</p>
+            <div className="pill-row">
+              <span className="pill"><Icon name="check" size={16}/> SLA 99,9%</span>
+              <span className="pill"><Icon name="check" size={16}/> IP fixo dedicado</span>
+              <span className="pill"><Icon name="check" size={16}/> Banda 1:1 garantida</span>
+              <span className="pill"><Icon name="check" size={16}/> Suporte 24/7</span>
+            </div>
+            <div className="hero-actions" style={{marginTop:32}}>
+              <a href="#solucoes" className="btn btn-primary">Ver soluções <Icon name="arrow" size={18}/></a>
+              <a href="#contato-biz" className="btn btn-ghost" style={{background:"transparent", color:"#fff", borderColor:"rgba(255,255,255,0.25)"}}>Falar com consultor</a>
+            </div>
+          </div>
+
+          <div className="grid-2" style={{gap:16}}>
+            <div className="metric" style={{background:"rgba(255,255,255,0.06)", borderColor:"rgba(255,255,255,0.1)"}}>
+              <div className="v" style={{color:"var(--teal-bright)"}}>99,9%</div>
+              <div className="k" style={{color:"#c7d4e0"}}>SLA de disponibilidade</div>
+            </div>
+            <div className="metric" style={{background:"rgba(255,255,255,0.06)", borderColor:"rgba(255,255,255,0.1)"}}>
+              <div className="v" style={{color:"var(--teal-bright)"}}>&lt;4h</div>
+              <div className="k" style={{color:"#c7d4e0"}}>Tempo médio de reparo</div>
+            </div>
+            <div className="metric" style={{background:"rgba(255,255,255,0.06)", borderColor:"rgba(255,255,255,0.1)"}}>
+              <div className="v" style={{color:"var(--teal-bright)"}}>1:1</div>
+              <div className="k" style={{color:"#c7d4e0"}}>Banda garantida</div>
+            </div>
+            <div className="metric" style={{background:"rgba(255,255,255,0.06)", borderColor:"rgba(255,255,255,0.1)"}}>
+              <div className="v" style={{color:"var(--teal-bright)"}}>24/7</div>
+              <div className="k" style={{color:"#c7d4e0"}}>Suporte prioritário</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Solucoes() {
+  const plans = [
+    {
+      tag: "PROFISSIONAL",
+      name: "Business 500",
+      desc: "Para escritórios, clínicas, lojas e comércios. Banda simétrica com IP fixo opcional.",
+      price: "R$ 299",
+      cycle: "/mês",
+      features: ["500 Mbps simétrico", "Banda garantida 1:1", "IP fixo opcional", "SLA 99,5%", "Suporte prioritário 7h–23h"],
+    },
+    {
+      tag: "DEDICADO",
+      name: "Business 1 Giga",
+      desc: "Link dedicado para empresas que dependem da internet para operar. Fibra exclusiva.",
+      price: "R$ 699",
+      cycle: "/mês",
+      features: ["1 Gbps dedicado simétrico", "Banda garantida 1:1", "IP fixo /30 incluso", "SLA 99,9% em contrato", "Suporte 24/7 prioritário", "Roteador gerenciado"],
+      featured: true,
+    },
+    {
+      tag: "CORPORATIVO",
+      name: "Link sob medida",
+      desc: "Múltiplos Gbps, redundância geográfica, bloco IP /29 ou /28, MPLS e VPN privada.",
+      price: "Consulte",
+      cycle: "",
+      features: ["2, 5 ou 10 Gbps", "Redundância dupla", "Bloco IP /29 ou /28", "SLA 99,95%", "Gerente de conta dedicado", "Relatórios mensais"],
+    },
+  ];
+  return (
+    <section className="sec alt" id="solucoes">
+      <div className="shell">
+        <div className="sec-head center">
+          <span className="sec-lbl">Soluções Business</span>
+          <h2>Planos pensados para cada <span>tamanho de negócio</span>.</h2>
+          <p>Do escritório de 2 pessoas à prefeitura com 200 servidores. Todos os planos incluem SLA em contrato e suporte prioritário.</p>
+        </div>
+        <div className="biz-grid">
+          {plans.map((p, i) => (
+            <div className={"biz-card " + (p.featured ? "featured" : "")} key={i}
+              style={p.featured ? {background:"linear-gradient(170deg, var(--bg-dark) 0%, var(--bg-deeper) 100%)", color:"#fff", border:"none", boxShadow:"0 30px 60px -20px rgba(10,37,64,0.4)"} : null}>
+              <div className="tag" style={p.featured ? {background:"rgba(20,212,207,0.2)", color:"var(--teal-bright)"} : null}>{p.tag}</div>
+              <h3>{p.name}</h3>
+              <p style={p.featured ? {color:"#c7d4e0"} : null}>{p.desc}</p>
+              <div className="price" style={p.featured ? {color:"var(--teal-bright)"} : null}>{p.price}<small style={p.featured ? {color:"#8fa5b8"} : null}> {p.cycle}</small></div>
+              <ul>
+                {p.features.map((f, j) => (
+                  <li key={j} style={p.featured ? {color:"#c7d4e0", borderColor:"rgba(255,255,255,0.1)"} : null}>{f}</li>
+                ))}
+              </ul>
+              <a href="#contato-biz" className={"btn " + (p.featured ? "btn-primary" : "btn-ghost")} style={{width:"100%", justifyContent:"center"}}>
+                Quero este plano <Icon name="arrow" size={16}/>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Setores() {
+  const items = [
+    { icon: "building", title: "Comércio e varejo", desc: "Maquininha, PDV, sistema ERP e CFTV sem quedas." },
+    { icon: "heart", title: "Clínicas e saúde", desc: "Prontuário eletrônico, teleconsulta, exames em nuvem." },
+    { icon: "book", title: "Educação", desc: "Salas conectadas, EaD, plataformas e aulas online." },
+    { icon: "server", title: "Setor público", desc: "Prefeituras, câmaras e secretarias com IP fixo e SLA." },
+    { icon: "cloud", title: "Escritórios", desc: "Contabilidade, advocacia, arquitetura, home office." },
+    { icon: "video", title: "Mídia e produção", desc: "Upload pesado, lives, transmissão em 4K e cloud storage." },
+    { icon: "stream", title: "Hotelaria", desc: "Wi-Fi para hóspedes, rede gerenciada, SLA visível." },
+    { icon: "users", title: "Coworking e hubs", desc: "Múltiplas VLANs, banda compartilhada inteligente." },
+  ];
+  return (
+    <section className="sec">
+      <div className="shell">
+        <div className="sec-head center">
+          <span className="sec-lbl">Setores que atendemos</span>
+          <h2>Feito para quem <span>não pode parar</span>.</h2>
+          <p>Mais de 80 empresas do Vale do Juruá já operam em cima da nossa rede.</p>
+        </div>
+        <div className="sectors-grid">
+          {items.map((it, i) => (
+            <div className="sector" key={i}>
+              <div className="sec-icon"><Icon name={it.icon} size={24}/></div>
+              <h4>{it.title}</h4>
+              <p>{it.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BizBeneficios() {
+  const items = [
+    { icon: "shield", title: "SLA em contrato", text: "Penalidades claras em caso de indisponibilidade. Não é promessa, é cláusula contratual." },
+    { icon: "bolt", title: "Banda garantida 1:1", text: "A velocidade contratada é a velocidade entregue, 24 horas por dia, sem contenção." },
+    { icon: "server", title: "IP fixo dedicado", text: "IP público exclusivo para sua empresa. Ideal para servidores, VPN e câmeras IP." },
+    { icon: "support", title: "Atendimento prioritário", text: "Fila separada, gerente de conta e técnicos em campo quando for necessário." },
+    { icon: "globe", title: "Redundância geográfica", text: "Backbone duplo via Tefé e Manaus. Se um caminho cai, o outro assume em segundos." },
+    { icon: "chart", title: "Relatórios mensais", text: "Uptime, tráfego, incidentes e SLA consolidados. Transparência total do que você paga." },
+  ];
+  return (
+    <section className="sec alt">
+      <div className="shell">
+        <div className="sec-head center">
+          <span className="sec-lbl">Por que Ondeline Business</span>
+          <h2>Mais que internet, uma <span>operação crítica</span> na sua mão.</h2>
+        </div>
+        <div className="why-grid">
+          {items.map((it, i) => (
+            <div className="why-card" key={i}>
+              <div className="why-icon"><Icon name={it.icon}/></div>
+              <h4>{it.title}</h4>
+              <p>{it.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BizTesti() {
+  const items = [
+    { q: "Migramos da operadora nacional para a Ondeline e no primeiro mês já sentimos a diferença. Atendimento em 3 minutos, técnico no mesmo dia. Operação nunca mais parou.", n: "Hospital Municipal", w: "Eirunepé · 120 colaboradores", l: "H" },
+    { q: "Temos 4 filiais no Vale do Juruá e todas são interligadas por VPN via Ondeline. Zero dor de cabeça. O gerente de conta resolve tudo pelo WhatsApp.", n: "Rede Comercial AM", w: "3 cidades atendidas", l: "R" },
+    { q: "Prefeitura com sistemas críticos de saúde e educação. A redundância dupla da Ondeline nos dá a tranquilidade de operar o ano inteiro.", n: "Prefeitura de Itamarati", w: "Secretaria de TI", l: "P" },
+  ];
+  return (
+    <section className="sec">
+      <div className="shell">
+        <div className="sec-head center">
+          <span className="sec-lbl">Cases de sucesso</span>
+          <h2>Empresas do Juruá que <span>confiam na Ondeline</span>.</h2>
+        </div>
+        <div className="testi-grid">
+          {items.map((t, i) => (
+            <div className="testi" key={i}>
+              <div className="stars">★★★★★</div>
+              <q>{t.q}</q>
+              <div className="who">
+                <div className="avatar">{t.l}</div>
+                <div>
+                  <div className="who-name">{t.n}</div>
+                  <div className="who-city">{t.w}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BizCTA() {
+  const [sent, setSent] = React.useState(false);
+  return (
+    <section className="cta" id="contato-biz">
+      <div className="shell">
+        <div className="cta-card">
+          <div style={{position:"relative", zIndex:1}}>
+            <span className="sec-lbl" style={{background:"rgba(255,255,255,0.2)", color:"#fff"}}>Fale com um consultor</span>
+            <h2 style={{marginTop:16}}>Vamos desenhar a solução ideal pra sua empresa.</h2>
+            <p>Nosso time comercial entra em contato em menos de 2 horas úteis para entender sua operação e enviar uma proposta sob medida.</p>
+            <div style={{display:"flex", gap:28, marginTop:32, flexWrap:"wrap"}}>
+              <div style={{display:"flex", alignItems:"center", gap:12}}>
+                <Icon name="phone"/>
+                <div>
+                  <div style={{fontSize:12, opacity:0.8, fontWeight:600}}>COMERCIAL</div>
+                  <div style={{fontSize:18, fontWeight:800}}>+55 97 9999-0001</div>
+                </div>
+              </div>
+              <div style={{display:"flex", alignItems:"center", gap:12}}>
+                <Icon name="mail"/>
+                <div>
+                  <div style={{fontSize:12, opacity:0.8, fontWeight:600}}>E-MAIL</div>
+                  <div style={{fontSize:18, fontWeight:800}}>business@ondeline.net</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <form className="cta-form" onSubmit={e => { e.preventDefault(); setSent(true); }}>
+            {!sent ? (
+              <>
+                <h3>Solicitar proposta</h3>
+                <label>Empresa</label>
+                <input required placeholder="Razão social ou nome fantasia"/>
+                <label>Seu nome</label>
+                <input required placeholder="Nome e sobrenome"/>
+                <label>WhatsApp</label>
+                <input required placeholder="(92) 98460-7721"/>
+                <label>Cidade</label>
+                <select>
+                  <option>Ipixuna</option>
+                  <option>Eirunepé</option>
+                  <option>Itamarati</option>
+                  <option>Outra / múltiplas filiais</option>
+                </select>
+                <label>Interesse</label>
+                <select>
+                  <option>Business 500</option>
+                  <option>Business 1 Giga (dedicado)</option>
+                  <option>Link corporativo sob medida</option>
+                  <option>Não sei, quero consultoria</option>
+                </select>
+                <button className="btn btn-primary" type="submit">Solicitar proposta <Icon name="arrow" size={16}/></button>
+              </>
+            ) : (
+              <div className="cta-thanks">
+                <div className="check">✓</div>
+                <h4>Proposta em andamento!</h4>
+                <p>Um consultor Ondeline Business entra em contato em até 2 horas úteis.</p>
+              </div>
+            )}
+          </form>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BizApp() {
+  return (
+    <>
+      <FadeInSetup/>
+      <Topbar/>
+      <Nav active="empresarial"/>
+      <BizHero/>
+      <Solucoes/>
+      <Setores/>
+      <BizBeneficios/>
+      <BizTesti/>
+      <BizCTA/>
+      <Footer/>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<BizApp/>);
+</script>
+</body>
+</html>
