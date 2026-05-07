@@ -68,12 +68,12 @@
 .on2-nav-cta {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 12px 22px;
-  background: var(--teal); color: #fff;
+  background: #0fb8b3 !important; color: #fff !important;
   font-weight: 700; font-size: 14px;
   border-radius: 999px;
   transition: transform .2s, box-shadow .2s, background .2s;
 }
-.on2-nav-cta:hover { background: var(--teal-dark); transform: translateY(-1px); box-shadow: 0 12px 28px -10px var(--teal); }
+.on2-nav-cta:hover { background: #0a8a86 !important; transform: translateY(-1px); box-shadow: 0 12px 28px -10px #0fb8b3; }
 @media (max-width: 900px) { .on2-nav-links { display: none; } .on2-nav-cta { display: none; } }
 
 /* ── BURGER ── */
@@ -230,7 +230,7 @@
 .on2-hv-cta {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   width: 100%; padding: 14px 20px;
-  background: #fff; color: var(--teal-dark);
+  background: #fff !important; color: #0a8a86 !important;
   border-radius: 14px; font-weight: 700; font-size: 15px;
   transition: transform .15s, box-shadow .15s;
 }
@@ -548,3 +548,139 @@
   .on2-hero-stats .cell + .cell { border-left: 1px solid var(--line); padding-left: 14px; }
   .on2-hero-stats .cell:nth-child(3) { grid-column: 1 / -1; border-left: none; border-top: 1px solid var(--line); padding-top: 14px; padding-left: 0; }
 }
+
+/* ============================================================
+   PÁGINAS DE CIDADE
+   ============================================================ */
+
+/* Hero da página de cidade */
+.on2-page-hero {
+  padding: 120px 0 80px;
+  background:
+    radial-gradient(ellipse 60% 50% at 85% 0%, #e6f9f8 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 0% 80%, #fff5f1 0%, transparent 60%),
+    #ffffff;
+  position: relative; overflow: hidden;
+}
+.on2-page-hero .crumbs {
+  font-size: 13px; font-weight: 600; color: #7a8ba0; margin-bottom: 24px;
+  display: flex; align-items: center; gap: 8px;
+}
+.on2-page-hero .crumbs a { color: #7a8ba0; }
+.on2-page-hero .crumbs a:hover { color: #0fb8b3; }
+.on2-page-hero .crumbs .sep { opacity: 0.4; }
+.on2-page-hero h1 {
+  font-size: clamp(40px, 5.4vw, 72px); font-weight: 800;
+  line-height: 1.03; letter-spacing: -0.03em; max-width: 18ch; color: #0a2540;
+}
+.on2-page-hero h1 span { color: #0fb8b3; }
+.on2-page-hero p.lead { font-size: 18px; line-height: 1.55; margin-top: 20px; max-width: 56ch; color: #3d5672; }
+
+/* Hero grid */
+.on2-city-hero-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: center; }
+@media (max-width: 900px) { .on2-city-hero-grid { grid-template-columns: 1fr; } }
+
+/* Foto placeholder da cidade */
+.on2-city-photo {
+  aspect-ratio: 4/5; border-radius: 32px;
+  overflow: hidden; position: relative;
+  border: 1.5px solid #e4ebf0;
+}
+.on2-city-photo img { width: 100%; height: 100%; object-fit: cover; }
+.on2-city-photo-placeholder {
+  width: 100%; height: 100%;
+  background:
+    linear-gradient(160deg, rgba(15,184,179,0.15), rgba(255,107,74,0.12)),
+    repeating-linear-gradient(135deg, #f4f7f8 0 20px, #ecf1f4 20px 40px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-size: 12px; color: #7a8ba0; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; text-align: center; padding: 24px;
+}
+.on2-city-tag-floating {
+  position: absolute; top: 24px; left: 24px;
+  background: #fff; border-radius: 12px;
+  padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 14px 30px -10px rgba(10,37,64,0.2);
+  font-size: 13px; font-weight: 700; color: #0a2540;
+}
+.on2-city-tag-floating .ld { width: 8px; height: 8px; border-radius: 50%; }
+.on2-city-tag-floating .ld.active { background: #4ade80; box-shadow: 0 0 8px #4ade80; }
+.on2-city-tag-floating .ld.soon { background: #ff6b4a; }
+
+/* Pill row */
+.on2-pill-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.on2-pill-row .pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: 999px;
+  background: #fff; border: 1.5px solid #e4ebf0;
+  font-size: 13.5px; font-weight: 600; color: #3d5672;
+}
+.on2-pill-row .pill svg { color: #0fb8b3; }
+
+/* Stats bar */
+.on2-city-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  background: #0a2540 !important; color: #fff !important;
+  border-radius: 24px; padding: 32px; margin: 0 0 0;
+}
+.on2-city-stats .cell { padding-right: 20px; }
+.on2-city-stats .cell + .cell { border-left: 1px solid rgba(255,255,255,0.12); padding-left: 24px; }
+.on2-city-stats .v { font-size: 32px; font-weight: 800; color: #14d4cf !important; letter-spacing: -0.02em; line-height: 1; }
+.on2-city-stats .k { font-size: 12px; font-weight: 600; color: #c7d4e0 !important; margin-top: 8px; letter-spacing: 0.05em; }
+@media (max-width: 720px) { .on2-city-stats { grid-template-columns: repeat(2, 1fr); gap: 20px; } .on2-city-stats .cell { border: 0 !important; padding: 0 !important; } }
+
+/* Bairros */
+.on2-bairros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.on2-bairro {
+  padding: 16px 20px; background: #fff; border: 1.5px solid #e4ebf0; border-radius: 14px;
+  display: flex; align-items: center; gap: 12px;
+  font-weight: 600; font-size: 14.5px; color: #0a2540;
+}
+.on2-bairro .dotg { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; flex: none; }
+.on2-bairro.soon { color: #7a8ba0; }
+.on2-bairro.soon .dotg { background: #ff6b4a; }
+@media (max-width: 720px) { .on2-bairros { grid-template-columns: 1fr; } }
+
+/* Loja local */
+.on2-loja-item {
+  display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px;
+}
+.on2-loja-icon {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: #e6f9f8; color: #0fb8b3;
+  display: flex; align-items: center; justify-content: center; flex: none;
+}
+.on2-loja-item .lbl { font-size: 12px; font-weight: 700; color: #7a8ba0; letter-spacing: 0.08em; text-transform: uppercase; }
+.on2-loja-item .val { font-size: 17px; font-weight: 700; color: #0a2540; margin-top: 4px; }
+
+/* CTA soon / waitlist */
+.on2-soon-banner {
+  background: linear-gradient(130deg, #0a2540 0%, #0d2d4f 100%);
+  color: #fff; border-radius: 36px; padding: 72px 64px;
+  position: relative; overflow: hidden; text-align: center;
+}
+.on2-soon-banner::before {
+  content: ""; position: absolute; top: -20%; right: -10%;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(15,184,179,0.35), transparent 70%);
+}
+.on2-soon-banner h2 { font-size: clamp(32px,4vw,52px); font-weight: 800; letter-spacing: -0.025em; margin-bottom: 16px; position: relative; z-index: 1; }
+.on2-soon-banner h2 span { color: #14d4cf; }
+.on2-soon-banner p { font-size: 17px; color: #c7d4e0; max-width: 56ch; margin: 0 auto 32px; line-height: 1.55; position: relative; z-index: 1; }
+.on2-soon-form { max-width: 480px; margin: 0 auto; position: relative; z-index: 1; display: flex; gap: 12px; flex-wrap: wrap; }
+.on2-soon-form input {
+  flex: 1; min-width: 220px; padding: 14px 18px; border-radius: 999px;
+  border: none; font: inherit; font-size: 15px;
+  background: rgba(255,255,255,0.12); color: #fff;
+  outline: none;
+}
+.on2-soon-form input::placeholder { color: rgba(255,255,255,0.5); }
+.on2-soon-form input:focus { background: rgba(255,255,255,0.2); }
+.on2-soon-thanks { position: relative; z-index: 1; }
+.on2-soon-thanks .check {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: rgba(20,212,207,0.15); color: #14d4cf;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 18px; font-size: 32px; font-weight: 800;
+}
+@media (max-width: 900px) { .on2-soon-banner { padding: 48px 28px; border-radius: 24px; } }
