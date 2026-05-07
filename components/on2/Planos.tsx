@@ -36,7 +36,15 @@ export function Planos({ whatsapp }: { whatsapp?: string }) {
     { id: "3", name: "CORRENTEZA", speed: "1000", price: "199,90", description: "Para quem não abre mão de nada", features: ["Fibra óptica dedicada", "Roteador Wi-Fi 6 Mesh", "Upload simétrico 1 Gbps", "Suporte prioritário 24h", "IP fixo opcional"], highlighted: false, active: true },
   ]
 
-  const display = plans.length > 0 ? plans : fallback
+  const raw = plans.length > 0 ? plans : fallback
+
+  // Sempre coloca o plano destacado no centro (posição 1)
+  const display = (() => {
+    const highlighted = raw.find((p) => p.highlighted)
+    const others = raw.filter((p) => !p.highlighted)
+    if (!highlighted || raw.length !== 3) return raw
+    return [others[0], highlighted, others[1]]
+  })()
 
   return (
     <section className="on2-sec" id="planos">
