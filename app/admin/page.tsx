@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { LogOut, Users, LayoutDashboard, Package, MessageSquare, Settings, BarChart3, FileText, BookOpen, Building2, HelpCircle, MapPin, Sparkles, Edit, Tag, Megaphone } from 'lucide-react'
 
@@ -58,13 +59,17 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-primary">Painel Admin - Ondeline</h1>
+      <header className="border-b border-border" style={{ background: '#fff', boxShadow: '0 1px 0 #e5e9ef' }}>
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Image src="/logo-ondeline.png" alt="Ondeline" width={120} height={32} style={{ height: 32, width: 'auto' }} />
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0fb8b3', background: '#e6fafa', padding: '2px 10px', borderRadius: 99 }}>Admin</span>
+          </div>
           <Button
             variant="outline"
             onClick={handleLogout}
             className="flex items-center gap-2"
+            style={{ borderColor: '#e5e9ef', color: '#374151' }}
           >
             <LogOut size={16} /> Sair
           </Button>

@@ -1,0 +1,176 @@
+/* ── Admin Ondeline 2 Theme ─────────────────────────────────────────────── */
+/* Sobrescreve as variáveis Tailwind dentro do wrapper .adm para aplicar     */
+/* o design system Ondeline 2 (teal, Manrope, fundo claro) sem tocar        */
+/* em nenhuma lógica funcional das páginas de admin.                         */
+
+.adm {
+  /* Base */
+  --background:         #f4f6f8;
+  --foreground:         #111827;
+  --card:               #ffffff;
+  --card-foreground:    #111827;
+  --popover:            #ffffff;
+  --popover-foreground: #111827;
+
+  /* Brand — teal Ondeline */
+  --primary:            #0fb8b3;
+  --primary-foreground: #ffffff;
+  --secondary:          #0a8a86;
+  --secondary-foreground: #ffffff;
+  --accent:             #b2f0ee;
+  --accent-foreground:  #0a8a86;
+
+  /* Neutros */
+  --muted:              #e5e9ef;
+  --muted-foreground:   #6b7280;
+  --border:             #e5e9ef;
+  --input:              #ffffff;
+  --ring:               #0fb8b3;
+
+  /* Destructive */
+  --destructive:        #ef4444;
+  --destructive-foreground: #ffffff;
+
+  font-family: var(--font-manrope, 'Manrope', sans-serif);
+  background-color: #f4f6f8;
+  color: #111827;
+  min-height: 100vh;
+}
+
+/* ── Reset herdado do dark mode ─────────────────────────────────────────── */
+.adm * {
+  color-scheme: light;
+}
+
+/* ── Backgrounds ────────────────────────────────────────────────────────── */
+.adm .bg-background    { background-color: #f4f6f8 !important; }
+.adm .bg-card          { background-color: #ffffff !important; }
+.adm .bg-card\/50      { background-color: #ffffff !important; }
+.adm .bg-muted         { background-color: #f0f2f5 !important; }
+.adm .bg-muted\/30     { background-color: #f4f6f8 !important; }
+.adm .bg-muted\/50     { background-color: #eef0f3 !important; }
+.adm .bg-input         { background-color: #ffffff !important; }
+.adm .bg-primary       { background-color: #0fb8b3 !important; }
+.adm .bg-secondary     { background-color: #0a8a86 !important; }
+.adm .bg-accent        { background-color: #e6fafa !important; }
+.adm .bg-destructive   { background-color: #ef4444 !important; }
+
+/* ── Text ───────────────────────────────────────────────────────────────── */
+.adm .text-foreground         { color: #111827 !important; }
+.adm .text-muted-foreground   { color: #6b7280 !important; }
+.adm .text-primary            { color: #0fb8b3 !important; }
+.adm .text-primary-foreground { color: #ffffff !important; }
+.adm .text-secondary          { color: #0a8a86 !important; }
+.adm .text-accent             { color: #0a8a86 !important; }
+.adm .text-destructive        { color: #ef4444 !important; }
+.adm .text-card-foreground    { color: #111827 !important; }
+
+/* ── Borders ────────────────────────────────────────────────────────────── */
+.adm .border-border        { border-color: #e5e9ef !important; }
+.adm .border-primary\/50   { border-color: rgba(15,184,179,.35) !important; }
+.adm .border-secondary\/50 { border-color: rgba(10,138,134,.35) !important; }
+.adm .border-accent\/50    { border-color: rgba(15,184,179,.25) !important; }
+.adm .border-destructive\/20 { border-color: rgba(239,68,68,.3) !important; }
+.adm .border-primary\/20   { border-color: rgba(15,184,179,.25) !important; }
+
+/* ── Rings / Focus ──────────────────────────────────────────────────────── */
+.adm .focus\:ring-primary:focus,
+.adm *:focus-visible {
+  outline: 2px solid #0fb8b3 !important;
+  outline-offset: 2px;
+  box-shadow: none !important;
+}
+.adm .focus\:ring-2:focus { box-shadow: 0 0 0 2px rgba(15,184,179,.4) !important; }
+
+/* ── Cards / Panels ─────────────────────────────────────────────────────── */
+.adm .rounded-xl,
+.adm .rounded-lg,
+.adm .rounded-2xl {
+  background-color: #ffffff;
+  border-color: #e5e9ef;
+}
+
+.adm [class*="hover:border-primary"]:hover  { border-color: #0fb8b3 !important; }
+.adm [class*="hover:border-secondary"]:hover { border-color: #0a8a86 !important; }
+.adm [class*="hover:border-accent"]:hover    { border-color: #0fb8b3 !important; }
+
+/* ── Inputs ─────────────────────────────────────────────────────────────── */
+.adm input,
+.adm select,
+.adm textarea {
+  background-color: #ffffff !important;
+  border-color: #e5e9ef !important;
+  color: #111827 !important;
+}
+.adm input::placeholder,
+.adm textarea::placeholder { color: #9ca3af !important; }
+
+/* ── Buttons ────────────────────────────────────────────────────────────── */
+.adm .bg-primary.hover\:bg-primary\/90,
+.adm button.bg-primary {
+  background-color: #0fb8b3 !important;
+  color: #ffffff !important;
+}
+.adm button[class*="bg-primary"] { background-color: #0fb8b3 !important; color: #ffffff !important; }
+.adm button[class*="bg-destructive"] { background-color: #ef4444 !important; color: #ffffff !important; }
+.adm button[class*="variant-outline"],
+.adm button[class*="border-border"] {
+  background-color: #ffffff !important;
+  border-color: #e5e9ef !important;
+  color: #374151 !important;
+}
+.adm button[class*="variant-ghost"] {
+  background-color: transparent !important;
+  color: #374151 !important;
+}
+.adm button[class*="variant-ghost"]:hover {
+  background-color: #f0f2f5 !important;
+}
+
+/* ── Header do admin ────────────────────────────────────────────────────── */
+.adm header.border-b {
+  background-color: #ffffff !important;
+  border-bottom-color: #e5e9ef !important;
+  box-shadow: 0 1px 0 #e5e9ef;
+}
+
+/* ── Tabelas ────────────────────────────────────────────────────────────── */
+.adm table { color: #111827; }
+.adm thead { background-color: #f4f6f8 !important; }
+.adm thead th { color: #6b7280 !important; }
+.adm tbody tr { border-bottom-color: #f0f2f5 !important; }
+.adm tbody tr:hover { background-color: #f9fafb !important; }
+.adm td { color: #374151 !important; }
+
+/* ── Badges de status (leads, etc.) ─────────────────────────────────────── */
+.adm .bg-blue-500\/10   { background-color: #eff6ff !important; }
+.adm .bg-yellow-500\/10 { background-color: #fefce8 !important; }
+.adm .bg-green-500\/10  { background-color: #f0fdf4 !important; }
+.adm .bg-red-500\/10    { background-color: #fef2f2 !important; }
+.adm .bg-gray-500\/10   { background-color: #f9fafb !important; }
+.adm .text-blue-500     { color: #3b82f6 !important; }
+.adm .text-yellow-500   { color: #eab308 !important; }
+.adm .text-green-500    { color: #22c55e !important; }
+.adm .text-red-500      { color: #ef4444 !important; }
+.adm .text-gray-500     { color: #6b7280 !important; }
+
+/* Charts — barras teal */
+.adm .bg-cyan-500 { background-color: #0fb8b3 !important; }
+.adm .bg-blue-500 { background-color: #3b82f6 !important; }
+
+/* ── Scrollbar ──────────────────────────────────────────────────────────── */
+.adm ::-webkit-scrollbar { width: 6px; height: 6px; }
+.adm ::-webkit-scrollbar-track { background: #f4f6f8; }
+.adm ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 99px; }
+.adm ::-webkit-scrollbar-thumb:hover { background: #0fb8b3; }
+
+/* ── Select (dropdown) ───────────────────────────────────────────────────── */
+.adm select option { background-color: #ffffff; color: #111827; }
+
+/* ── Destructive bg no card ─────────────────────────────────────────────── */
+.adm .bg-destructive\/10 { background-color: #fef2f2 !important; }
+.adm .border-destructive\/20 { border-color: #fecaca !important; }
+
+/* ── Prose / content editor ─────────────────────────────────────────────── */
+.adm .prose { color: #374151 !important; }
+.adm .prose h1,.adm .prose h2,.adm .prose h3 { color: #111827 !important; }

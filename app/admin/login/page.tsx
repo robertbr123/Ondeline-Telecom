@@ -1,110 +1,101 @@
 "use client"
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import Image from "next/image"
 
 export default function AdminLogin() {
   const router = useRouter()
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-  })
-  const [error, setError] = useState('')
+  const [formData, setFormData] = useState({ username: "", password: "" })
+  const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
+    setError("")
     setLoading(true)
-
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(formData),
       })
-
       const data = await res.json()
-
       if (data.success) {
-        // Usar window.location para garantir reload completo e cookie aplicado
-        window.location.href = '/admin'
+        window.location.href = "/admin"
       } else {
-        setError(data.error || 'Erro ao fazer login')
+        setError(data.error || "Erro ao fazer login")
       }
-    } catch (err) {
-      setError('Erro ao conectar com o servidor')
+    } catch {
+      setError("Erro ao conectar com o servidor")
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-8">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-primary mb-2">Ondeline</h1>
-          <p className="text-muted-foreground">Painel de Administração</p>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f4f6f8", padding: 24, fontFamily: "var(--font-manrope, Manrope, sans-serif)" }}>
+      <div style={{ width: "100%", maxWidth: 420 }}>
+
+        {/* Logo */}
+        <div style={{ textAlign: "center", marginBottom: 32 }}>
+          <Image src="/logo-ondeline.png" alt="Ondeline" width={160} height={42} style={{ height: 42, width: "auto", margin: "0 auto" }} />
+          <p style={{ color: "#6b7280", fontSize: "0.9rem", marginTop: 10, fontWeight: 500 }}>Painel de Administração</p>
         </div>
 
-        <div className="p-8 rounded-xl border border-border bg-card/50">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Card */}
+        <div style={{ background: "#fff", borderRadius: 20, border: "1.5px solid #e5e9ef", padding: 36, boxShadow: "0 4px 24px rgba(0,0,0,0.06)" }}>
+          <h2 style={{ fontWeight: 800, fontSize: "1.3rem", color: "#111827", marginBottom: 24 }}>Entrar</h2>
+
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div>
-              <label htmlFor="username" className="block text-sm font-medium mb-2">
-                Usuário
-              </label>
+              <label style={labelSt}>Usuário</label>
               <input
-                id="username"
                 type="text"
-                value={formData.username}
-                onChange={(e) =>
-                  setFormData({ ...formData, username: e.target.value })
-                }
-                className="w-full px-3 py-2 bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="admin"
                 required
+                placeholder="admin"
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                style={inputSt}
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium mb-2">
-                Senha
-              </label>
+              <label style={labelSt}>Senha</label>
               <input
-                id="password"
                 type="password"
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
-                className="w-full px-3 py-2 bg-input border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="••••••••"
                 required
+                placeholder="••••••••"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                style={inputSt}
               />
             </div>
 
             {error && (
-              <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
+              <div style={{ padding: "10px 14px", borderRadius: 10, background: "#fef2f2", border: "1px solid #fecaca", color: "#dc2626", fontSize: "0.875rem" }}>
                 {error}
               </div>
             )}
 
-            <Button
+            <button
               type="submit"
-              className="w-full bg-primary hover:bg-primary/90"
               disabled={loading}
+              style={{ marginTop: 4, padding: "12px", borderRadius: 12, background: loading ? "#9ca3af" : "#0fb8b3", color: "#fff", fontWeight: 700, fontSize: "1rem", border: "none", cursor: loading ? "not-allowed" : "pointer", fontFamily: "inherit", transition: "background .15s" }}
             >
-              {loading ? 'Entrando...' : 'Entrar'}
-            </Button>
+              {loading ? "Entrando..." : "Entrar"}
+            </button>
           </form>
         </div>
 
-        <p className="text-center text-sm text-muted-foreground">
+        <p style={{ textAlign: "center", fontSize: "0.8rem", color: "#9ca3af", marginTop: 20 }}>
           Acesse com suas credenciais de administrador
         </p>
       </div>
     </div>
   )
 }
+
+const labelSt: React.CSSProperties = { display: "block", fontSize: "0.85rem", fontWeight: 600, color: "#374151", marginBottom: 6 }
+const inputSt: React.CSSProperties = { width: "100%", padding: "10px 14px", border: "1.5px solid #e5e9ef", borderRadius: 10, fontSize: "0.95rem", fontFamily: "inherit", outline: "none", background: "#fff", color: "#111827", boxSizing: "border-box" }
