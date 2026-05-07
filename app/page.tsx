@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import { getSiteConfig } from "@/lib/site-config"
 import { Topbar } from "@/components/on2/Topbar"
 import { Nav } from "@/components/on2/Nav"

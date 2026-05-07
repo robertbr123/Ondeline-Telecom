@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import { getSiteConfig } from "@/lib/site-config"
 import { CityPage, type CityData } from "@/components/on2/CityPage"
 
