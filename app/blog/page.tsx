@@ -1,10 +1,11 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-import { Calendar, User, Eye, Search } from "lucide-react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
+import { Icon } from "@/components/on2/Icon"
+
+const WA = "5592984607721"
 
 interface Article {
   id: string
@@ -19,156 +20,130 @@ interface Article {
   created_at: string
 }
 
+function formatDate(d: string) {
+  return new Date(d).toLocaleDateString("pt-BR", { day: "numeric", month: "long", year: "numeric" })
+}
+
 export default function BlogPage() {
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedCategory, setSelectedCategory] = useState<string>("Todos")
-  const [searchQuery, setSearchQuery] = useState("")
+  const [category, setCategory] = useState("Todos")
+  const [search, setSearch] = useState("")
 
   useEffect(() => {
-    fetchArticles()
+    fetch("/api/blog")
+      .then((r) => r.json())
+      .then((d) => { if (d.success) setArticles((d.data || []).filter((a: Article) => a.published)) })
+      .catch(() => {})
+      .finally(() => setLoading(false))
   }, [])
 
-  const fetchArticles = async () => {
-    try {
-      const res = await fetch('/api/blog')
-      const data = await res.json()
-      if (data.success) {
-        const published = (data.data || []).filter((a: Article) => a.published)
-        setArticles(published)
-      }
-    } catch (error) {
-      console.error('Erro ao buscar artigos:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-BR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    })
-  }
-
-  const categories = ["Todos", ...new Set(articles.map((a) => a.category).filter(Boolean))]
-  const filteredArticles = articles.filter((a) => {
-    const matchesCategory = selectedCategory === "Todos" || a.category === selectedCategory
-    const matchesSearch = !searchQuery ||
-      a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      a.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesCategory && matchesSearch
+  const categories = ["Todos", ...Array.from(new Set(articles.map((a) => a.category).filter(Boolean)))]
+  const filtered = articles.filter((a) => {
+    const okCat = category === "Todos" || a.category === category
+    const okSearch = !search || a.title.toLowerCase().includes(search.toLowerCase()) || a.excerpt.toLowerCase().includes(search.toLowerCase())
+    return okCat && okSearch
   })
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <main className="pt-24 pb-16">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="flex justify-center items-center h-64">
-              <div className="text-muted-foreground">Carregando artigos...</div>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    )
-  }
-
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-
-      <main className="pt-24 pb-16">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="mb-12">
-            <h1 className="text-4xl font-bold text-foreground mb-4">Blog Ondeline</h1>
-            <p className="text-muted-foreground text-lg">
-              Dicas, notícias e informações sobre internet de qualidade na Amazônia
-            </p>
+    <div className="on2">
+      {/* Nav */}
+      <nav className="on2-nav" style={{ position: "relative" }}>
+        <div className="on2-shell on2-nav-inner">
+          <Link href="/" className="on2-nav-logo">
+            <Image src="/logo-ondeline.png" alt="Ondeline" width={140} height={36} style={{ height: 36, width: "auto" }} />
+          </Link>
+          <div className="on2-nav-links" style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <Link href="/#planos" className="on2-nav-link">Planos</Link>
+            <Link href={`https://wa.me/${WA}`} className="on2-nav-cta">Assine agora</Link>
           </div>
+        </div>
+      </nav>
 
-          {/* Search bar */}
-          <div className="mb-6 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+      {/* Hero */}
+      <section style={{ background: "linear-gradient(135deg, #0fb8b3 0%, #0a8a86 100%)", padding: "64px 0 48px" }}>
+        <div className="on2-shell" style={{ textAlign: "center" }}>
+          <span className="on2-sec-lbl" style={{ color: "rgba(255,255,255,0.85)", borderColor: "rgba(255,255,255,0.3)", background: "rgba(255,255,255,0.15)" }}>Conteúdo</span>
+          <h1 style={{ fontSize: "clamp(1.8rem,5vw,2.8rem)", fontWeight: 800, color: "#fff", marginTop: 14, marginBottom: 14 }}>Blog Ondeline</h1>
+          <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.05rem", maxWidth: 500, margin: "0 auto" }}>
+            Dicas, notícias e informações sobre internet de qualidade na Amazônia.
+          </p>
+        </div>
+      </section>
+
+      {/* Conteúdo */}
+      <section className="on2-sec">
+        <div className="on2-shell">
+
+          {/* Busca */}
+          <div style={{ position: "relative", maxWidth: 520, margin: "0 auto 28px" }}>
+            <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "#9ca3af", pointerEvents: "none" }}>🔍</span>
             <input
               type="text"
               placeholder="Buscar artigos..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={{ width: "100%", padding: "12px 16px 12px 40px", border: "1.5px solid #e5e9ef", borderRadius: 12, fontSize: "0.95rem", fontFamily: "inherit", outline: "none", background: "#fff", color: "#111827", boxSizing: "border-box" }}
             />
           </div>
 
+          {/* Categorias */}
           {categories.length > 1 && (
-            <div className="mb-8 flex flex-wrap gap-3">
-              {categories.map((category) => (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginBottom: 40 }}>
+              {categories.map((cat) => (
                 <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-lg font-medium transition ${
-                    selectedCategory === category
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-muted-foreground hover:bg-muted/70"
-                  }`}
+                  key={cat}
+                  onClick={() => setCategory(cat)}
+                  style={{
+                    padding: "7px 18px", borderRadius: 99, border: "1.5px solid",
+                    borderColor: category === cat ? "#0fb8b3" : "#e5e9ef",
+                    background: category === cat ? "#0fb8b3" : "#fff",
+                    color: category === cat ? "#fff" : "#4b5563",
+                    fontWeight: 600, fontSize: "0.875rem", cursor: "pointer", fontFamily: "inherit", transition: "all .15s"
+                  }}
                 >
-                  {category}
+                  {cat}
                 </button>
               ))}
             </div>
           )}
 
-          {filteredArticles.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-muted-foreground text-lg mb-4">Nenhum artigo publicado ainda.</p>
-              <p className="text-sm text-muted-foreground">Volte em breve para novidades!</p>
+          {/* Grid */}
+          {loading ? (
+            <div style={{ textAlign: "center", padding: "64px 0" }}>
+              <div style={{ width: 36, height: 36, border: "3px solid #0fb8b3", borderTopColor: "transparent", borderRadius: "50%", margin: "0 auto", animation: "spin 0.8s linear infinite" }} />
+              <p style={{ marginTop: 16, color: "#6b7280" }}>Carregando artigos...</p>
+            </div>
+          ) : filtered.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "64px 0" }}>
+              <div style={{ fontSize: "3rem", marginBottom: 16 }}>📰</div>
+              <p style={{ color: "#6b7280", fontSize: "1.05rem", marginBottom: 8 }}>Nenhum artigo encontrado.</p>
+              <p style={{ color: "#9ca3af", fontSize: "0.9rem" }}>Volte em breve para novidades!</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredArticles.map((article) => (
-                <Link
-                  key={article.id}
-                  href={`/blog/${article.slug}`}
-                  className="group text-left h-full hover:opacity-80 transition"
-                >
-                  <div className="bg-card border border-border rounded-lg overflow-hidden h-full flex flex-col">
-                    {article.cover_image ? (
-                      <img
-                        src={article.cover_image}
-                        alt={article.title}
-                        className="w-full h-40 object-cover group-hover:scale-105 transition duration-300"
-                      />
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 24 }}>
+              {filtered.map((a) => (
+                <Link key={a.id} href={`/blog/${a.slug}`} style={{ textDecoration: "none", display: "flex", flexDirection: "column" }}>
+                  <div className="on2-why-card" style={{ padding: 0, overflow: "hidden", flex: 1, display: "flex", flexDirection: "column", transition: "box-shadow .2s, transform .2s" }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(-3px)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(15,184,179,0.12)" }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = ""; (e.currentTarget as HTMLElement).style.boxShadow = "" }}
+                  >
+                    {a.cover_image ? (
+                      <img src={a.cover_image} alt={a.title} style={{ width: "100%", height: 180, objectFit: "cover" }} />
                     ) : (
-                      <div className="w-full h-40 bg-gradient-to-br from-primary/20 to-muted flex items-center justify-center">
-                        <span className="text-4xl">📰</span>
-                      </div>
+                      <div style={{ width: "100%", height: 180, background: "linear-gradient(135deg, #e6fafa, #b2f0ee)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "3rem" }}>📰</div>
                     )}
-                    <div className="p-4 flex-1 flex flex-col">
-                      {article.category && (
-                        <span className="text-xs text-muted-foreground font-semibold uppercase tracking-wide mb-2">
-                          {article.category}
-                        </span>
+                    <div style={{ padding: "20px 22px", flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
+                      {a.category && (
+                        <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "#0a8a86", textTransform: "uppercase", letterSpacing: "0.06em" }}>{a.category}</span>
                       )}
-                      <h3 className="font-bold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition">
-                        {article.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2 flex-1">{article.excerpt}</p>
-                      <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1">
-                          <User size={12} />
-                          {article.author}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Eye size={12} />
-                          {article.views}
-                        </span>
+                      <h3 style={{ fontWeight: 700, color: "#111827", fontSize: "1rem", lineHeight: 1.4, margin: 0, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{a.title}</h3>
+                      <p style={{ fontSize: "0.875rem", color: "#4b5563", margin: 0, flex: 1, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{a.excerpt}</p>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.78rem", color: "#9ca3af", marginTop: 4 }}>
+                        <span>👤 {a.author}</span>
+                        <span>👁 {a.views}</span>
                       </div>
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-                        <Calendar size={12} />
-                        {formatDate(article.created_at)}
-                      </div>
+                      <div style={{ fontSize: "0.78rem", color: "#9ca3af" }}>🗓 {formatDate(a.created_at)}</div>
                     </div>
                   </div>
                 </Link>
@@ -176,9 +151,19 @@ export default function BlogPage() {
             </div>
           )}
         </div>
-      </main>
+      </section>
 
-      <Footer />
+      {/* Footer */}
+      <footer className="on2-footer">
+        <div className="on2-shell on2-footer-inner">
+          <div className="on2-footer-logo">
+            <Image src="/logo-ondeline.png" alt="Ondeline" width={120} height={32} style={{ height: 32, width: "auto", filter: "brightness(0) invert(1)" }} />
+          </div>
+          <div className="on2-footer-copy">© 2023–2026 Ondeline Telecom · Vale do Juruá / AM</div>
+        </div>
+      </footer>
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   )
 }
