@@ -1,182 +1,153 @@
-"use client";
+"use client"
 
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
-import { CoverageMap } from "@/components/coverage-map";
-import { CoverageChecker } from "@/components/coverage-checker";
-import { Button } from "@/components/ui/button";
-import { MapPin, Phone, CheckCircle, Clock, Building2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
+import Link from "next/link"
+import Image from "next/image"
+import { Icon } from "@/components/on2/Icon"
+
+const WA = "5592984607721"
 
 interface CoverageArea {
-  id: number;
-  name: string;
-  state: string;
-  status: string;
-  latitude: number;
-  longitude: number;
-  description: string;
-  population: number;
-  launch_date: string;
+  id: number
+  name: string
+  state: string
+  status: string
+  description: string
+  population: number
+  launch_date: string
+}
+
+const CITY_LINKS: Record<string, string> = {
+  Ipixuna: "/ipixuna",
+  Eirunepé: "/eirunepe",
+  Itamarati: "/itamarati",
+  Carauari: "/carauari",
+}
+
+function formatPop(n: number) {
+  return n?.toLocaleString("pt-BR")
 }
 
 export default function CoveragePage() {
-  const [areas, setAreas] = useState<CoverageArea[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [areas, setAreas] = useState<CoverageArea[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetch("/api/coverage")
-      .then((res) => res.json())
-      .then((data) => {
-        setAreas(data.data || []);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
+      .then((r) => r.json())
+      .then((d) => { setAreas(d.data || []); setLoading(false) })
+      .catch(() => setLoading(false))
+  }, [])
 
-  const activeAreas = areas.filter((a) => a.status === "active");
-  const comingSoonAreas = areas.filter((a) => a.status === "coming_soon");
-
-  const formatPopulation = (pop: number) => {
-    if (!pop) return "";
-    return pop.toLocaleString("pt-BR");
-  };
+  const active = areas.filter((a) => a.status === "active")
+  const soon = areas.filter((a) => a.status === "coming_soon")
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-
-      {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-[#00a651] to-[#008c44]">
-        <div className="absolute inset-0 bg-black/10" />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center text-white max-w-3xl mx-auto">
-            <span className="inline-block px-3 py-1 bg-white/20 text-white border border-white/30 rounded-full text-sm mb-4">
-              Cobertura Regional
-            </span>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Onde a Ondeline Está Presente
-            </h1>
-            <p className="text-xl text-white/90 mb-8">
-              Levando internet de qualidade para as comunidades do Amazonas.
-              Confira nossa área de cobertura e verifique a disponibilidade no seu endereço.
-            </p>
+    <div className="on2">
+      {/* Nav */}
+      <nav className="on2-nav" style={{ position: "relative" }}>
+        <div className="on2-shell on2-nav-inner">
+          <Link href="/" className="on2-nav-logo">
+            <Image src="/logo-ondeline.png" alt="Ondeline" width={140} height={36} style={{ height: 36, width: "auto" }} />
+          </Link>
+          <div className="on2-nav-links" style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <Link href="/#planos" className="on2-nav-link">Planos</Link>
+            <Link href={`https://wa.me/${WA}`} className="on2-nav-cta">Assine agora</Link>
           </div>
+        </div>
+      </nav>
+
+      {/* Hero */}
+      <section style={{ background: "linear-gradient(135deg, #0fb8b3 0%, #0a8a86 100%)", padding: "72px 0 56px" }}>
+        <div className="on2-shell" style={{ textAlign: "center" }}>
+          <span className="on2-sec-lbl" style={{ color: "rgba(255,255,255,0.8)", borderColor: "rgba(255,255,255,0.3)", background: "rgba(255,255,255,0.15)" }}>Cobertura Regional</span>
+          <h1 style={{ fontSize: "clamp(1.8rem,5vw,3rem)", fontWeight: 800, color: "#fff", marginTop: 16, marginBottom: 16 }}>
+            Onde a Ondeline está presente
+          </h1>
+          <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.1rem", maxWidth: 580, margin: "0 auto" }}>
+            Levando fibra óptica de verdade para as comunidades do Vale do Juruá, no coração do Amazonas.
+          </p>
         </div>
       </section>
 
-      {/* Coverage Map Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">
-              Mapa de Cobertura
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Visualize todas as cidades onde a Ondeline oferece seus serviços de internet
-            </p>
-          </div>
-          <CoverageMap />
-        </div>
-      </section>
-
-      {/* Coverage Checker Section */}
-      <section className="py-16 bg-muted/50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto">
-            <CoverageChecker />
-          </div>
-        </div>
-      </section>
-
-      {/* Active Areas */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm mb-4">
-              <CheckCircle className="w-4 h-4" />
-              Disponível Agora
-            </span>
-            <h2 className="text-3xl font-bold text-foreground mb-4">
-              Cidades com Cobertura Ativa
-            </h2>
-            <p className="text-muted-foreground">
-              Nestas cidades você já pode contratar nossos serviços
-            </p>
+      {/* Cidades ativas */}
+      <section className="on2-sec">
+        <div className="on2-shell">
+          <div className="on2-sec-head center">
+            <span className="on2-sec-lbl" style={{ color: "#0fb8b3", borderColor: "#b2f0ee", background: "#e6fafa" }}>Disponível agora</span>
+            <h2 style={{ marginTop: 14 }}>Cidades com <span>cobertura ativa</span></h2>
+            <p>Nestas cidades você já pode contratar a fibra Ondeline.</p>
           </div>
 
           {loading ? (
-            <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#00a651] mx-auto"></div>
-              <p className="mt-4 text-muted-foreground">Carregando...</p>
+            <div style={{ textAlign: "center", padding: "48px 0" }}>
+              <div style={{ width: 36, height: 36, border: "3px solid #0fb8b3", borderTopColor: "transparent", borderRadius: "50%", margin: "0 auto", animation: "spin 0.8s linear infinite" }} />
+              <p style={{ marginTop: 16, color: "#6b7280" }}>Carregando...</p>
             </div>
-          ) : activeAreas.length === 0 ? (
-            <p className="text-center text-muted-foreground py-8">
-              Nenhuma cidade com cobertura ativa cadastrada ainda.
-            </p>
+          ) : active.length === 0 ? (
+            <p style={{ textAlign: "center", color: "#6b7280", padding: "48px 0" }}>Nenhuma cidade ativa cadastrada.</p>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {activeAreas.map((area) => (
-                <div key={area.id} className="bg-card border rounded-lg shadow-sm hover:shadow-lg transition-shadow">
-                  <div className="p-6">
-                    <div className="flex items-start justify-between mb-4">
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
+              {active.map((area) => {
+                const cityPath = CITY_LINKS[area.name]
+                return (
+                  <div key={area.id} className="on2-why-card" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                       <div>
-                        <h3 className="text-lg font-semibold flex items-center gap-2">
-                          <MapPin className="w-5 h-5 text-[#00a651]" />
-                          {area.name}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">{area.state}</p>
+                        <div style={{ fontWeight: 700, fontSize: "1.1rem", color: "#111827", display: "flex", alignItems: "center", gap: 6 }}>
+                          <Icon name="pin" size={18} /> {area.name}
+                        </div>
+                        <div style={{ fontSize: "0.85rem", color: "#6b7280" }}>{area.state}</div>
                       </div>
-                      <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Ativo</span>
+                      <span style={{ background: "#e6fafa", color: "#0a8a86", fontSize: "0.75rem", fontWeight: 700, padding: "3px 10px", borderRadius: 99 }}>Ativo</span>
                     </div>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      {area.description || "Internet de alta qualidade disponível nesta região."}
+                    <p style={{ fontSize: "0.9rem", color: "#4b5563", margin: 0 }}>
+                      {area.description || "Fibra óptica dedicada com suporte local."}
                     </p>
                     {area.population > 0 && (
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                        <Building2 className="w-4 h-4" />
-                        <span>População: {formatPopulation(area.population)} habitantes</span>
+                      <div style={{ fontSize: "0.85rem", color: "#6b7280" }}>
+                        {formatPop(area.population)} habitantes
                       </div>
                     )}
-                    <Button className="w-full bg-[#00a651] hover:bg-[#008c44]" asChild>
-                      <a href={`https://wa.me/5597991677795?text=Olá! Tenho interesse em contratar internet em ${area.name}`}>
-                        <Phone className="w-4 h-4 mr-2" />
-                        Contratar Agora
+                    <div style={{ display: "flex", gap: 8, marginTop: "auto", flexWrap: "wrap" }}>
+                      {cityPath && (
+                        <Link href={cityPath} className="on2-btn on2-btn-ghost" style={{ flex: 1, textAlign: "center", justifyContent: "center" }}>
+                          Ver cidade
+                        </Link>
+                      )}
+                      <a
+                        href={`https://wa.me/${WA}?text=Olá! Quero contratar internet em ${area.name}`}
+                        target="_blank" rel="noopener noreferrer"
+                        className="on2-btn on2-btn-primary" style={{ flex: 1, textAlign: "center", justifyContent: "center" }}
+                      >
+                        Contratar <Icon name="arrow" size={16} />
                       </a>
-                    </Button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           )}
         </div>
       </section>
 
-      {/* Coming Soon Areas */}
-      {comingSoonAreas.length > 0 && (
-        <section className="py-16 bg-muted/50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm mb-4">
-                <Clock className="w-4 h-4" />
-                Em Breve
-              </span>
-              <h2 className="text-3xl font-bold text-foreground mb-4">
-                Próximas Cidades
-              </h2>
-              <p className="text-muted-foreground">
-                Estamos expandindo! Essas cidades receberão cobertura em breve
-              </p>
+      {/* Em breve */}
+      {(!loading && soon.length > 0) && (
+        <section className="on2-sec" style={{ background: "#f4f6f8" }}>
+          <div className="on2-shell">
+            <div className="on2-sec-head center">
+              <span className="on2-sec-lbl" style={{ color: "#b45309", borderColor: "#fde68a", background: "#fefce8" }}>Em breve</span>
+              <h2 style={{ marginTop: 14 }}>Próximas <span>cidades</span></h2>
+              <p>Estamos expandindo! Essas cidades receberão cobertura em breve.</p>
             </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {comingSoonAreas.map((area) => (
-                <div key={area.id} className="bg-card border rounded-lg p-6 text-center">
-                  <MapPin className="w-8 h-8 text-yellow-500 mx-auto mb-3" />
-                  <h3 className="font-semibold">{area.name}</h3>
-                  <p className="text-sm text-muted-foreground">{area.state}</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 20 }}>
+              {soon.map((area) => (
+                <div key={area.id} className="on2-why-card" style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: "2rem", marginBottom: 8 }}>📍</div>
+                  <div style={{ fontWeight: 700, fontSize: "1.05rem", color: "#111827" }}>{area.name}</div>
+                  <div style={{ fontSize: "0.85rem", color: "#6b7280", marginBottom: 8 }}>{area.state}</div>
                   {area.launch_date && (
-                    <span className="inline-block mt-2 px-2 py-1 border rounded-full text-xs">
+                    <span style={{ background: "#fefce8", color: "#b45309", fontSize: "0.75rem", fontWeight: 600, padding: "3px 10px", borderRadius: 99 }}>
                       Previsão: {new Date(area.launch_date).toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}
                     </span>
                   )}
@@ -187,26 +158,36 @@ export default function CoveragePage() {
         </section>
       )}
 
-      {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-br from-[#00a651] to-[#008c44]">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
+      {/* CTA final */}
+      <section className="on2-cta-sec">
+        <div className="on2-shell" style={{ textAlign: "center" }}>
+          <h2 style={{ color: "#fff", fontSize: "clamp(1.5rem,4vw,2.2rem)", fontWeight: 800, marginBottom: 16 }}>
             Sua cidade não está na lista?
           </h2>
-          <p className="text-white/90 mb-8 max-w-2xl mx-auto">
-            Entre em contato conosco! Estamos sempre buscando expandir nossa cobertura
-            para levar internet de qualidade a mais comunidades do Amazonas.
+          <p style={{ color: "rgba(255,255,255,0.85)", maxWidth: 520, margin: "0 auto 32px" }}>
+            Entre em contato — estamos sempre expandindo para levar fibra óptica a mais comunidades do Amazonas.
           </p>
-          <Button size="lg" variant="secondary" asChild>
-            <a href="https://wa.me/5597991677795?text=Olá! Gostaria de saber quando a Ondeline chegará na minha cidade">
-              <Phone className="w-5 h-5 mr-2" />
-              Falar com a Ondeline
-            </a>
-          </Button>
+          <a
+            href={`https://wa.me/${WA}?text=Olá! Gostaria de saber quando a Ondeline chegará na minha cidade`}
+            target="_blank" rel="noopener noreferrer"
+            className="on2-btn" style={{ background: "#fff", color: "#0a8a86", fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
+            Falar com a Ondeline <Icon name="arrow" size={18} />
+          </a>
         </div>
       </section>
 
-      <Footer />
+      {/* Footer simples */}
+      <footer className="on2-footer">
+        <div className="on2-shell on2-footer-inner">
+          <div className="on2-footer-logo">
+            <Image src="/logo-ondeline.png" alt="Ondeline" width={120} height={32} style={{ height: 32, width: "auto", filter: "brightness(0) invert(1)" }} />
+          </div>
+          <div className="on2-footer-copy">© 2023–2026 Ondeline Telecom · Vale do Juruá / AM</div>
+        </div>
+      </footer>
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
-  );
+  )
 }

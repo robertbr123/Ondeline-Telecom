@@ -1,339 +1,241 @@
 "use client"
 
-import React, { useState } from "react"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
-import { Button } from "@/components/ui/button"
-import { Users, Target, Zap, Heart, MapPin, Mail, Phone, Briefcase } from "lucide-react"
+import { useState } from "react"
+import Link from "next/link"
+import Image from "next/image"
+import { Icon } from "@/components/on2/Icon"
+
+const WA = "5592984607721"
+
+const BENEFITS = [
+  "Salário competitivo compatível com o mercado",
+  "Vale-alimentação e vale-transporte",
+  "Plano de saúde e odontológico",
+  "PLR — Participação nos Lucros",
+  "Internet gratuita em casa",
+  "Cursos e capacitações pagos pela empresa",
+]
+
+const CULTURE = [
+  "Compromisso com a qualidade",
+  "Respeito ao cliente e aos colegas",
+  "Inovação contínua",
+  "Trabalho em equipe",
+  "Ética e transparência",
+]
+
+const WHY = [
+  { icon: "👥", title: "Equipe Unida", desc: "Ambiente colaborativo e acolhedor no Vale do Juruá" },
+  { icon: "📈", title: "Crescimento", desc: "Oportunidades reais de desenvolvimento profissional" },
+  { icon: "⚡", title: "Inovação", desc: "Trabalhe com tecnologia de fibra óptica de ponta" },
+  { icon: "🌿", title: "Impacto", desc: "Conecte comunidades do Amazonas ao mundo" },
+]
 
 export default function TrabalheConoscoPage() {
-  const [formData, setFormData] = useState({
-    nome: "",
-    email: "",
-    telefone: "",
-    cidade: "",
-    cargo: "",
-    experiencia: "",
-    mensagem: ""
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
+  const [form, setForm] = useState({ nome: "", email: "", telefone: "", cidade: "", cargo: "", experiencia: "", mensagem: "" })
+  const [sending, setSending] = useState(false)
+  const [sent, setSent] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setIsSubmitting(true)
-    
-    // Simular envio
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    setSubmitted(true)
-    setIsSubmitting(false)
-    setFormData({
-      nome: "",
-      email: "",
-      telefone: "",
-      cidade: "",
-      cargo: "",
-      experiencia: "",
-      mensagem: ""
-    })
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
-
-  if (submitted) {
-    return (
-      <main className="w-full min-h-screen">
-        <Header />
-        <section className="pt-32 pb-20 px-4">
-          <div className="max-w-2xl mx-auto text-center">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8">
-              <span className="text-5xl">✓</span>
-            </div>
-            <h1 className="text-4xl font-bold mb-4 text-primary">Candidatura Enviada!</h1>
-            <p className="text-lg text-muted-foreground mb-8">
-              Obrigado pelo seu interesse em fazer parte da equipe Ondeline. 
-              Recebemos suas informações e entraremos em contato em breve.
-            </p>
-            <Button 
-              onClick={() => setSubmitted(false)}
-              className="bg-primary hover:bg-primary/90"
-            >
-              Enviar Nova Candidatura
-            </Button>
-          </div>
-        </section>
-        <Footer />
-      </main>
-    )
+    setSending(true)
+    await new Promise((r) => setTimeout(r, 1200))
+    setSent(true)
+    setSending(false)
   }
 
   return (
-    <main className="w-full min-h-screen">
-      <Header />
-      <section className="pt-32 pb-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-primary">Trabalhe Conosco</h1>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Faça parte da equipe que está conectando o Amazonas. Junte-se a nós e construa uma carreira em uma empresa em crescimento.
-            </p>
+    <div className="on2">
+      {/* Nav */}
+      <nav className="on2-nav" style={{ position: "relative" }}>
+        <div className="on2-shell on2-nav-inner">
+          <Link href="/" className="on2-nav-logo">
+            <Image src="/logo-ondeline.png" alt="Ondeline" width={140} height={36} style={{ height: 36, width: "auto" }} />
+          </Link>
+          <div className="on2-nav-links" style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <Link href="/#planos" className="on2-nav-link">Planos</Link>
+            <Link href={`https://wa.me/${WA}`} className="on2-nav-cta">Assine agora</Link>
           </div>
+        </div>
+      </nav>
 
-          {/* Por que trabalhar conosco */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
-            <div className="bg-card border border-border rounded-xl p-6 text-center hover:border-primary/50 transition">
-              <Users className="w-12 h-12 text-primary mx-auto mb-4" />
-              <h3 className="font-semibold text-lg mb-2 text-foreground">Equipe Unida</h3>
-              <p className="text-sm text-muted-foreground">
-                Ambiente colaborativo e acolhedor
-              </p>
-            </div>
-            <div className="bg-card border border-border rounded-xl p-6 text-center hover:border-primary/50 transition">
-              <Target className="w-12 h-12 text-secondary mx-auto mb-4" />
-              <h3 className="font-semibold text-lg mb-2 text-foreground">Crescimento</h3>
-              <p className="text-sm text-muted-foreground">
-                Oportunidades de desenvolvimento profissional
-              </p>
-            </div>
-            <div className="bg-card border border-border rounded-xl p-6 text-center hover:border-primary/50 transition">
-              <Zap className="w-12 h-12 text-accent mx-auto mb-4" />
-              <h3 className="font-semibold text-lg mb-2 text-foreground">Inovação</h3>
-              <p className="text-sm text-muted-foreground">
-                Trabalhe com tecnologia de ponta
-              </p>
-            </div>
-            <div className="bg-card border border-border rounded-xl p-6 text-center hover:border-primary/50 transition">
-              <Heart className="w-12 h-12 text-primary mx-auto mb-4" />
-              <h3 className="font-semibold text-lg mb-2 text-foreground">Impacto</h3>
-              <p className="text-sm text-muted-foreground">
-                Conecte comunidades ao mundo
-              </p>
-            </div>
+      {/* Hero */}
+      <section style={{ background: "linear-gradient(135deg, #0fb8b3 0%, #0a8a86 100%)", padding: "72px 0 56px" }}>
+        <div className="on2-shell" style={{ textAlign: "center" }}>
+          <span className="on2-sec-lbl" style={{ color: "rgba(255,255,255,0.85)", borderColor: "rgba(255,255,255,0.3)", background: "rgba(255,255,255,0.15)" }}>Faça parte do time</span>
+          <h1 style={{ fontSize: "clamp(1.8rem,5vw,3rem)", fontWeight: 800, color: "#fff", marginTop: 16, marginBottom: 16 }}>
+            Trabalhe Conosco
+          </h1>
+          <p style={{ color: "rgba(255,255,255,0.85)", fontSize: "1.1rem", maxWidth: 560, margin: "0 auto" }}>
+            Junte-se à equipe que está conectando o Vale do Juruá. Construa uma carreira em uma empresa em crescimento real.
+          </p>
+        </div>
+      </section>
+
+      {/* Por que trabalhar */}
+      <section className="on2-sec">
+        <div className="on2-shell">
+          <div className="on2-sec-head center">
+            <span className="on2-sec-lbl">Por que a Ondeline</span>
+            <h2 style={{ marginTop: 14 }}>Uma empresa que <span>cresce com você</span></h2>
           </div>
+          <div className="on2-why-grid">
+            {WHY.map((w, i) => (
+              <div key={i} className="on2-why-card" style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "2.2rem", marginBottom: 12 }}>{w.icon}</div>
+                <h3 style={{ fontWeight: 700, color: "#111827", marginBottom: 6 }}>{w.title}</h3>
+                <p style={{ fontSize: "0.9rem", color: "#4b5563", margin: 0 }}>{w.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      {/* Formulário + Info */}
+      <section className="on2-sec" style={{ background: "#f4f6f8" }}>
+        <div className="on2-shell">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "start" }} className="on2-form-grid">
+
             {/* Formulário */}
-            <div className="bg-card border border-border rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-6 text-foreground flex items-center gap-2">
-                <Briefcase className="w-6 h-6 text-primary" />
-                Envie sua Candidatura
-              </h2>
-              
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label htmlFor="nome" className="block text-sm font-medium text-foreground mb-2">
-                    Nome Completo *
-                  </label>
-                  <input
-                    type="text"
-                    id="nome"
-                    name="nome"
-                    value={formData.nome}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition"
-                    placeholder="Seu nome completo"
-                  />
+            <div style={{ background: "#fff", borderRadius: 20, padding: 36, boxShadow: "0 2px 16px rgba(0,0,0,0.06)" }}>
+              {sent ? (
+                <div style={{ textAlign: "center", padding: "32px 0" }}>
+                  <div style={{ width: 72, height: 72, background: "#e6fafa", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", fontSize: "2rem", color: "#0fb8b3" }}>✓</div>
+                  <h3 style={{ fontWeight: 800, fontSize: "1.4rem", color: "#111827", marginBottom: 12 }}>Candidatura enviada!</h3>
+                  <p style={{ color: "#4b5563", marginBottom: 24 }}>Obrigado! Recebemos seus dados e entraremos em contato em breve pelo WhatsApp ou e-mail.</p>
+                  <button onClick={() => { setSent(false); setForm({ nome: "", email: "", telefone: "", cidade: "", cargo: "", experiencia: "", mensagem: "" }) }} className="on2-btn on2-btn-primary">
+                    Enviar nova candidatura
+                  </button>
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-                      E-mail *
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition"
-                      placeholder="seu@email.com"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="telefone" className="block text-sm font-medium text-foreground mb-2">
-                      Telefone *
-                    </label>
-                    <input
-                      type="tel"
-                      id="telefone"
-                      name="telefone"
-                      value={formData.telefone}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition"
-                      placeholder="(92) 99999-9999"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="cidade" className="block text-sm font-medium text-foreground mb-2">
-                    Cidade *
-                  </label>
-                  <select
-                    id="cidade"
-                    name="cidade"
-                    value={formData.cidade}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition"
-                  >
-                    <option value="">Selecione a cidade</option>
-                    <option value="ipixuna">Ipixuna</option>
-                    <option value="eirunepe">Eirunepe</option>
-                    <option value="itamarati">Itamarati</option>
-                    <option value="carauari">Carauari</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="cargo" className="block text-sm font-medium text-foreground mb-2">
-                    Cargo de Interesse *
-                  </label>
-                  <select
-                    id="cargo"
-                    name="cargo"
-                    value={formData.cargo}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition"
-                  >
-                    <option value="">Selecione o cargo</option>
-                    <option value="tecnico">Técnico de Instalação</option>
-                    <option value="suporte">Analista de Suporte</option>
-                    <option value="vendas">Vendedor</option>
-                    <option value="financeiro">Assistente Financeiro</option>
-                    <option value="marketing">Auxiliar de Marketing</option>
-                    <option value="outro">Outro</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="experiencia" className="block text-sm font-medium text-foreground mb-2">
-                    Experiência Profissional *
-                  </label>
-                  <select
-                    id="experiencia"
-                    name="experiencia"
-                    value={formData.experiencia}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition"
-                  >
-                    <option value="">Selecione sua experiência</option>
-                    <option value="estagiario">Estagiário</option>
-                    <option value="junior">Júnior (1-2 anos)</option>
-                    <option value="pleno">Pleno (3-5 anos)</option>
-                    <option value="senior">Sênior (5+ anos)</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="mensagem" className="block text-sm font-medium text-foreground mb-2">
-                    Conte sobre você *
-                  </label>
-                  <textarea
-                    id="mensagem"
-                    name="mensagem"
-                    value={formData.mensagem}
-                    onChange={handleChange}
-                    required
-                    rows={4}
-                    className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition resize-none"
-                    placeholder="Conte um pouco sobre sua experiência e por que quer trabalhar na Ondeline..."
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-primary hover:bg-primary/90 h-12 text-lg font-semibold"
-                >
-                  {isSubmitting ? "Enviando..." : "Enviar Candidatura"}
-                </Button>
-              </form>
+              ) : (
+                <>
+                  <h2 style={{ fontWeight: 800, fontSize: "1.4rem", color: "#111827", marginBottom: 24 }}>Envie sua Candidatura</h2>
+                  <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                    <div>
+                      <label style={labelStyle}>Nome completo *</label>
+                      <input name="nome" required value={form.nome} onChange={handleChange} placeholder="Seu nome completo" style={inputStyle} />
+                    </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                      <div>
+                        <label style={labelStyle}>E-mail *</label>
+                        <input name="email" type="email" required value={form.email} onChange={handleChange} placeholder="seu@email.com" style={inputStyle} />
+                      </div>
+                      <div>
+                        <label style={labelStyle}>Telefone *</label>
+                        <input name="telefone" type="tel" required value={form.telefone} onChange={handleChange} placeholder="(92) 99999-9999" style={inputStyle} />
+                      </div>
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Cidade *</label>
+                      <select name="cidade" required value={form.cidade} onChange={handleChange} style={inputStyle}>
+                        <option value="">Selecione a cidade</option>
+                        <option value="ipixuna">Ipixuna</option>
+                        <option value="eirunepe">Eirunepé</option>
+                        <option value="itamarati">Itamarati</option>
+                        <option value="carauari">Carauari</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Cargo de interesse *</label>
+                      <select name="cargo" required value={form.cargo} onChange={handleChange} style={inputStyle}>
+                        <option value="">Selecione o cargo</option>
+                        <option value="tecnico">Técnico de Instalação</option>
+                        <option value="suporte">Analista de Suporte</option>
+                        <option value="vendas">Vendedor</option>
+                        <option value="financeiro">Assistente Financeiro</option>
+                        <option value="marketing">Auxiliar de Marketing</option>
+                        <option value="outro">Outro</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Experiência profissional *</label>
+                      <select name="experiencia" required value={form.experiencia} onChange={handleChange} style={inputStyle}>
+                        <option value="">Selecione</option>
+                        <option value="estagiario">Estagiário</option>
+                        <option value="junior">Júnior (1–2 anos)</option>
+                        <option value="pleno">Pleno (3–5 anos)</option>
+                        <option value="senior">Sênior (5+ anos)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Conte sobre você *</label>
+                      <textarea name="mensagem" required rows={4} value={form.mensagem} onChange={handleChange} placeholder="Sua experiência e por que quer trabalhar na Ondeline..." style={{ ...inputStyle, resize: "none" }} />
+                    </div>
+                    <button type="submit" disabled={sending} className="on2-btn on2-btn-primary" style={{ marginTop: 4, justifyContent: "center" }}>
+                      {sending ? "Enviando..." : <>Enviar candidatura <Icon name="arrow" size={18} /></>}
+                    </button>
+                  </form>
+                </>
+              )}
             </div>
 
-            {/* Informações Adicionais */}
-            <div className="space-y-6">
-              <div className="bg-muted/30 rounded-xl p-6">
-                <h3 className="text-xl font-semibold mb-4 text-foreground">Benefícios</h3>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3">
-                    <span className="text-green-500 mt-1">✓</span>
-                    <span className="text-muted-foreground">Salário competitivo compatível com o mercado</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-green-500 mt-1">✓</span>
-                    <span className="text-muted-foreground">Vale-alimentação e vale-transporte</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-green-500 mt-1">✓</span>
-                    <span className="text-muted-foreground">Plano de saúde e odontológico</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-green-500 mt-1">✓</span>
-                    <span className="text-muted-foreground">PLR (Participação nos Lucros)</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-green-500 mt-1">✓</span>
-                    <span className="text-muted-foreground">Internet gratuita em casa</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-green-500 mt-1">✓</span>
-                    <span className="text-muted-foreground">Cursos e capacitações</span>
-                  </li>
+            {/* Lado direito */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+              <div style={{ background: "#fff", borderRadius: 16, padding: 28, boxShadow: "0 2px 12px rgba(0,0,0,0.05)" }}>
+                <h3 style={{ fontWeight: 700, color: "#111827", marginBottom: 16, fontSize: "1.1rem" }}>Benefícios</h3>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
+                  {BENEFITS.map((b, i) => (
+                    <li key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", color: "#374151", fontSize: "0.9rem" }}>
+                      <span style={{ color: "#0fb8b3", fontWeight: 700, marginTop: 1 }}>✓</span> {b}
+                    </li>
+                  ))}
                 </ul>
               </div>
 
-              <div className="bg-muted/30 rounded-xl p-6">
-                <h3 className="text-xl font-semibold mb-4 text-foreground">Nossa Cultura</h3>
-                <p className="text-muted-foreground mb-4">
-                  Valorizamos pessoas que são proativas, criativas e que querem fazer a diferença na comunidade. 
-                  Buscamos profissionais que compartilham dos nossos valores:
+              <div style={{ background: "#fff", borderRadius: 16, padding: 28, boxShadow: "0 2px 12px rgba(0,0,0,0.05)" }}>
+                <h3 style={{ fontWeight: 700, color: "#111827", marginBottom: 12, fontSize: "1.1rem" }}>Nossa Cultura</h3>
+                <p style={{ color: "#4b5563", fontSize: "0.9rem", marginBottom: 12 }}>
+                  Valorizamos pessoas proativas, criativas e comprometidas com a comunidade.
                 </p>
-                <ul className="space-y-2">
-                  <li className="text-muted-foreground">• Compromisso com a qualidade</li>
-                  <li className="text-muted-foreground">• Respeito ao cliente e colegas</li>
-                  <li className="text-muted-foreground">• Inovação contínua</li>
-                  <li className="text-muted-foreground">• Trabalho em equipe</li>
-                  <li className="text-muted-foreground">• Ética e transparência</li>
+                <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
+                  {CULTURE.map((c, i) => (
+                    <li key={i} style={{ color: "#374151", fontSize: "0.9rem" }}>• {c}</li>
+                  ))}
                 </ul>
               </div>
 
-              <div className="bg-primary/10 border border-primary/20 rounded-xl p-6">
-                <h3 className="text-xl font-semibold mb-4 text-primary">Entre em Contato</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <MapPin className="w-5 h-5 text-primary" />
-                    <span className="text-muted-foreground">
-                      Ipixuna, Eirunepe, Itamarati e Carauari - AM
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Phone className="w-5 h-5 text-primary" />
-                    <span className="text-muted-foreground">(92) 98460-7721</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Mail className="w-5 h-5 text-primary" />
-                    <span className="text-muted-foreground">rh@ondeline.com.br</span>
-                  </div>
+              <div style={{ background: "linear-gradient(135deg, #0fb8b3 0%, #0a8a86 100%)", borderRadius: 16, padding: 28 }}>
+                <h3 style={{ fontWeight: 700, color: "#fff", marginBottom: 16, fontSize: "1.1rem" }}>Entre em Contato</h3>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  {[
+                    { label: "📍 Localização", value: "Ipixuna, Eirunepé, Itamarati e Carauari — AM" },
+                    { label: "📞 Telefone", value: "(92) 98460-7721" },
+                    { label: "✉️ E-mail", value: "rh@ondeline.com.br" },
+                  ].map((it, i) => (
+                    <div key={i}>
+                      <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.75rem", fontWeight: 600, marginBottom: 2 }}>{it.label}</div>
+                      <div style={{ color: "#fff", fontSize: "0.9rem" }}>{it.value}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <Footer />
-    </main>
+
+      {/* Footer */}
+      <footer className="on2-footer">
+        <div className="on2-shell on2-footer-inner">
+          <div className="on2-footer-logo">
+            <Image src="/logo-ondeline.png" alt="Ondeline" width={120} height={32} style={{ height: 32, width: "auto", filter: "brightness(0) invert(1)" }} />
+          </div>
+          <div className="on2-footer-copy">© 2023–2026 Ondeline Telecom · Vale do Juruá / AM</div>
+        </div>
+      </footer>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .on2-form-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+    </div>
   )
 }
+
+const labelStyle: React.CSSProperties = { display: "block", fontSize: "0.85rem", fontWeight: 600, color: "#374151", marginBottom: 6 }
+const inputStyle: React.CSSProperties = { width: "100%", padding: "10px 14px", border: "1.5px solid #e5e9ef", borderRadius: 10, fontSize: "0.95rem", fontFamily: "inherit", outline: "none", background: "#fff", color: "#111827", boxSizing: "border-box" }
