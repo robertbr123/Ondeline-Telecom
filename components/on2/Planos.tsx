@@ -38,12 +38,13 @@ export function Planos({ whatsapp }: { whatsapp?: string }) {
 
   const raw = plans.length > 0 ? plans : fallback
 
-  // Sempre coloca o plano destacado no centro (posição 1)
+  // Sempre coloca o plano destacado no centro, independente da quantidade
   const display = (() => {
     const highlighted = raw.find((p) => p.highlighted)
+    if (!highlighted) return raw
     const others = raw.filter((p) => !p.highlighted)
-    if (!highlighted || raw.length !== 3) return raw
-    return [others[0], highlighted, others[1]]
+    const mid = Math.floor(others.length / 2)
+    return [...others.slice(0, mid), highlighted, ...others.slice(mid)]
   })()
 
   return (
