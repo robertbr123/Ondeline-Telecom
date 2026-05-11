@@ -18,6 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const config = await getSiteConfig()
   
   return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://ondeline.com.br"),
     title: config.title || "Ondeline - Internet Rápida no Amazonas",
     description: config.description || "Internet de alta velocidade em Ipixuna, Eirunepe, Itamarati e Carauari. Suporte rápido 24/7 e planos a partir de R$ 100.",
     keywords: config.keywords?.join(", "),

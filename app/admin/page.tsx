@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { AlertTriangle, BarChart3, BookOpen, Building2, Edit, HelpCircle, LayoutDashboard, LogOut, MapPin, Megaphone, Package, Settings, Sparkles, Tag, Users } from 'lucide-react'
+import { AlertTriangle, BarChart3, BookOpen, Building2, Edit, FileSearch, HelpCircle, LayoutDashboard, LogOut, MapPin, Megaphone, Package, Settings, Sparkles, Tag, Users } from 'lucide-react'
 
 interface Lead {
   id: string
@@ -37,6 +37,7 @@ const shortcuts = [
   { href: '/admin/campaigns', icon: Megaphone, title: 'Campanhas', text: 'Criar landing pages promocionais' },
   { href: '/admin/settings', icon: Settings, title: 'Banners e Site', text: 'Trocar hero, contato, logo e SEO' },
   { href: '/admin/coverage', icon: MapPin, title: 'Cobertura', text: 'Gerenciar cidades e previsão' },
+  { href: '/admin/seo', icon: FileSearch, title: 'SEO Local', text: 'Auditar páginas e keywords' },
   { href: '/admin/plans', icon: Package, title: 'Planos', text: 'Editar preços e benefícios' },
   { href: '/admin/analytics', icon: BarChart3, title: 'Analytics', text: 'Ver conversão e origem dos leads' },
   { href: '/admin/blog', icon: BookOpen, title: 'Blog', text: 'Conteúdo e notícias' },

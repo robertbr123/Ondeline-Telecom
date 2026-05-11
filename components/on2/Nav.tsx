@@ -24,14 +24,14 @@ export function Nav({ whatsapp, logo }: { whatsapp?: string; logo?: string }) {
         </a>
 
         <div className="on2-nav-links">
-          <a href="#planos">Planos</a>
-          <a href="#cobertura">Cobertura</a>
-          <a href="#porque">Por que Ondeline</a>
+          <a href="/#planos">Planos</a>
+          <a href="/coverage">Cobertura</a>
+          <a href="/#porque">Por que Ondeline</a>
           <a href="/empresas">Empresarial</a>
-          <a href="#contato">Contato</a>
+          <a href="/#contato">Contato</a>
         </div>
 
-        <a className="on2-nav-cta" href="#contato">
+        <a className="on2-nav-cta" href={`https://wa.me/${wa}?text=Olá! Gostaria de assinar a Ondeline`} target="_blank" rel="noopener noreferrer">
           Assine agora <Icon name="arrow" size={18} />
         </a>
 
@@ -48,11 +48,11 @@ export function Nav({ whatsapp, logo }: { whatsapp?: string; logo?: string }) {
 
       <div className={"on2-mobile-menu " + (open ? "open" : "")} onClick={close}>
         <div className="on2-mobile-menu-inner" onClick={(e) => e.stopPropagation()}>
-          <a href="#planos" onClick={close}>Planos residenciais</a>
+          <a href="/#planos" onClick={close}>Planos residenciais</a>
           <a href="/empresas" onClick={close}>Empresarial</a>
-          <a href="#cobertura" onClick={close}>Cobertura</a>
-          <a href="#porque" onClick={close}>Por que Ondeline</a>
-          <a href="#contato" onClick={close}>Contato</a>
+          <a href="/coverage" onClick={close}>Cobertura</a>
+          <a href="/#porque" onClick={close}>Por que Ondeline</a>
+          <a href="/#contato" onClick={close}>Contato</a>
           <div className="on2-mm-cities">
             <div className="lbl">Cidades</div>
             <a href="/ipixuna" onClick={close}>Ipixuna</a>

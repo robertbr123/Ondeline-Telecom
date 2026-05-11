@@ -4,6 +4,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   transpilePackages: ['framer-motion'],
+  serverExternalPackages: ['pino', 'thread-stream', 'pino-pretty'],
   images: {
     unoptimized: true,
     remotePatterns: [

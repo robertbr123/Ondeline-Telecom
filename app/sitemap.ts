@@ -31,6 +31,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/teste-velocidade`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${baseUrl}/status`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.7,
+    },
+    {
       url: `${baseUrl}/blog`,
       lastModified: new Date(),
       changeFrequency: 'daily',
@@ -103,5 +115,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Erro ao buscar páginas CMS para sitemap:', error)
   }
 
-  return [...staticPages, ...blogPages, ...cmsPages]
+  let campaignPages: MetadataRoute.Sitemap = []
+  try {
+    const campaignResult = await query(`
+      SELECT slug, updated_at FROM campaigns
+      WHERE active = 1
+    `)
+    campaignPages = campaignResult.rows.map((campaign: any) => ({
+      url: `${baseUrl}/promo/${campaign.slug}`,
+      lastModified: new Date(campaign.updated_at),
+      changeFrequency: 'weekly' as const,
+      priority: 0.65,
+    }))
+  } catch (error) {
+    console.error('Erro ao buscar campanhas para sitemap:', error)
+  }
+
+  return [...staticPages, ...blogPages, ...cmsPages, ...campaignPages]
 }
