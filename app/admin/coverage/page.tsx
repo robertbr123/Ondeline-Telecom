@@ -101,6 +101,11 @@ export default function AdminCoverage() {
     return STATUS_OPTIONS.find(s => s.value === status) || STATUS_OPTIONS[2]
   }
 
+  const summary = STATUS_OPTIONS.map((status) => ({
+    ...status,
+    count: areas.filter((area) => area.status === status.value).length,
+  }))
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border">
@@ -127,6 +132,53 @@ export default function AdminCoverage() {
           </div>
         ) : (
           <>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              {summary.map((item) => {
+                const StatusIcon = item.icon
+                return (
+                  <div key={item.value} className="rounded-xl border border-border bg-card/50 p-5">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground">{item.label}</p>
+                        <div className="text-3xl font-bold mt-1">{item.count}</div>
+                      </div>
+                      <div className={`${item.color} text-white w-11 h-11 rounded-full grid place-items-center`}>
+                        <StatusIcon size={20} />
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            <div className="rounded-2xl border border-border bg-white p-5 mb-6">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <h2 className="font-semibold">Mapa operacional simplificado</h2>
+                  <p className="text-sm text-muted-foreground">Use a descrição para bairros, ruas atendidas e previsão comercial.</p>
+                </div>
+                <a href="/coverage" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-primary">
+                  Ver página pública
+                </a>
+              </div>
+              <div className="mt-5 grid gap-3 md:grid-cols-4">
+                {areas.slice(0, 8).map((area) => {
+                  const statusInfo = getStatusInfo(area.status)
+                  return (
+                    <div key={area.id} className="rounded-xl border border-border bg-muted/30 p-3">
+                      <div className="flex items-center gap-2">
+                        <span className={`h-2.5 w-2.5 rounded-full ${statusInfo.color}`} />
+                        <strong className="text-sm">{area.city}</strong>
+                      </div>
+                      <p className="mt-2 text-xs text-muted-foreground line-clamp-2">
+                        {area.description || (area.status === 'active' ? 'Cobertura ativa.' : 'Use a descrição para informar bairros e previsão.')}
+                      </p>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
             {/* Modal de Edição */}
             {editingArea && (
               <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">

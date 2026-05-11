@@ -1,6 +1,16 @@
 import { Icon } from "./Icon"
 
-export function Hero({ whatsapp }: { whatsapp?: string }) {
+export function Hero({
+  whatsapp,
+  title = "A internet mais rápida do Vale do Juruá.",
+  subtitle = "Fibra óptica 100% dedicada, Wi-Fi 6 incluso e suporte local que fala sua língua. Conectamos mais de 1.000 famílias em Ipixuna, Eirunepé e Itamarati — e vamos mais longe.",
+  badge = "Planos Giga disponíveis em Eirunepé",
+}: {
+  whatsapp?: string
+  title?: string
+  subtitle?: string
+  badge?: string
+}) {
   const wa = whatsapp || "5592984607721"
   return (
     <section className="on2-hero" id="top">
@@ -8,14 +18,19 @@ export function Hero({ whatsapp }: { whatsapp?: string }) {
         <div>
           <div className="on2-hero-pill">
             <span className="tag">NOVO</span>
-            Planos Giga disponíveis em Eirunepé
+            {badge}
           </div>
           <h1>
-            A internet mais rápida do <span className="highlight">Vale do Juruá</span>.
+            {title.includes("Vale do Juruá") ? (
+              <>
+                {title.split("Vale do Juruá")[0]}<span className="highlight">Vale do Juruá</span>{title.split("Vale do Juruá")[1]}
+              </>
+            ) : (
+              title
+            )}
           </h1>
           <p className="on2-hero-sub">
-            Fibra óptica 100% dedicada, Wi-Fi 6 incluso e suporte local que fala sua língua.
-            Conectamos mais de 1.000 famílias em Ipixuna, Eirunepé e Itamarati — e vamos mais longe.
+            {subtitle}
           </p>
           <div className="on2-hero-actions">
             <a href="#planos" className="on2-btn on2-btn-primary">

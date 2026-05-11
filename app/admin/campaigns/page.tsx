@@ -212,6 +212,14 @@ export default function AdminCampaigns() {
                 )}
 
                 <div className="flex gap-2">
+                  <a
+                    href={`/promo/${campaign.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex flex-1 items-center justify-center rounded-md border border-border px-3 py-2 text-sm font-medium hover:bg-muted"
+                  >
+                    <Eye size={14} className="mr-1" /> Preview
+                  </a>
                   <Button
                     size="sm"
                     variant="outline"

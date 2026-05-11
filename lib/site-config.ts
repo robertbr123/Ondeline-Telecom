@@ -13,6 +13,10 @@ export interface SiteConfigData {
   linkedin: string
   keywords: string[]
   logoUrl: string
+  heroTitle: string
+  heroSubtitle: string
+  heroBadge: string
+  promoBannerText: string
   // SEO
   googleAnalyticsId: string
   googleTagManagerId: string
@@ -35,6 +39,10 @@ const defaultConfig: SiteConfigData = {
   linkedin: "",
   keywords: ["internet", "wifi", "amazonas", "ipixuna", "eirunepe", "itamarati", "carauari", "provedor", "fibra óptica"],
   logoUrl: "/logo-ondeline.png",
+  heroTitle: "A internet mais rápida do Vale do Juruá.",
+  heroSubtitle: "Fibra óptica 100% dedicada, Wi-Fi 6 incluso e suporte local que fala sua língua. Conectamos mais de 1.000 famílias em Ipixuna, Eirunepé e Itamarati — e vamos mais longe.",
+  heroBadge: "Planos Giga disponíveis em Eirunepé",
+  promoBannerText: "Instalação grátis nos planos selecionados",
   // SEO
   googleAnalyticsId: "",
   googleTagManagerId: "",

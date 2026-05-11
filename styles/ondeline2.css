@@ -218,6 +218,202 @@
   70% { box-shadow: 0 0 0 8px rgba(74,222,128,0); }
   100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
 }
+
+/* ── PLAN SIMULATOR ── */
+.on2-simulator {
+  padding: 28px 0 72px;
+  background: linear-gradient(180deg, #ffffff 0%, #f4f7f8 100%);
+}
+.on2-simulator-inner {
+  display: grid;
+  grid-template-columns: .9fr 1.1fr;
+  gap: 40px;
+  align-items: center;
+}
+.on2-simulator h2 {
+  max-width: 620px;
+  margin-top: 12px;
+  font-size: clamp(34px, 4vw, 56px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.on2-simulator p {
+  max-width: 540px;
+  margin-top: 18px;
+  color: var(--ink-2);
+  font-size: 17px;
+  line-height: 1.55;
+}
+.on2-sim-panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 28px 70px -42px rgba(10,37,64,.45);
+}
+.on2-sim-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.on2-sim-row label {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.on2-sim-row strong {
+  min-width: 48px;
+  height: 40px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--teal-soft);
+  color: var(--teal-dark);
+  font-size: 22px;
+}
+.on2-sim-control input[type="range"] {
+  width: 100%;
+  accent-color: var(--teal);
+}
+.on2-sim-usage {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 22px 0;
+}
+.on2-sim-usage button {
+  min-height: 44px;
+  border: 1px solid var(--line-2);
+  border-radius: 12px;
+  color: var(--ink-2);
+  font-size: 13px;
+  font-weight: 800;
+  background: #fff;
+}
+.on2-sim-usage button.active {
+  border-color: var(--teal);
+  background: var(--teal-soft);
+  color: var(--teal-dark);
+}
+.on2-sim-result {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: center;
+  padding: 22px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #0a2540 0%, #0d3a5d 100%);
+  color: #fff;
+}
+.on2-sim-result span {
+  display: block;
+  color: #a7d9e4;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.on2-sim-result h3 {
+  margin-top: 6px;
+  font-size: 30px;
+  line-height: 1;
+}
+.on2-sim-result p {
+  margin-top: 10px;
+  color: #d7e8f0;
+  font-size: 14px;
+}
+.on2-sim-price {
+  min-width: 154px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.1);
+  text-align: right;
+}
+.on2-sim-price strong {
+  display: block;
+  font-size: 24px;
+}
+.on2-sim-price span {
+  margin-top: 6px;
+  color: #fff;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.on2-sim-cta {
+  width: 100%;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+/* ── SMART FLOATING CTA ── */
+.on2-smart-cta {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.on2-smart-cta-panel {
+  width: min(320px, calc(100vw - 44px));
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 24px 70px -32px rgba(10,37,64,.45);
+  backdrop-filter: blur(14px);
+}
+.on2-smart-cta-panel a,
+.on2-smart-cta-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  border-radius: 13px;
+  font-size: 13px;
+  font-weight: 800;
+}
+.on2-smart-cta-panel a {
+  border: 1px solid var(--line);
+  color: var(--ink);
+  background: #fff;
+}
+.on2-smart-cta-panel a.primary {
+  grid-column: span 2;
+  color: #fff;
+  border-color: var(--teal);
+  background: var(--teal);
+}
+.on2-smart-cta-toggle {
+  width: 56px;
+  height: 56px;
+  color: #fff;
+  background: var(--accent);
+  box-shadow: 0 18px 36px -18px rgba(255,107,74,.75);
+}
+
+@media (max-width: 820px) {
+  .on2-simulator-inner { grid-template-columns: 1fr; }
+  .on2-sim-result { grid-template-columns: 1fr; }
+  .on2-sim-price { text-align: left; }
+}
+
+@media (max-width: 520px) {
+  .on2-simulator { padding-top: 18px; }
+  .on2-sim-panel { padding: 18px; border-radius: 18px; }
+  .on2-sim-usage { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .on2-smart-cta { right: 14px; bottom: 14px; }
+}
 .on2-hv-speed { margin-bottom: 22px; }
 .on2-hv-speed .n { font-size: clamp(64px,14vw,96px); font-weight: 800; letter-spacing: -0.04em; line-height: 0.95; }
 .on2-hv-speed .n .u { font-size: 0.32em; font-weight: 700; letter-spacing: 0.08em; margin-left: 10px; vertical-align: 0.55em; opacity: 0.9; }

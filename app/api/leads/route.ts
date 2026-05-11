@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
     // Validar dados
     const validatedData = leadSchema.parse(body)
     const couponCode = body.coupon_code || null
+    const source = body.source || body.utm_source || 'Site'
     // aceita tanto planInterest (frontend) quanto plan_interest (admin)
     const planInterest = body.planInterest || body.plan_interest || validatedData.planInterest || validatedData.plan_interest || null
 
@@ -51,9 +52,9 @@ export async function POST(request: NextRequest) {
 
     // Inserir no banco
     await query(`
-      INSERT INTO leads (id, name, email, phone, city, plan_interest, status, coupon_code, score, created_at, updated_at)
-      VALUES ($1, $2, $3, $4, $5, $6, 'new', $7, $8, $9, $10)
-    `, [id, validatedData.name, validatedData.email || '', validatedData.phone, validatedData.city, planInterest, couponCode, score, now, now])
+      INSERT INTO leads (id, name, email, phone, city, plan_interest, status, coupon_code, score, source, created_at, updated_at)
+      VALUES ($1, $2, $3, $4, $5, $6, 'new', $7, $8, $9, $10, $11)
+    `, [id, validatedData.name, validatedData.email || '', validatedData.phone, validatedData.city, planInterest, couponCode, score, source, now, now])
 
     // Incrementar uso do cupom se fornecido
     if (couponCode) {
@@ -95,7 +96,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      data: { id, ...validatedData },
+      data: { id, ...validatedData, source },
       message: 'Pré-cadastro realizado com sucesso!',
     })
   } catch (error) {

@@ -159,7 +159,7 @@ export async function generatePlanOGImage(plan: {
               borderRadius: '12px',
               fontSize: '20px',
               marginBottom: '24px',
-              fontWeight: 600',
+              fontWeight: 600,
             }}
           >
             {plan.speed}

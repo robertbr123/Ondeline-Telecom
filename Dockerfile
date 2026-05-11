@@ -6,18 +6,17 @@ WORKDIR /app
 # Dependências nativas necessárias para sharp e tailwindcss/oxide
 RUN apk add --no-cache libc6-compat
 
-# Copiar arquivos de dependências (package.json inclui pnpm.onlyBuiltDependencies)
-COPY package.json pnpm-lock.yaml* ./
+# Copiar arquivos de dependências
+COPY package.json package-lock.json ./
 
-# Instalar pnpm e dependências (build scripts de sharp e oxide serão executados automaticamente)
-RUN corepack enable pnpm
-RUN pnpm install --no-frozen-lockfile --config.dangerously-allow-all-builds=true
+# Instalar dependências de forma reprodutível usando o lockfile do npm
+RUN npm ci
 
 # Copiar resto do código
 COPY . .
 
 # Build do projeto
-RUN pnpm run build
+RUN npm run build
 
 # Imagem de produção (limpa e leve)
 FROM node:22-alpine AS runner

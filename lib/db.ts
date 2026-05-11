@@ -100,6 +100,9 @@ export async function initializeDatabase() {
         city TEXT NOT NULL,
         status TEXT DEFAULT 'new',
         plan_interest TEXT,
+        source TEXT DEFAULT 'Site',
+        last_contact_at TEXT,
+        installation_date TEXT,
         notes TEXT,
         created_at TEXT NOT NULL,
         updated_at TEXT NOT NULL
@@ -280,6 +283,18 @@ export async function initializeDatabase() {
     // Adicionar coluna coupon_code na tabela leads (se não existir)
     await pool.query(`
       ALTER TABLE leads ADD COLUMN IF NOT EXISTS coupon_code TEXT
+    `).catch(() => {})
+
+    await pool.query(`
+      ALTER TABLE leads ADD COLUMN IF NOT EXISTS source TEXT DEFAULT 'Site'
+    `).catch(() => {})
+
+    await pool.query(`
+      ALTER TABLE leads ADD COLUMN IF NOT EXISTS last_contact_at TEXT
+    `).catch(() => {})
+
+    await pool.query(`
+      ALTER TABLE leads ADD COLUMN IF NOT EXISTS installation_date TEXT
     `).catch(() => {})
 
     // Inserir configurações padrão se não existirem

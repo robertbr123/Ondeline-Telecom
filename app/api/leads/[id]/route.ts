@@ -9,7 +9,7 @@ export async function PATCH(
   try {
     const { id } = await params
     const body = await request.json()
-    const { status, notes } = body
+    const { status, notes, last_contact_at, installation_date, source, plan_interest } = body
 
     if (!status) {
       return NextResponse.json(
@@ -22,13 +22,28 @@ export async function PATCH(
 
     await query(`
       UPDATE leads 
-      SET status = $1, notes = $2, updated_at = $3
-      WHERE id = $4
-    `, [status, notes || null, now, id])
+      SET status = $1,
+          notes = COALESCE($2, notes),
+          last_contact_at = COALESCE($3, last_contact_at),
+          installation_date = COALESCE($4, installation_date),
+          source = COALESCE($5, source),
+          plan_interest = COALESCE($6, plan_interest),
+          updated_at = $7
+      WHERE id = $8
+    `, [
+      status,
+      notes ?? null,
+      last_contact_at ?? null,
+      installation_date ?? null,
+      source ?? null,
+      plan_interest ?? null,
+      now,
+      id,
+    ])
 
     return NextResponse.json({
       success: true,
-      data: { id, status },
+      data: { id, status, notes, last_contact_at, installation_date },
       message: 'Status atualizado com sucesso',
     })
   } catch (error) {

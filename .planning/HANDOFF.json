@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-05-07T16:28:21.841Z",
+  "timestamp": "2026-05-07T16:40:50.762Z",
   "source": "auto-postool",
   "partial": false,
   "phase": null,
@@ -26,19 +26,7 @@
     },
     {
       "status": "M",
-      "path": "app/blog/[slug]/BlogPostContent.tsx"
-    },
-    {
-      "status": "M",
-      "path": "app/blog/page.tsx"
-    },
-    {
-      "status": "M",
       "path": "app/carauari/page.tsx"
-    },
-    {
-      "status": "M",
-      "path": "app/coverage/page.tsx"
     },
     {
       "status": "M",
@@ -55,32 +43,8 @@
     {
       "status": "M",
       "path": "app/page.tsx"
-    },
-    {
-      "status": "M",
-      "path": "app/trabalhe-conosco/page.tsx"
-    },
-    {
-      "status": "M",
-      "path": "components/on2/CityPage.tsx"
-    },
-    {
-      "status": "M",
-      "path": "components/on2/Footer.tsx"
-    },
-    {
-      "status": "M",
-      "path": "components/on2/Nav.tsx"
-    },
-    {
-      "status": "??",
-      "path": "components/on2/LogoImg.tsx"
-    },
-    {
-      "status": "??",
-      "path": "components/on2/SiteLogo.tsx"
     }
   ],
   "next_action": null,
-  "context_notes": "Recent commits:\nafcc0c2 fix: leads form now saves correctly from homepage CTA\n8168f7e feat: apply Ondeline 2 design system to admin panel\n0c4ed6d fix: allow build scripts in Docker with pnpm 11\n2a54e02 fix: upgrade Dockerfile from Node 20 to Node 22 to support pnpm 11\n2533e36 feat: redesign blog list and post pages with Ondeline 2 design system"
+  "context_notes": "Recent commits:\nf25c196 feat: logo from admin/settings now propagates to all pages\nafcc0c2 fix: leads form now saves correctly from homepage CTA\n8168f7e feat: apply Ondeline 2 design system to admin panel\n0c4ed6d fix: allow build scripts in Docker with pnpm 11\n2a54e02 fix: upgrade Dockerfile from Node 20 to Node 22 to support pnpm 11"
 }
