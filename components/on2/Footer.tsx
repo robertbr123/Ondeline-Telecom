@@ -17,6 +17,7 @@ export function Footer({
   const wa = whatsapp || "5592984607721"
   const tel = phone || "(92) 98460-7721"
   const logoSrc = logo || "/logo-ondeline.png"
+  const instagramUrl = instagram || "https://www.instagram.com/ondelinetec"
 
   return (
     <footer className="on2-footer">
@@ -29,7 +30,7 @@ export function Footer({
           <div>
             <h5>Planos</h5>
             <ul>
-              <li><a href="#planos">Residencial</a></li>
+              <li><a href="/#planos">Residencial</a></li>
               <li><a href="/empresas">Empresarial</a></li>
               <li><a href="/empresas">Link dedicado</a></li>
               <li><a href="/empresas">IP fixo</a></li>
@@ -58,7 +59,7 @@ export function Footer({
           <div>© 2023–2026 Ondeline Telecom · Todos os direitos reservados</div>
           <div className="on2-foot-socials">
             <a href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><Icon name="wa" size={18} /></a>
-            {instagram && <a href={instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"><Icon name="ig" size={18} /></a>}
+            <a href={instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Instagram"><Icon name="ig" size={18} /></a>
             {facebook && <a href={facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook"><Icon name="fb" size={18} /></a>}
           </div>
         </div>

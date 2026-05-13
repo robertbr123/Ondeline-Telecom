@@ -34,7 +34,7 @@ const defaultConfig: SiteConfigData = {
   whatsappNumber: "5592984607721",
   address: "Amazonas, Brasil",
   facebook: "",
-  instagram: "",
+  instagram: "https://www.instagram.com/ondelinetec",
   twitter: "",
   linkedin: "",
   keywords: ["internet", "wifi", "amazonas", "ipixuna", "eirunepe", "itamarati", "carauari", "provedor", "fibra óptica"],

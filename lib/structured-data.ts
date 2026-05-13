@@ -30,7 +30,7 @@ export function generateOrganizationSchema() {
     },
     sameAs: [
       'https://facebook.com/ondeline',
-      'https://instagram.com/ondeline',
+      'https://www.instagram.com/ondelinetec',
       'https://linkedin.com/company/ondeline',
     ],
   }
