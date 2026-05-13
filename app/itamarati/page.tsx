@@ -6,6 +6,12 @@ import { CityPage, type CityData } from "@/components/on2/CityPage"
 export const metadata = {
   title: "Internet em Itamarati — Fibra Óptica Ondeline",
   description: "Ondeline em Itamarati: fibra óptica dedicada, suporte local e planos a partir de R$ 99,90/mês.",
+  alternates: { canonical: "/itamarati" },
+  openGraph: {
+    title: "Internet Fibra em Itamarati | Ondeline Telecom",
+    description: "Planos de fibra óptica em Itamarati com suporte local e instalação agendada.",
+    images: [{ url: "/itamarati.jpg", width: 1200, height: 630 }],
+  },
 }
 
 const CITY: CityData = {

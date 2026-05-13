@@ -40,7 +40,7 @@ export default async function Home() {
       <SpeedBanner />
       <Depoimentos />
       <CTASection whatsapp={wa} phone={phone} />
-      <Footer whatsapp={wa} phone={phone} logo={logo} />
+      <Footer whatsapp={wa} phone={phone} logo={logo} instagram={config.instagram} facebook={config.facebook} />
       <SmartFloatCTA whatsapp={wa} phone={phone} />
     </div>
   )

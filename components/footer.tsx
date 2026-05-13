@@ -32,7 +32,7 @@ export function Footer() {
                 <a href="/#sobre" className="hover:text-cyan-400 transition">Quem Somos</a>
               </li>
               <li>
-                <a href="#planos" className="hover:text-cyan-400 transition">Planos</a>
+                <a href="/#planos" className="hover:text-cyan-400 transition">Planos</a>
               </li>
               <li>
                 <a href="/empresas" className="hover:text-cyan-400 transition">Empresas</a>
@@ -50,13 +50,13 @@ export function Footer() {
             <h4 className="font-bold mb-4 dark:text-white text-slate-900 text-sm uppercase tracking-wider">Suporte</h4>
             <ul className="space-y-2 text-sm dark:text-slate-400 text-slate-600">
               <li>
-                <a href="#faq" className="hover:text-cyan-400 transition">Dúvidas</a>
+                <a href="/coverage" className="hover:text-cyan-400 transition">Dúvidas</a>
               </li>
               <li>
-                <a href="#suporte" className="hover:text-cyan-400 transition">Problemas</a>
+                <a href="/#contato" className="hover:text-cyan-400 transition">Problemas</a>
               </li>
               <li>
-                <a href="#suporte" className="hover:text-cyan-400 transition">Contato</a>
+                <a href="/#contato" className="hover:text-cyan-400 transition">Contato</a>
               </li>
               <li>
                 <a href="/status" className="hover:text-cyan-400 transition">Status do Sistema</a>

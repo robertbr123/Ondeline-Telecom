@@ -59,7 +59,7 @@ export function CTA() {
             variant="outline"
             className="ripple-effect h-14 px-8 text-lg border-white/30 text-white hover:bg-white/10 w-full sm:w-auto bg-transparent transition-all hover:scale-105 active:scale-95"
           >
-            <a href="#suporte">
+            <a href="/#contato">
               Fale com a Gente <ArrowRight size={20} className="ml-1" />
             </a>
           </Button>

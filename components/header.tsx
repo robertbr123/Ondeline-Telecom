@@ -39,13 +39,13 @@ export function Header() {
           <a href="/" className="dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition text-sm font-medium">
             Inicio
           </a>
-          <a href="#planos" className="dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition text-sm font-medium">
+          <a href="/#planos" className="dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition text-sm font-medium">
             Planos
           </a>
           <a href="/empresas" className="dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition text-sm font-medium">
             Empresas
           </a>
-          <a href="#suporte" className="dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition text-sm font-medium">
+          <a href="/#contato" className="dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition text-sm font-medium">
             Suporte
           </a>
           <a href="/blog" className="dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition text-sm font-medium">
@@ -103,13 +103,13 @@ export function Header() {
             <a href="/" onClick={() => setIsOpen(false)} className="block dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition">
               Inicio
             </a>
-            <a href="#planos" onClick={() => setIsOpen(false)} className="block dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition">
+            <a href="/#planos" onClick={() => setIsOpen(false)} className="block dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition">
               Planos
             </a>
             <a href="/empresas" onClick={() => setIsOpen(false)} className="block dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition">
               Empresas
             </a>
-            <a href="#suporte" onClick={() => setIsOpen(false)} className="block dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition">
+            <a href="/#contato" onClick={() => setIsOpen(false)} className="block dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition">
               Suporte
             </a>
             <a href="/blog" onClick={() => setIsOpen(false)} className="block dark:text-slate-300 text-slate-600 hover:text-cyan-400 transition">

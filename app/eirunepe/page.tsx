@@ -6,6 +6,12 @@ import { CityPage, type CityData } from "@/components/on2/CityPage"
 export const metadata = {
   title: "Internet em Eirunepé — Fibra Óptica Ondeline",
   description: "Ondeline em Eirunepé: hub regional de fibra óptica, Wi-Fi 6 incluso, suporte local 24h. Planos a partir de R$ 99,90/mês.",
+  alternates: { canonical: "/eirunepe" },
+  openGraph: {
+    title: "Internet Fibra em Eirunepé | Ondeline Telecom",
+    description: "Planos de fibra óptica em Eirunepé com Wi-Fi 6, suporte local e atendimento regional.",
+    images: [{ url: "/eirunepe.jpg", width: 1200, height: 630 }],
+  },
 }
 
 const CITY: CityData = {

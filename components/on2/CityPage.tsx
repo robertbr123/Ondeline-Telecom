@@ -22,6 +22,7 @@ export interface CityData {
     desc: string
     items: { icon: string; k: string; v: string }[]
   }
+  teamPhoto?: string
 }
 
 function CityHero({ city, wa }: { city: CityData; wa: string }) {
@@ -70,8 +71,9 @@ function CityHero({ city, wa }: { city: CityData; wa: string }) {
             {city.photo ? (
               <Image src={city.photo} alt={`Foto de ${city.name}`} fill className="object-cover" />
             ) : (
-              <div className="on2-city-photo-placeholder">
-                FOTO DA CIDADE<br />{city.name.toUpperCase()}
+              <div className="on2-city-photo-placeholder" aria-label={`Cobertura Ondeline em ${city.name}`}>
+                <Icon name="fiber" size={56} />
+                <span>Rede Ondeline em {city.name}</span>
               </div>
             )}
             <div className="on2-city-tag-floating">
@@ -161,7 +163,7 @@ function CityLoja({ city }: { city: CityData }) {
             ))}
           </div>
           <div className="on2-city-photo" style={{ aspectRatio: "4/3" }}>
-            <div className="on2-city-photo-placeholder">EQUIPE LOCAL<br />{city.name.toUpperCase()}</div>
+            <Image src={city.teamPhoto || city.photo || "/business-office-internet.jpg"} alt={`Atendimento local da Ondeline em ${city.name}`} fill className="object-cover" />
           </div>
         </div>
       </div>
@@ -290,9 +292,28 @@ function CityCTASoon({ city, wa }: { city: CityData; wa: string }) {
 export function CityPage({ city, whatsapp, phone, logo }: { city: CityData; whatsapp?: string; phone?: string; logo?: string }) {
   const wa = whatsapp || "5592984607721"
   const ph = phone || "(92) 98460-7721"
+  const citySchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: `Internet fibra Ondeline em ${city.name}`,
+    serviceType: city.status === "active" ? "Internet por fibra óptica" : "Pré-cadastro para internet por fibra óptica",
+    provider: {
+      "@type": "InternetServiceProvider",
+      name: "Ondeline Telecom",
+      telephone: ph,
+      url: "https://ondeline.com.br",
+    },
+    areaServed: {
+      "@type": "City",
+      name: city.name,
+      addressRegion: "AM",
+      addressCountry: "BR",
+    },
+  }
 
   return (
     <div className="on2">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(citySchema) }} />
       <Topbar phone={ph} />
       <Nav whatsapp={wa} logo={logo} />
       <CityHero city={city} wa={wa} />

@@ -305,7 +305,7 @@ export function Hero() {
             variant="outline"
             className="h-14 px-10 text-lg border-white/30 text-white hover:bg-white/10 bg-white/5 backdrop-blur-sm transition-all hover:scale-105 active:scale-95"
           >
-            <a href="#suporte">Saiba Mais</a>
+            <a href="/#contato">Saiba Mais</a>
           </Button>
         </div>
 

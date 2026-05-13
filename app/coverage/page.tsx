@@ -49,7 +49,7 @@ export default async function CoveragePage() {
       <Topbar phone={phone} />
       <Nav whatsapp={wa} logo={logo} />
       <CoverageExperience whatsapp={wa} />
-      <Footer whatsapp={wa} phone={phone} logo={logo} />
+      <Footer whatsapp={wa} phone={phone} logo={logo} instagram={config.instagram} facebook={config.facebook} />
       <SmartFloatCTA whatsapp={wa} phone={phone} />
     </div>
   )

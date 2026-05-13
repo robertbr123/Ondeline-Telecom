@@ -208,7 +208,7 @@ export default function StatusPage() {
           {/* Contact Button */}
           <div className="mt-8 text-center">
             <a
-              href="/#suporte"
+              href="/#contato"
               className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary/90 transition"
             >
               Precisa de Ajuda? Entre em Contato

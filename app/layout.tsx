@@ -23,7 +23,6 @@ export async function generateMetadata(): Promise<Metadata> {
     description: config.description || "Internet de alta velocidade em Ipixuna, Eirunepe, Itamarati e Carauari. Suporte rápido 24/7 e planos a partir de R$ 100.",
     keywords: config.keywords?.join(", "),
     robots: config.metaRobots || "index, follow",
-    generator: "v0.app",
     ...(config.canonicalUrl && {
       alternates: {
         canonical: config.canonicalUrl,

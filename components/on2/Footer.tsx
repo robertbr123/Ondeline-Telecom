@@ -1,7 +1,19 @@
 import Image from "next/image"
 import { Icon } from "./Icon"
 
-export function Footer({ whatsapp, phone, logo }: { whatsapp?: string; phone?: string; logo?: string }) {
+export function Footer({
+  whatsapp,
+  phone,
+  logo,
+  instagram,
+  facebook,
+}: {
+  whatsapp?: string
+  phone?: string
+  logo?: string
+  instagram?: string
+  facebook?: string
+}) {
   const wa = whatsapp || "5592984607721"
   const tel = phone || "(92) 98460-7721"
   const logoSrc = logo || "/logo-ondeline.png"
@@ -46,8 +58,8 @@ export function Footer({ whatsapp, phone, logo }: { whatsapp?: string; phone?: s
           <div>© 2023–2026 Ondeline Telecom · Todos os direitos reservados</div>
           <div className="on2-foot-socials">
             <a href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><Icon name="wa" size={18} /></a>
-            <a href="#" aria-label="Instagram"><Icon name="ig" size={18} /></a>
-            <a href="#" aria-label="Facebook"><Icon name="fb" size={18} /></a>
+            {instagram && <a href={instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"><Icon name="ig" size={18} /></a>}
+            {facebook && <a href={facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook"><Icon name="fb" size={18} /></a>}
           </div>
         </div>
       </div>

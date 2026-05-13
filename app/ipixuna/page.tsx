@@ -6,6 +6,12 @@ import { CityPage, type CityData } from "@/components/on2/CityPage"
 export const metadata = {
   title: "Internet em Ipixuna — Fibra Óptica Ondeline",
   description: "Ondeline em Ipixuna: fibra óptica dedicada, Wi-Fi 6 incluso, suporte local 24h. Planos a partir de R$ 99,90/mês.",
+  alternates: { canonical: "/ipixuna" },
+  openGraph: {
+    title: "Internet Fibra em Ipixuna | Ondeline Telecom",
+    description: "Internet fibra em Ipixuna com instalação rápida, suporte local e planos residenciais.",
+    images: [{ url: "/ipixuna-2.jpg", width: 1200, height: 630 }],
+  },
 }
 
 const CITY: CityData = {

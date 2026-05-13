@@ -6,6 +6,12 @@ import { CityPage, type CityData } from "@/components/on2/CityPage"
 export const metadata = {
   title: "Internet em Carauari — Em Breve Ondeline",
   description: "A Ondeline está chegando em Carauari! Entre na lista de espera e seja um dos primeiros assinantes de fibra óptica na sua cidade.",
+  alternates: { canonical: "/carauari" },
+  openGraph: {
+    title: "Internet em Carauari | Lista de Espera Ondeline",
+    description: "Pré-cadastro para fibra óptica Ondeline em Carauari. Expansão em andamento no Amazonas.",
+    images: [{ url: "/carauri.jpg", width: 1200, height: 630 }],
+  },
 }
 
 const CITY: CityData = {
