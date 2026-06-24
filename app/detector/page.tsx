@@ -93,7 +93,7 @@ export default function DetectorPage() {
               <Activity className="w-8 h-8 text-primary animate-pulse mx-auto mb-4" />
               <p className="text-muted-foreground">Verificando serviços...</p>
             </div>
-          ) : error ? (
+          ) : error && !data ? (
             <div className="text-center py-16">
               <p className="text-muted-foreground mb-4">Não foi possível carregar o status agora.</p>
               <button

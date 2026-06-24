@@ -105,6 +105,11 @@ export async function GET() {
       ).catch(() => {})
     }
 
+    // Limpeza best-effort de histórico antigo (> 7 dias)
+    await query(
+      `DELETE FROM external_status_checks WHERE checked_at < now() - interval '7 days'`
+    ).catch(() => {})
+
     // Histórico das últimas 24h (para uptime% e sparkline)
     const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
     const hist = await query(
