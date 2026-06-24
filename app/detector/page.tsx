@@ -1,11 +1,13 @@
 // app/detector/page.tsx
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { LogoOndeline } from "@/components/logo-ondeline"
-import { Activity, RefreshCw, CheckCircle, AlertTriangle } from "lucide-react"
+import { Activity, RefreshCw, CheckCircle, AlertTriangle, Download } from "lucide-react"
+import { toPng } from "html-to-image"
+import { ExportCard } from "@/components/detector/export-card"
 import { DETECTOR_CATEGORIES } from "@/lib/detector-services"
 import { ServiceCard, type DetectorServiceView } from "@/components/detector/service-card"
 
@@ -20,6 +22,25 @@ export default function DetectorPage() {
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState(false)
+
+  const exportRef = useRef<HTMLDivElement>(null)
+  const [exporting, setExporting] = useState(false)
+
+  const handleExport = useCallback(async () => {
+    if (!exportRef.current) return
+    setExporting(true)
+    try {
+      const dataUrl = await toPng(exportRef.current, { cacheBust: true, pixelRatio: 2 })
+      const link = document.createElement("a")
+      link.download = `detector-ondeline-${Date.now()}.png`
+      link.href = dataUrl
+      link.click()
+    } catch (e) {
+      console.error("Falha ao gerar imagem:", e)
+    } finally {
+      setExporting(false)
+    }
+  }, [])
 
   const fetchData = useCallback(async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true)
@@ -121,6 +142,17 @@ export default function DetectorPage() {
                 </button>
               </div>
 
+              <div className="flex justify-end mb-6">
+                <button
+                  onClick={handleExport}
+                  disabled={exporting}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-white font-semibold hover:bg-primary/90 transition disabled:opacity-60"
+                >
+                  <Download className="w-4 h-4" />
+                  {exporting ? "Gerando..." : "Gerar imagem"}
+                </button>
+              </div>
+
               {/* Seções por categoria */}
               {DETECTOR_CATEGORIES.map((cat) => {
                 const items = data?.services.filter((s) => s.category === cat) ?? []
@@ -140,6 +172,20 @@ export default function DetectorPage() {
               <p className="text-center text-sm text-muted-foreground mt-8">
                 Atualiza automaticamente a cada 60 segundos · por Ondeline Telecom
               </p>
+
+              {data && (
+                <ExportCard
+                  ref={exportRef}
+                  data={{
+                    lastUpdated: data.lastUpdated,
+                    services: data.services.map((s) => ({
+                      name: s.name,
+                      domain: s.domain,
+                      status: s.status,
+                    })),
+                  }}
+                />
+              )}
             </>
           )}
         </div>
