@@ -23,6 +23,7 @@ const PUBLIC_ROUTES = [
   '/api/health',
   '/api/speedtest',
   '/api/status',
+  '/api/detector',
   '/api/blog/comments',
 ] as const
 
