@@ -24,20 +24,24 @@ let tableReady = false
 
 async function ensureTable(): Promise<void> {
   if (tableReady || !pool) return
-  await query(`
-    CREATE TABLE IF NOT EXISTS external_status_checks (
-      id SERIAL PRIMARY KEY,
-      service TEXT NOT NULL,
-      status TEXT NOT NULL,
-      response_time INTEGER,
-      checked_at TIMESTAMPTZ NOT NULL DEFAULT now()
+  try {
+    await query(`
+      CREATE TABLE IF NOT EXISTS external_status_checks (
+        id SERIAL PRIMARY KEY,
+        service TEXT NOT NULL,
+        status TEXT NOT NULL,
+        response_time INTEGER,
+        checked_at TIMESTAMPTZ NOT NULL DEFAULT now()
+      )
+    `)
+    await query(
+      `CREATE INDEX IF NOT EXISTS idx_external_status_service_time
+       ON external_status_checks (service, checked_at DESC)`
     )
-  `).catch(() => {})
-  await query(
-    `CREATE INDEX IF NOT EXISTS idx_external_status_service_time
-     ON external_status_checks (service, checked_at DESC)`
-  ).catch(() => {})
-  tableReady = true
+    tableReady = true
+  } catch {
+    // DDL falhou; tableReady permanece false para tentar novamente na próxima request
+  }
 }
 
 const BROWSER_UA =
