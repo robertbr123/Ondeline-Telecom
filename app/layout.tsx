@@ -1,7 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono, Manrope } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/lib/theme-context"
 import { Providers } from "./providers"
 import { getSiteConfig } from "@/lib/site-config"
@@ -92,7 +91,6 @@ export default function RootLayout({
             />
           </ThemeProvider>
         </Providers>
-        <Analytics />
       </body>
     </html>
   )

@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { jwtVerify } from 'jose'
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.NEXTAUTH_SECRET || 'your-secret-key-change-in-production'
-)
+// Sem NEXTAUTH_SECRET em produção não há login: a senha padrão é pública
+// (está no código) e permitiria forjar um token de admin.
+const SECRET_RAW =
+  process.env.NEXTAUTH_SECRET ||
+  (process.env.NODE_ENV === 'production' ? '' : 'dev-only-secret-not-for-production')
+const JWT_SECRET = new TextEncoder().encode(SECRET_RAW)
 
 // Rotas públicas que não exigem autenticação
 const PUBLIC_ROUTES = [
@@ -25,6 +28,22 @@ const PUBLIC_ROUTES = [
   '/api/status',
   '/api/detector',
   '/api/blog/comments',
+] as const
+
+// Formulários públicos: únicos POST permitidos sem login
+const PUBLIC_POST_ROUTES = [
+  '/api/auth/login',
+  '/api/leads',
+  '/api/referrals',
+  '/api/coupons/validate',
+  '/api/blog/comments',
+  '/api/speedtest',
+] as const
+
+// Listagens com dados de clientes: só admin pode ler
+const PRIVATE_READ_ROUTES = [
+  '/api/leads',
+  '/api/referrals',
 ] as const
 
 // Rotas públicas do site
@@ -56,7 +75,8 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/static') ||
     pathname.startsWith('/favicon') ||
     pathname.startsWith('/public') ||
-    STATIC_EXTENSIONS.some(ext => pathname.endsWith(ext))
+    // extensão de arquivo só libera fora da API (antes /api/qualquer.json passava sem login)
+    (!pathname.startsWith('/api/') && STATIC_EXTENSIONS.some(ext => pathname.endsWith(ext)))
   ) {
     return NextResponse.next()
   }
@@ -66,8 +86,21 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // Permitir rotas públicas de API
-  if (PUBLIC_ROUTES.some(route => pathname.startsWith(route))) {
+  // Rotas públicas de API: visitante só LÊ (GET/HEAD).
+  // Gravar (POST/PUT/DELETE) exige login, exceto os formulários do site.
+  const method = request.method.toUpperCase()
+  const isRead = method === 'GET' || method === 'HEAD' || method === 'OPTIONS'
+  if (isRead && pathname.startsWith('/api/uploads/')) {
+    return NextResponse.next()
+  }
+  if (method === 'POST' && PUBLIC_POST_ROUTES.some(route => pathname === route)) {
+    return NextResponse.next()
+  }
+  if (
+    isRead &&
+    !PRIVATE_READ_ROUTES.some(route => pathname === route || pathname.startsWith(`${route}/`)) &&
+    PUBLIC_ROUTES.some(route => pathname.startsWith(route))
+  ) {
     return NextResponse.next()
   }
 
@@ -86,6 +119,7 @@ export async function middleware(request: NextRequest) {
     }
 
     try {
+      if (!SECRET_RAW) throw new Error('NEXTAUTH_SECRET ausente')
       await jwtVerify(token, JWT_SECRET)
       return NextResponse.next()
     } catch {

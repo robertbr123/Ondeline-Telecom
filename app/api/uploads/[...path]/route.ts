@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { readFile } from 'fs/promises'
 import { existsSync } from 'fs'
 import path from 'path'
+import { getSiteFile } from '@/lib/site-files'
 
 const MIME_TYPES: Record<string, string> = {
   '.png': 'image/png',
@@ -29,7 +30,18 @@ export async function GET(
     const filePath = path.join(process.cwd(), 'public', 'uploads', fileName)
 
     if (!existsSync(filePath)) {
-      return NextResponse.json({ error: 'File not found' }, { status: 404 })
+      // Depois de um deploy a pasta some: busca a cópia do banco
+      const stored = await getSiteFile(fileName)
+      if (!stored) {
+        return NextResponse.json({ error: 'File not found' }, { status: 404 })
+      }
+      return new NextResponse(new Uint8Array(stored.data), {
+        status: 200,
+        headers: {
+          'Content-Type': stored.mime,
+          'Cache-Control': 'public, max-age=31536000, immutable',
+        },
+      })
     }
 
     const ext = path.extname(filePath).toLowerCase()

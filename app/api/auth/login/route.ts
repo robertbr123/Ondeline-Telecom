@@ -4,11 +4,21 @@ import { SignJWT } from 'jose'
 import { query } from '@/lib/db'
 import { authLogger } from '@/lib/logger'
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.NEXTAUTH_SECRET || 'your-secret-key-change-in-production'
-)
+// Sem NEXTAUTH_SECRET em produção não há login: a senha padrão é pública
+// (está no código) e permitiria forjar um token de admin.
+const SECRET_RAW =
+  process.env.NEXTAUTH_SECRET ||
+  (process.env.NODE_ENV === 'production' ? '' : 'dev-only-secret-not-for-production')
+const JWT_SECRET = new TextEncoder().encode(SECRET_RAW)
 
 export async function POST(request: NextRequest) {
+  if (!SECRET_RAW) {
+    console.error('NEXTAUTH_SECRET não configurado: login do admin desativado')
+    return NextResponse.json(
+      { success: false, error: 'Login indisponível: configure NEXTAUTH_SECRET no servidor' },
+      { status: 503 }
+    )
+  }
   try {
     const body = await request.json()
     const { username, password } = body

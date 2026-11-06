@@ -3,6 +3,7 @@ import { writeFile, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
 import path from 'path'
 import { apiLogger } from '@/lib/logger'
+import { saveSiteFile } from '@/lib/site-files'
 
 export async function POST(request: NextRequest) {
   try {
@@ -41,14 +42,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Gerar nome do arquivo
-    const ext = file.name.split('.').pop()
+    const ext = (file.name.split('.').pop() || 'png').toLowerCase().replace(/[^a-z0-9]/g, '')
     const fileName = `logo.${ext}`
     const filePath = path.join(uploadsDir, fileName)
 
     // Converter para buffer e salvar
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
-    await writeFile(filePath, buffer)
+    // Banco primeiro (sobrevive ao deploy); disco é só cache
+    await saveSiteFile(fileName, file.type, buffer)
+    await writeFile(filePath, buffer).catch(() => {})
 
     const logoUrl = `/api/uploads/${fileName}?t=${Date.now()}`
 

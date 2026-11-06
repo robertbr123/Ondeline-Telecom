@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/db'
+import { resolveLogoUrl } from '@/lib/site-files'
+import { invalidateCache } from '@/lib/cache'
 
 // GET - Obter configurações
 export async function GET() {
@@ -11,6 +13,8 @@ export async function GET() {
     config.forEach(item => {
       configObj[item.key] = item.key === 'keywords' ? JSON.parse(item.value) : item.value
     })
+
+    if (configObj.logoUrl) configObj.logoUrl = await resolveLogoUrl(configObj.logoUrl)
 
     return NextResponse.json({
       success: true,
@@ -34,6 +38,7 @@ export async function PUT(request: NextRequest) {
       const valueToStore = key === 'keywords' ? JSON.stringify(value) : String(value)
       await query('INSERT INTO site_config (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = $2', [key, valueToStore])
     }
+    await invalidateCache('site-config')
 
     return NextResponse.json({
       success: true,

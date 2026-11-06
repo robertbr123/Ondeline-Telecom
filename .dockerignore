@@ -6,3 +6,10 @@ node_modules
 *.md
 .vscode
 .idea
+.planning
+docs
+Ondeline Telecom 2
+/carauri.jpg
+.claude
+*.log
+coverage

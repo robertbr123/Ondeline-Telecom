@@ -1,4 +1,6 @@
 import { query } from './db'
+import { resolveLogoUrl } from './site-files'
+import { getCachedData } from './cache'
 
 export interface SiteConfigData {
   title: string
@@ -53,6 +55,11 @@ const defaultConfig: SiteConfigData = {
 }
 
 export async function getSiteConfig(): Promise<SiteConfigData> {
+  // 30s em memória: toda página pedia o banco a cada visita
+  return getCachedData('site-config', loadSiteConfig, 30 * 1000)
+}
+
+async function loadSiteConfig(): Promise<SiteConfigData> {
   try {
     const result = await query('SELECT * FROM site_config')
     const config = result.rows as any[]
@@ -62,10 +69,10 @@ export async function getSiteConfig(): Promise<SiteConfigData> {
       configObj[item.key] = item.key === 'keywords' ? JSON.parse(item.value) : item.value
     })
 
-    return {
-      ...defaultConfig,
-      ...configObj,
-    }
+    const merged = { ...defaultConfig, ...configObj }
+    // Logo enviado que se perdeu num deploy antigo cai no logo padrão
+    merged.logoUrl = await resolveLogoUrl(merged.logoUrl)
+    return merged
   } catch (error) {
     console.error('Erro ao buscar configurações:', error)
     return defaultConfig
