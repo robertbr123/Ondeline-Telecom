@@ -1,47 +1,42 @@
 export const dynamic = "force-dynamic"
 
 import { getSiteConfig } from "@/lib/site-config"
-import { Topbar } from "@/components/on2/Topbar"
-import { Nav } from "@/components/on2/Nav"
-import { Hero } from "@/components/on2/Hero"
-import { Planos } from "@/components/on2/Planos"
-import { PlanSimulator } from "@/components/on2/PlanSimulator"
-import { Cobertura } from "@/components/on2/Cobertura"
-import { Porque } from "@/components/on2/Porque"
-import { SpeedBanner } from "@/components/on2/SpeedBanner"
-import { Depoimentos } from "@/components/on2/Depoimentos"
-import { CTASection } from "@/components/on2/CTASection"
-import { Footer } from "@/components/on2/Footer"
+import { getActivePlans } from "@/lib/plans"
+import { Nav } from "@/components/o30/Nav"
+import { Hero } from "@/components/o30/Hero"
+import { Plans } from "@/components/o30/Plans"
+import { Why } from "@/components/o30/Why"
+import { Coverage } from "@/components/o30/Coverage"
+import { Contact } from "@/components/o30/Contact"
+import { Footer } from "@/components/o30/Footer"
 import { SmartFloatCTA } from "@/components/on2/SmartFloatCTA"
 import { AnalyticsScripts, GTMNoScript } from "@/components/analytics-scripts"
+import "@/styles/ondeline2030.css"
 
 export default async function Home() {
-  const config = await getSiteConfig()
+  const [config, plans] = await Promise.all([getSiteConfig(), getActivePlans()])
   const wa = config.whatsappNumber || "5592984607721"
   const phone = config.contactPhone || "(92) 98460-7721"
   const logo = config.logoUrl || "/logo-ondeline.png"
+  const featured = plans.find((p) => p.highlighted) || plans[plans.length - 1]
 
   return (
-    <div className="on2">
+    <div className="o30">
       <AnalyticsScripts />
       <GTMNoScript />
-      <Topbar phone={phone} />
-      <Nav whatsapp={wa} logo={logo} />
-      <Hero
-        whatsapp={wa}
-        title={config.heroTitle}
-        subtitle={config.heroSubtitle}
-        badge={config.heroBadge}
-      />
-      <PlanSimulator whatsapp={wa} />
-      <Planos whatsapp={wa} />
-      <Cobertura />
-      <Porque />
-      <SpeedBanner />
-      <Depoimentos />
-      <CTASection whatsapp={wa} phone={phone} />
-      <Footer whatsapp={wa} phone={phone} logo={logo} instagram={config.instagram} facebook={config.facebook} />
-      <SmartFloatCTA whatsapp={wa} phone={phone} />
+      <Nav logo={logo} />
+      <main>
+        <Hero plan={featured} whatsapp={wa} />
+        <Plans plans={plans} whatsapp={wa} />
+        <Why />
+        <Coverage />
+        <Contact whatsapp={wa} phone={phone} planNames={plans.map((p) => `${p.name} · ${p.speed}`)} />
+      </main>
+      <Footer logo={logo} whatsapp={wa} phone={phone} instagram={config.instagram} facebook={config.facebook} />
+      {/* botão flutuante continua com o estilo on2 */}
+      <div className="on2">
+        <SmartFloatCTA whatsapp={wa} phone={phone} />
+      </div>
     </div>
   )
 }

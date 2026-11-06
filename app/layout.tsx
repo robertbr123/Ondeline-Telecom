@@ -10,8 +10,8 @@ import SkipLink from "@/components/skip-link"
 import "./globals.css"
 import "@/styles/ondeline2.css"
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" })
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" })
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap", weight: ["300","400","500","600","700","800"] })
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -77,7 +77,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`font-sans antialiased ${manrope.variable}`}>
+      <body className={`font-sans antialiased ${manrope.variable} ${geist.variable} ${geistMono.variable}`}>
         <SkipLink />
         <Providers>
           <ThemeProvider>
