@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono, Manrope } from "next/font/google"
+import localFont from "next/font/local"
 import { ThemeProvider } from "@/lib/theme-context"
 import { Providers } from "./providers"
 import { getSiteConfig } from "@/lib/site-config"
@@ -9,9 +9,10 @@ import SkipLink from "@/components/skip-link"
 import "./globals.css"
 import "@/styles/ondeline2.css"
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" })
-const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" })
-const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap", weight: ["300","400","500","600","700","800"] })
+// Fontes dentro do projeto: o build não depende mais de baixar do Google
+const geist = localFont({ src: "./fonts/geist.woff2", variable: "--font-geist", weight: "100 900", display: "swap" })
+const geistMono = localFont({ src: "./fonts/geist-mono.woff2", variable: "--font-geist-mono", weight: "100 900", display: "swap" })
+const manrope = localFont({ src: "./fonts/manrope.woff2", variable: "--font-manrope", weight: "200 800", display: "swap" })
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await getSiteConfig()
